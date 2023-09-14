@@ -50,7 +50,7 @@ Returns the information about the current user that is logged in.
 * Require Authentication: true
 * Request
   * Method: GET
-  * URL: /user
+  * URL: /session
   * Body: none
 
 * Successful Response when there is a logged in user
@@ -91,7 +91,7 @@ information.
 * Require Authentication: false
 * Request
   * Method: POST
-  * URL: /login
+  * URL: /api/session
   * Headers:
     * Content-Type: application/json
   * Body:
@@ -157,7 +157,7 @@ user's information.
 * Require Authentication: false
 * Request
   * Method: POST
-  * URL: /signup
+  * URL: /api/auth/signup <!-- /api/users -->
   * Headers:
     * Content-Type: application/json
   * Body:
@@ -287,7 +287,7 @@ Returns all the spots owned (created) by the current user.
 * Require Authentication: true
 * Request
   * Method: GET 
-  * URL: /user/:userid/spots
+  * URL: /user/spots <!-- /spots/current -->
   * Body: none
 
 * Successful Response
@@ -327,7 +327,7 @@ Returns the details of a spot specified by its id.
 * Require Authentication: false
 * Request
   * Method: GET
-  * URL: /spots/:spotsid/details
+  * URL: /spots/:spotId
   * Body: none
 
 * Successful Response
@@ -512,7 +512,7 @@ Updates and returns an existing spot.
 * Require proper authorization: Spot must belong to the current user
 * Request
   * Method: PUT
-  * URL: /spots
+  * URL: /spots/:spotId
   * Headers:
     * Content-Type: application/json
   * Body:
@@ -598,7 +598,7 @@ Deletes an existing spot.
 * Require proper authorization: Spot must belong to the current user
 * Request
   * Method: DELETE
-  * URL: /spots
+  * URL: /spots/:spotId
   * Body: none
 
 * Successful Response
@@ -634,7 +634,7 @@ Returns all the reviews written by the current user.
 * Require Authentication: true
 * Request
   * Method: GET
-  * URL: /user/:userId/reviews
+  * URL: /user/:userId/reviews <!-- /current/reviews -->
   * Body: none
 
 * Successful Response
@@ -982,7 +982,7 @@ Return all the bookings that the current user has made.
 * Require Authentication: true
 * Request
   * Method: GET
-  * URL: /user/:userId/booking
+  * URL: /user/:userId/booking <!-- /bookings/current -->
   * Body: none
 
 * Successful Response
@@ -1027,7 +1027,7 @@ Return all the bookings for a spot specified by id.
 * Require Authentication: true
 * Request
   * Method: GET
-  * URL: /spots/:spotsId/bookings
+  * URL: /spots/:spotsId/bookings 
   * Body: none
 
 * Successful Response: If you ARE NOT the owner of the spot.
@@ -1317,7 +1317,7 @@ Delete an existing image for a Spot.
 * Require proper authorization: Spot must belong to the current user
 * Request
   * Method: DELETE
-  * URL: /spots/:spotsId/images
+  * URL: /spots/:spotsId/images/:imageId <!-- /spot-images/:imageId -->
   * Body: none
 
 * Successful Response
@@ -1352,7 +1352,7 @@ Delete an existing image for a Review.
 * Require proper authorization: Review must belong to the current user
 * Request
   * Method: DELETE
-  * URL: /reviews/:reviewsId/images
+  * URL: /reviews/:reviewsId/images/:imageId <!-- /review-images/:imageId -->
   * Body: none
 
 * Successful Response
