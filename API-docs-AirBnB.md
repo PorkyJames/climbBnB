@@ -287,7 +287,7 @@ Returns all the spots owned (created) by the current user.
 * Require Authentication: true
 * Request
   * Method: GET 
-  * URL: /user/spots <!-- /spots/current -->
+  * URL: /spots/current
   * Body: none
 
 * Successful Response
@@ -634,7 +634,7 @@ Returns all the reviews written by the current user.
 * Require Authentication: true
 * Request
   * Method: GET
-  * URL: /user/:userId/reviews <!-- /current/reviews -->
+  * URL: /current/reviews
   * Body: none
 
 * Successful Response
@@ -982,7 +982,7 @@ Return all the bookings that the current user has made.
 * Require Authentication: true
 * Request
   * Method: GET
-  * URL: /user/:userId/booking <!-- /bookings/current -->
+  * URL: /bookings/current
   * Body: none
 
 * Successful Response
@@ -1317,7 +1317,7 @@ Delete an existing image for a Spot.
 * Require proper authorization: Spot must belong to the current user
 * Request
   * Method: DELETE
-  * URL: /spots/:spotsId/images/:imageId <!-- /spot-images/:imageId -->
+  * URL: /spot-images/:imageId
   * Body: none
 
 * Successful Response
@@ -1352,7 +1352,7 @@ Delete an existing image for a Review.
 * Require proper authorization: Review must belong to the current user
 * Request
   * Method: DELETE
-  * URL: /reviews/:reviewsId/images/:imageId <!-- /review-images/:imageId -->
+  * URL: /review-images/:imageId
   * Body: none
 
 * Successful Response
