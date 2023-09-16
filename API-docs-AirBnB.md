@@ -946,7 +946,7 @@ Delete an existing review.
 * Require proper authorization: Review must belong to the current user
 * Request
   * Method: DELETE
-  * URL: /reviews/:reviewsId
+  * URL: /reviews/:reviewId
   * Body: none
 
 * Successful Response
