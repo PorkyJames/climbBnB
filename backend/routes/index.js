@@ -1,6 +1,7 @@
 // backend/routes/index.js
 const express = require('express');
 const router = express.Router();
+const apiRouter = require('./api');
 
 router.get("/api/csrf/restore", (req, res) => {
     const csrfToken = req.csrfToken();
@@ -9,5 +10,7 @@ router.get("/api/csrf/restore", (req, res) => {
       'XSRF-Token': csrfToken
     });
   });
+
+router.use('/api', apiRouter);
 
 module.exports = router;
