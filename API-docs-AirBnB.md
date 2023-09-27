@@ -1,12 +1,8 @@
 # AirBnB Clone
 
-![Alt text](images/schema.png)
-
 ## Database Schema Design
 
-![database-schema]
-
-[database-schema]: `<insert link or local path to database schema>`
+![Alt text](images/schema.png)
 
 ## API Documentation
 
