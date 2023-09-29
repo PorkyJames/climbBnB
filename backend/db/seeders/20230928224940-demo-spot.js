@@ -1,4 +1,5 @@
 'use strict';
+/** @type {import('sequelize-cli').Migration} */
 
 const { Spot } = require('../models');
 const bcrypt = require("bcryptjs");
@@ -8,7 +9,6 @@ if (process.env.NODE_ENV === 'production') {
   options.schema = process.env.SCHEMA;
 }
 
-/** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up (queryInterface, Sequelize) {
     /**
@@ -40,7 +40,7 @@ module.exports = {
         state: 'TwoState',
         country: 'TwoCountry',
         lat: 55.05,
-        lng: 194,
+        lng: 162,
         name: "City Skyscraper with Terrace",
         description: "Apartment with a luxurious view of the city available from the secure Terrace",
         price: 450,

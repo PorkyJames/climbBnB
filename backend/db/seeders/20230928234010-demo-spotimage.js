@@ -28,13 +28,13 @@ module.exports = {
     },
     {
       spotId: 2,
-      url: 'images.com/spotImage1',
+      url: 'images.com/spotImage2',
       preview: true,
     },
     {
       spotId: 3,
-      url: 'images.com/spotImage1',
-      preview: false,
+      url: 'images.com/spotImage3',
+      preview: true,
     },
    ], {validate: true})
   },
