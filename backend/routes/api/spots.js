@@ -14,7 +14,7 @@ router.get('/current', requireAuth, async (req, res)=> {
 
     //Created spot Object to pull whenever we look for all spots
     //Utilized allSpots.map to transform each spot that we find
-    const everySpot = {
+    const eachSpot = {
         Spots: allSpots.map((spot) => ({
           id: spot.id,
           ownerId: spot.ownerId,
@@ -34,6 +34,11 @@ router.get('/current', requireAuth, async (req, res)=> {
         })),
       };
 
+    //Creates a response for all the spots that we can later push
+    //all of the spots that we find into this new Spots array response
+    const spotsResponse = {
+        Spots: []
+    };
     
     // Get all Spots owned by Current User
     // This will allow us to find within spots anything that belongs to the current user's spots
@@ -42,6 +47,13 @@ router.get('/current', requireAuth, async (req, res)=> {
             owner: userId
         } 
     })
+
+    // Everytime we look for a new spot, we push the eachSpot (spot object) into the 
+    //the spotsResponse
+    spotsResponse.Spots.push(eachSpot)
+
+    //Once we get the correct response back, then we'll return the spotsResponse via 200
+    return res.status(200).json(spotsResponse)
 
 });
 
