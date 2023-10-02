@@ -1,64 +1,60 @@
 const express = require('express');
 const Sequelize = require('sequelize');
-const { Spot } = require('../../db/models')
+const { Spot, SpotImage, User } = require('../../db/models');
 const { requireAuth } = require('../../utils/auth');
 const router = express.Router();
 
+// Get all Spots
+router.get('/spots', requireAuth, async (req, res) => {
+    try {
+      const spots = await Spot.findAll();
+      res.status(200).json({ Spots: spots });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Internal Server Error' });
+    }
+  });
 
-//! GET
-router.get('/current', requireAuth, async (req, res)=> {
-    const userId = req.user.id;
-
-    // Get all Spots
-    const allSpots = await Spot.findAll()
-
-    //Created spot Object to pull whenever we look for all spots
-    //Utilized allSpots.map to transform each spot that we find
-    const eachSpot = {
-        Spots: allSpots.map((spot) => ({
-          id: spot.id,
-          ownerId: spot.ownerId,
-          address: spot.address,
-          city: spot.city,
-          state: spot.state,
-          country: spot.country,
-          lat: spot.lat,
-          lng: spot.lng,
-          name: spot.name,
-          description: spot.description,
-          price: spot.price,
-          createdAt: spot.createdAt,
-          updatedAt: spot.updatedAt,
-          avgRating: spot.avgRating,
-          previewImage: spot.previewImage,
-        })),
-      };
-
-    //Creates a response for all the spots that we can later push
-    //all of the spots that we find into this new Spots array response
-    const spotsResponse = {
-        Spots: []
-    };
-    
-    // Get all Spots owned by Current User
-    // This will allow us to find within spots anything that belongs to the current user's spots
-    const allUserSpots = await Spot.findAll({
-        where:{
-            owner: userId
-        } 
-    })
-
-    // Everytime we look for a new spot, we push the eachSpot (spot object) into the 
-    //the spotsResponse
-    spotsResponse.Spots.push(eachSpot)
-
-    //Once we get the correct response back, then we'll return the spotsResponse via 200
-    return res.status(200).json(spotsResponse)
-
-});
+// Get all Spots owned by the Current User
+router.get('/spots/current', requireAuth, async (req, res) => {
+    try {
+      const userId = req.user.id; // Assuming you have implemented authentication middleware
+      const spots = await Spot.findAll({ where: { ownerId: userId } });
+      res.status(200).json({ Spots: spots });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Internal Server Error' });
+    }
+  });
 
 // Get details of a Spot from an Id
-
+router.get('/spots/:spotId', requireAuth, async (req, res) => {
+    const spotId = req.params.spotId;
+    try {
+        const spot = await Spot.findByPk(spotId, {
+          include: [
+            {
+              model: SpotImage,
+              as: 'SpotImages',
+            },
+            {
+              model: User,
+              as: 'Owner',
+            },
+          ],
+        });
+    
+        if (!spot) {
+          res.status(404).json({ message: "Spot couldn't be found" });
+          return;
+        }
+    
+        res.status(200).json(spot);
+      } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Internal Server Error' });
+      }
+    });
 
 //! POST 
 
