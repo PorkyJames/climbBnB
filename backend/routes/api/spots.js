@@ -53,6 +53,14 @@ router.get('/:spotId', async (req, res) => {
 //! PUT
 
 // Edit a Spot
+router.put('/:spotid', requireAuth, async (req, res) => {
+  const spot = await Spot.findByPk(req.params.spotId);
+
+  if (!spot){
+    return res.status(404).json({message: "Spot not found"})
+  }
+  
+})
 
 
 //! DELETE
