@@ -105,7 +105,7 @@ router.post('/', async (req, res) => {
   }
 
   // Create a new spot object
-  const spot = await sequelize.models.Spot.create(req.body);
+  const spot = await Sequelize.models.Spot.create(req.body);
 
   // Return a 201 Created response with the new spot object
   res.status(201).json({
@@ -131,19 +131,123 @@ router.post('/', async (req, res) => {
 //! PUT
 
 // Edit a Spot
-router.put('/:spotid', requireAuth, async (req, res) => {
+router.put('/:spotId', requireAuth, async (req, res) => {
+  const userId = req.user.id;
+
   const spot = await Spot.findByPk(req.params.spotId);
 
-  if (!spot){
-    return res.status(404).json({message: "Spot not found"})
+  if (!spot) {
+      return res.status(404).json({
+          message: "Spot was not found"
+      })
   }
-  
+
+  const finalSpot = spot.dataValues;
+
+  if (userId !== finalSpot.ownerId) {
+      return res.status(401).json({
+          message: "You must own the spot to make an edit"
+      })
+  }
+
+  const { address, city, state, country, lat, lng, name, description, price } = req.body;
+
+  await spot.set({
+      address: address,
+      city: city,
+      state: state,
+      country: country,
+      lat: lat,
+      lng: lng,
+      name: name,
+      description: description,
+      price: price
+  })
+
+  await spot.save();
+
+  const editedSpot = await Spot.findByPk(req.params.spotId);
+
+  return res.status(200).json(editedSpot)
 })
+
 
 
 //! DELETE
 
 // Delete a Spot
+router.delete('/:spotId', requireAuth, async (req, res) => {
+  const userId = req.user.id;
+
+  const spot = await Spot.findByPk(req.params.spotId);
+
+  if (!spot) {
+      return res.status(404).json({
+          message: "Spot was not found"
+      })
+  }
+
+  if (userId !== spot.dataValues.ownerId) {
+      return res.status(401).json({
+          message: "You must own this spot to delete this post"
+      })
+  }
+
+  await spot.destroy();
+
+  return res.status(200).json({
+      message: "Successfully deleted"
+  })
+})
+
+//Reviews by Spot ID
+router.get("/:spotId/reviews", async (req, res, next) => {
+  const spotId = Number(req.params.spotId);
+
+  const currSpot = await Spot.findByPk(spotId);
+  if (!currSpot) {
+    const err = new Error("Spot couldn't be found");
+    err.status = 404;
+    return next(err);
+  }
+  const spotReviews = await Review.findAll({
+    where: {
+      spotId: spotId,
+    },
+    include: [
+      {
+        model: User,
+        attributes: ["id", "firstName", "lastName"],
+      },
+      {
+        model: Image,
+        attributes: ["id", "url", "imageableType"],
+      },
+    ],
+  });
+
+  if (!spotReviews.length) {
+    return res.json({
+      message: "There are currently no reviews for this spot",
+    });
+  }
+
+  const updatedReviews = spotReviews.map((spotReview) => {
+    const {
+      dataValues: { Images, ...newReviews },
+    } = spotReview;
+
+    const ReviewImages = Images.map((image) => {
+      if ((image.imageableType = "Review")) {
+        return { id: image.id, url: image.url };
+      }
+    });
+
+    return { ...newReviews, ReviewImages };
+  });
+
+  return res.json({ Reviews: updatedReviews });
+});
 
 
 //! Always need to export the router
