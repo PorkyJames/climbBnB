@@ -1,6 +1,6 @@
 const express = require('express');
 const Sequelize = require('sequelize');
-const { Spot } = require('../../db/models')
+const { Spot, SpotImage, User } = require('../../db/models')
 const { requireAuth } = require('../../utils/auth');
 const router = express.Router();
 
@@ -20,6 +20,28 @@ router.get('/current', requireAuth, async (req, res) => {
   });
 
 // Get details of a Spot from an Id
+router.get('/:spotId', async (req, res) => {
+  const spotId = req.params.spotId;
+      const spot = await Spot.findByPk(spotId, {
+        include: [
+          {
+            model: SpotImage,
+            as: 'SpotImages',
+          },
+          {
+            model: User,
+            as: 'Owner',
+          },
+        ],
+      });
+
+      if (!spot) {
+      return res.status(404).json({ message: "Spot couldn't be found" });
+      }
+
+      res.json(spot);
+  });
+
 
 //! POST 
 
@@ -37,6 +59,6 @@ router.get('/current', requireAuth, async (req, res) => {
 
 // Delete a Spot
 
-//! Always need to export the router
 
+//! Always need to export the router
 module.exports = router;
