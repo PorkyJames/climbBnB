@@ -66,7 +66,64 @@ router.get('/:spotId', async (req, res) => {
     })
   }
 
-  res.json(spot)
+  const dvSpot = spot.dataValues;
+
+  //find our adjusted spot's ids
+  const adjustedSpotReviews = await Review.findAll({
+    where: {
+      spotId: spot.dataValues.id
+    }
+  })
+
+  const numReviews = adjustedSpotReviews.length;
+
+  //we're going to add the total with the adjusted spot reviews
+  let sum = 0;
+  //iterate and add
+  for (let i = 0; i < adjustedSpotReviews.length; i++) {
+    sum += adjustedSpotReviews[i].dataValues.stars
+  }
+
+  //then we can get the average rating
+  const average = sum / adjustedSpotReviews.length;
+
+  //this will be the result of what our res.json will return
+  const result = {
+    ...dvSpot,
+    numReviews,
+    average,
+    SpotImages: [],
+  }
+  
+  const spotImage = await SpotImage.findAll({
+    where: {
+      spotId: spot.dataValues.id
+    }
+  })
+
+  //then we iterate again using for loop and push the imageObj into our result
+  for (let i = 0; i < spotImages.length; i++) {
+    let currentImage = spotImages[i];
+    let imageObj = {
+      id: currentImage.id,
+      url: currentImage.url,
+      preview: currentImage.preview,
+    }
+    result.SpotImages.push(imageObj)
+  }
+
+  
+  const owner = await User.findByPk(spot.dataValues.ownerId) 
+
+  const dvOwner = owner.dataValues
+
+  result.Owner = {
+    id: dvOwner.id,
+    firstName: dvOwner.firstName,
+    lastName: dvOwner.lastName,
+  }
+
+  return res.json(result)
 
 });
 
@@ -139,8 +196,6 @@ router.post('/:spotId/images', requireAuth, async (req, res) => {
           });
           await spotPreviewImage.save();
       }
-
-      console.log(spotPreviewImage)
       //create the spotImage
       const newSpotImage = await SpotImage.create({
           url: url,
@@ -395,29 +450,29 @@ router.get('/:spotId/bookings', requireAuth, async (req, res) => {
   }
 })
 
-
 //CREATE a booking for a spot based on Spot ID
 
 router.post('/:spotId/bookings', requireAuth, async (req, res) => {
   const spot = await Spot.findByPk(req.params.spotId);
   const user = req.user;
 
-  //check if spot exists
+  //if the spot doesn't exist
   if (!spot) {
       return res.status(404).json({
           message: "Spot couldn't be found"
       })
   }
   
-  //check if current user owns the spot
+  //if the user doesn't own the spot
   if (user.id === spot.ownerId) {
       return res.status(403).json({
           message: "You cannot book a booking for your own spot"
       })
   };
 
-
   const { startDate, endDate } = req.body;
+
+  //create our validation errors for any bad requests. Similar to what we've done before
 
   const validationError = {
       message: "Bad Request",
@@ -439,14 +494,13 @@ router.post('/:spotId/bookings', requireAuth, async (req, res) => {
   const bookingStartDate = new Date(startDate);
   const bookingEndDate = new Date(endDate);
 
-  //error message to be sent
   const dateError = {
       message: "Sorry, this spot is already booked for the specified dates",
       errors: {}
   };
 
-  //check for overlap
   let Op = Sequelize.Op
+
   //if start date is invalid
   const currentBookingsStartDate = await Booking.findAll({
       where: {
@@ -461,12 +515,11 @@ router.post('/:spotId/bookings', requireAuth, async (req, res) => {
       }
   })
 
-  // console.log(currentBookingsStartDate, '!!!currentBookignsStartDate')
-
   if (currentBookingsStartDate.length) {
       dateError.errors.startDate = "Start date conflicts with an existing booking"
   }
 
+  //if there is a conflict with the end date as well
   const currentBookingsEndDate = await Booking.findAll({
       where: {
           spotId: spot.id,
@@ -495,7 +548,6 @@ router.post('/:spotId/bookings', requireAuth, async (req, res) => {
                   }
           }
       })
-  
 
   if (currentBookingsBothDates.length) {
       dateError.errors.startDate = "Start date conflicts with an existing booking";
@@ -506,6 +558,7 @@ router.post('/:spotId/bookings', requireAuth, async (req, res) => {
       return res.status(403).json(dateError)
   }
 
+  //if everything checks out fine
   const newBooking = await Booking.create({
       spotId: spot.id,
       userId: user.id,
@@ -514,8 +567,6 @@ router.post('/:spotId/bookings', requireAuth, async (req, res) => {
   });
 
   return res.status(200).json(newBooking)
-
-
 
 })
 
