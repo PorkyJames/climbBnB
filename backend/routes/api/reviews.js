@@ -47,6 +47,7 @@ router.get('/current', requireAuth, async (req, res) => {
 //Add an Image to a Review based on the Review's Id
 
 router.post('/:reviewId/images', requireAuth, async (req, res) => {
+    
     //if the review doesn't exist
     const review = await Review.findByPk(req.params.reviewId);
     if (!review) {
@@ -57,11 +58,25 @@ router.post('/:reviewId/images', requireAuth, async (req, res) => {
 
     //if the review doesn't belong to the current user
     const user = req.user;
-    const dvReview = review.datavalues;
+    const dvReview = review.dataValues;
 
     if (user.id !== dvReview.userId) {
         return res.status(400).json({
             message: "Review must belong to the current user"
+        })
+    }
+
+    //if there are more than 10 images for each review
+
+    const images = await ReviewImage.findAll({
+        where: {
+            reviewId: dvReview.id
+        }
+    })
+
+    if (images.length >= 10) {
+        return res.status(403).json({
+            message: "Maximum number of images for this resource was reached"
         })
     }
 

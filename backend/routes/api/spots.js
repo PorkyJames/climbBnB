@@ -1,6 +1,6 @@
 const express = require('express');
 const Sequelize = require('sequelize');
-const { Spot, Image, SpotImage, User, Review, ReviewImage } = require('../../db/models')
+const { Spot, SpotImage, User, Review, ReviewImage, Booking } = require('../../db/models')
 const { requireAuth } = require('../../utils/auth');
 const router = express.Router();
 const { handleValidationErrors } = require('../../utils/validation');
@@ -95,7 +95,7 @@ router.get('/:spotId', async (req, res) => {
     SpotImages: [],
   }
   
-  const spotImage = await SpotImage.findAll({
+  const spotImages = await SpotImage.findAll({
     where: {
       spotId: spot.dataValues.id
     }
@@ -263,6 +263,7 @@ router.put('/:spotId', requireAuth, async(req, res) => {
 
 // Delete a Spot
 router.delete('/:spotId', requireAuth, async (req, res, next) => {
+  const userId = req.user.id;
   const spot = await Spot.findByPk(req.params.spotId)
 
   //if spot doesn't exist
@@ -353,101 +354,131 @@ router.get('/:spotId/reviews', async (req, res) => {
 })
 
 //CREATE a review for a Spot based on SpotID
-router.post('/:spotId/reviews', async (req, res) => {
-  const userId = req.user.id;
+router.post('/:spotId/reviews', requireAuth, async (req, res) => {
+  //check for spot
+  const spot = await Spot.findByPk(req.params.spotId) 
 
-  //if the spot doesn't exist
-  const spot = await Spot.findByPk(req.params.spotId);
   if (!spot) {
-    return res.status(404).json({
-      message: "Spot couldn't be found"
-    })
-  };
-
-  //if the user has a review for the spot already
-  const existingReview = await Review.findOne({
-    where: {
-      userId: req.user.id,
-      spotId: req.params.spotId,
-    }
-  })
-
-  if (existingReview) {
-    return res.status(500).json({
-      message: "User already has a review for this spot",
-    });
+      return res.status(404).json({
+          message: "Spot couldn't be found"
+      })
   }
 
-  //if no existing review / spot exists, create a new review
-  const newReview = await Review.create({
-    userId: req.user.id,
-    spotId: req.params.id,
-    review,
-    stars,
-  });
+  const refinedSpot = spot.dataValues
+  const user = req.user
+  //check to see if there is a review by that user for that spot
 
-  //return our new review
-  res.status(200).json({
-    id: review.id,
-    userId,
-    spotId,
-    review,
-    stars,
-    createdAt: review.createdAt,
-    updatedAt: review.updatedAt,
+  const userReviewsForSpot = await Review.findAll({
+      where: {
+          spotId: refinedSpot.id,
+          userId: user.id
+      }
   })
 
+  if (userReviewsForSpot.length) {
+      return res.status(500).json({
+          message: "User already has a review for this spot"
+      })
+  }
+
+
+  const { review, stars } = req.body
+
+  const newReview = await Review.create({
+      userId: user.id,
+      spotId: req.params.spotId,
+      review: review,
+      stars: stars
+  })
+
+  return res.status(201).json(newReview);
 })
 
 
 //Get all Bookings for a Spot based on the Spot's id
 router.get('/:spotId/bookings', requireAuth, async (req, res) => {
-
+  
+  //create our booking result obj that we'll push into later
+  const result = {
+      Bookings: []
+  }
+  //grab the current user
   const user = req.user;
-  const currSpot = await Spot.findByPk(req.params.spotId);
+  //get details of the spot via our spotId
+  const spot = await Spot.findByPk(req.params.spotId);
 
   //if the spot doesn't exist
-  if (!currSpot) {
-    return res.status(404).json({
-      message: "Spot couldn't be found"
-    })
+  if (!spot) {
+      return res.status(404).json({
+          message: "Spot couldn't be found"
+      })
   }
 
-  const bookingObj = {
-    Bookings: []
-  }
-
-  //if you are the owner (if you are not the owner would take additional code / time)
+  //if the current user IS the owner
   if (user.id === spot.ownerId) {
-    const allBookings = await Booking.findAll({
-      where: {
-        spotId: spot.id
+      const bookings = await Booking.findAll({
+          where: {
+              spotId:  spot.id
+          }
+      })
+
+      //iterate through our bookings and get the details then find where it's
+      //designated by userId. Then we include / exclude whatever we want
+      for (let i = 0; i < bookings.length; i++) {
+          const booking = bookings[i].dataValues;
+          let user = await User.findAll({
+              where: {
+                  id: booking.userId
+              },
+              attributes: {
+                  include: ['id', 'firstName', 'lastName'],
+                  exclude: ['email', 'username', 'hashedPassword', 'createdAt', 'updatedAt']
+              }
+          });
+
+          //grab the first item in our user array and give us more
+          //details via the dataValues
+          user = user[0].dataValues
+
+          const bookingObj = {
+              User: user,
+              ...booking
+          }
+
+          result.Bookings.push(bookingObj);
       }
-    })
+
+  } else {
+
+      //if the current user is NOT the owner
+
+      //grab each booking based on the spot's id
+      const bookings = await Booking.findAll({
+          where: {
+              spotId:  spot.id
+          }
+      })
+
+      //iterate through our bookings and grab each info for
+      //the item inside of our bookings via datavalues
+      for (let i = 0; i < bookings.length; i++) {
+          const booking = bookings[i].dataValues;
+
+          //create a new bookings Object that will change the info
+          //for each booking spotId, startDate, and endDate
+          const bookingsObj = {
+              spotId: booking.spotId,
+              startDate: booking.startDate,
+              endDate: booking.endDate
+          }
+
+          //then push all of that nonsense into our results bookings obj
+          result.Bookings.push(bookingsObj)
+      }
+
   }
 
-  //iterate through our bookings 
-  for (let i = 0; i < allBookings.length; i++) {
-    const dvBookings = allBookings[i].dataValues
-    let user = await User.findAll({
-      where: {
-        id: dvBookings.userId
-      },
-      attributes: {
-        include: ['id', 'firstName', 'lastName'],
-        exclude: ['email', 'username', 'hashedPassword', 'createdAt', 'updatedAt']
-      }
-    });
-
-    user = user[0].dataValues
-
-            const bookingObject = {
-                User: user,
-                ...dvBookings
-            }
-
-            bookingObj.Bookings.push(bookingObject);
-  }
+  return res.status(200).json(result)
 })
 
 //CREATE a booking for a spot based on Spot ID

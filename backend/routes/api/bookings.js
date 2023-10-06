@@ -1,6 +1,6 @@
 const express = require('express');
 const Sequelize = require('sequelize');
-const { Review, ReviewImage, Spot, User, SpotImage } = require('../../db/models')
+const { Review, ReviewImage, Spot, User, SpotImage, Booking } = require('../../db/models')
 const { requireAuth } = require('../../utils/auth');
 const router = express.Router();
 
@@ -9,29 +9,43 @@ const router = express.Router();
 
 //Get all of the Current User's Bookings
 router.get('/current', requireAuth, async (req, res) => {
+    //grab the correctly authenticated user
     const user = req.user;
+    //find all of that user's bookings where the user id 
+    //relates to the authenticated user above
     const userBookings = await Booking.findAll({
         where: {
             userId: user.id
         }
     })
 
-    const bookingObj = {
+    //next create a booking Object that we'll push everything into
+    //for our response json
+    const result = {
         Bookings: []
     }
-    for (let i = 0; i < bookings.length; i++) {
-        const booking = bookings[i].dataValues;
+
+    //iterate throughout bookings array and each booking will be the dv of each 
+    //item in our booking array
+    for (let i = 0; i < userBookings.length; i++) {
+        const booking = userBookings[i].dataValues;
+
+        //then we look for each spot based on that specific booking
         let spot = await Spot.findAll({
             where: {
                 id: booking.spotId
             },
+            //and we include all of the attributes and exclude the ones we don't need
             attributes: {
                 include: ['id', 'ownerId', 'address', 'city', 'state', 'country', 'lat', 'lng', 'name', 'price'],
                 exclude: ['description','createdAt', 'updatedAt']
             }
         })
+        //then we use dv to access that data in the first item in our spot array
         spot = spot[0].dataValues;
 
+        //then we find all of the Spot Images where it relates to our spotId that we 
+        //freshly create in our where / findall
         const spotPreviewImage = await SpotImage.findAll({
             where : {
                 spotId: spot.id,
@@ -43,7 +57,9 @@ router.get('/current', requireAuth, async (req, res) => {
 
         if (spotPreviewImage[0]) {
             imageUrl = spotPreviewImage[0].dataValues.url;
-        } else imageUrl = 'none'
+        } else {
+            imageUrl = 'none'
+        }
 
         const bookingObj = {
             id: booking.id,
@@ -59,10 +75,10 @@ router.get('/current', requireAuth, async (req, res) => {
             updatedAt: booking.updatedAt
         };
 
-        bookingsRes.Bookings.push(bookingObj);
+        result.Bookings.push(bookingObj);
     }
 
-    return res.status(200).json(bookingsRes);
+    return res.json(result);
 });
 
 
