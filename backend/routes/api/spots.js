@@ -3,51 +3,186 @@ const Sequelize = require('sequelize');
 const { Spot, SpotImage, User, Review, ReviewImage, Booking } = require('../../db/models')
 const { requireAuth } = require('../../utils/auth');
 const router = express.Router();
+const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
 
-// //use to help validate our data
-// const validateData = [
-//   check('address')
-//     .exists({ checkFalsy: true })
-//     .withMessage("Street address is required"),
-//   check('city')
-//     .exists({ checkFalsy: true })
-//     .withMessage("City is required"),
-//     check('state')
-//     .exists({ checkFalsy: true })
-//     .withMessage("State is required"),
-//     check('country')
-//     .exists({ checkFalsy: true })
-//     .withMessage("Country is required"),
-//     check('lat')
-//     .exists({ checkFalsy: true })
-//     .isFloat({min:-90,max:90})
-//     .withMessage("Latitude is not valid"),
-//     check('lng')
-//     .exists({ checkFalsy: true })
-//     .isFloat({min:-180,max:180})
-//     .withMessage("Longitude is not valid"),
-//     check('name')
-//     .exists({ checkFalsy: true })
-//     .isLength({ max: 50 })
-//     .withMessage("Name must be less than 50 characters"),
-//     check('description')
-//     .exists({ checkFalsy: true })
-//     .withMessage("Description is required"),
-//     check('price')
-//     .exists({ checkFalsy: true })
-//     .withMessage("Price per day is required"),
-//   handleValidationErrors
-// ];
+//use to help validate our data
+const validateData = [
+    check('address')
+    .exists({ checkFalsy: true })
+    .withMessage("Street address is required"),
+    check('city')
+    .exists({ checkFalsy: true })
+    .withMessage("City is required"),
+    check('state')
+    .exists({ checkFalsy: true })
+    .withMessage("State is required"),
+    check('country')
+    .exists({ checkFalsy: true })
+    .withMessage("Country is required"),
+    check('lat')
+    .exists({ checkFalsy: true })
+    .isFloat({min:-90,max:90})
+    .withMessage("Latitude is not valid"),
+    check('lng')
+    .exists({ checkFalsy: true })
+    .isFloat({min:-180,max:180})
+    .withMessage("Longitude is not valid"),
+    check('name')
+    .exists({ checkFalsy: true })
+    .isLength({ max: 50 })
+    .withMessage("Name must be less than 50 characters"),
+    check('description')
+    .exists({ checkFalsy: true })
+    .withMessage("Description is required"),
+    check('price')
+    .exists({ checkFalsy: true })
+    .withMessage("Price per day is required"),
+  handleValidationErrors
+];
+
+const validateCreateReview = [
+    check("review")
+      .exists({ checkFalsy: true })
+      .withMessage("Review text is required"),
+    check("stars")
+      .exists({ checkFalsy: true })
+      .isInt({
+        min: 1,
+        max: 5,
+      })
+      .withMessage("Stars must be an integer from 1 to 5"),
+    handleValidationErrors,
+  ];
+  
+  const validateCreateReviewImage = [
+    check("title")
+      .exists({ checkFalsy: true })
+      .withMessage("Title is required"),
+    check("message")
+      .exists({ checkFalsy: true })
+      .withMessage("Message is required"),
+    check("errors")
+      .exists({ checkFalsy: true })
+      .withMessage("Errors field is required"),
+    check("url")
+      .exists({ checkFalsy: true })
+      .isURL()
+      .withMessage("URL must be a valid URL"),
+    handleValidationErrors,
+  ];
+
+//create a function that will help us validate all of our query parameters
+
+function validateQueryParameters(query) {
+    //create an empty validation Errors object to return
+    const validationErrors = {};
+  
+    //page is an integer, minimum of 1, maximum of 10, and default of 1
+    if (query.page && (isNaN(query.page) || query.page < 1 || query.page > 10)) {
+      validationErrors.page = "Page must be between 1 and 10";
+    }
+  
+    //size is an integer, minimum of 1, maximum of 20, default of 20
+    if (query.size && (isNaN(query.size) || query.size < 1 || query.size > 20)) {
+      validationErrors.size = "Size must be between 1 and 20";
+    }
+    
+    //minLat must be a decimal and must be optional
+    if (query.minLat && isNaN(query.minLat)) {
+      validationErrors.minLat = "Minimum latitude is invalid";
+    }
+  
+    if (query.maxLat && isNaN(query.maxLat)) {
+      validationErrors.maxLat = "Maximum latitude is invalid";
+    }
+  
+    if (query.minLng && isNaN(query.minLng)) {
+      validationErrors.minLng = "Minimum longitude is invalid";
+    }
+  
+    if (query.maxLng && isNaN(query.maxLng)) {
+      validationErrors.maxLng = "Maximum longitude is invalid";
+    }
+  
+    if (query.minPrice && (isNaN(query.minPrice) || query.minPrice < 0)) {
+      validationErrors.minPrice = "Minimum price must be greater than or equal to 0";
+    }
+  
+    if (query.maxPrice && (isNaN(query.maxPrice) || query.maxPrice < 0)) {
+      validationErrors.maxPrice = "Maximum price must be greater than or equal to 0";
+    }
+  
+    return validationErrors;
+  }
+
 
 // Get all Spots
-router.get('/', async (req, res) => { 
-      const spots = await Spot.findAll();
-      res.json({ Spots: spots });
+router.get('/', async (req, res) => {
+    try {
+      //get all spots
+      const allSpots = await Spot.findAll();
+  
+      // Extract and validate query parameters
+      const { page = 1, size = 20, minLat, maxLat, minLng, maxLng, minPrice, maxPrice } = req.query;
+      const validationErrors = validateQueryParameters(req.query);
+  
+      if (Object.keys(validationErrors).length > 0) {
+        return res.status(400).json({
+          message: "Bad Request",
+          errors: validationErrors,
+        });
+      }
+  
+      // Calculate the offset for pagination
+      const offset = (page - 1) * size;
+  
+      // Define the filter conditions based on query parameters
+      const filterConditions = {};
+  
+      if (minLat && maxLat) {
+        filterConditions.lat = { [Op.between]: [minLat, maxLat] };
+      }
+  
+      if (minLng && maxLng) {
+        filterConditions.lng = { [Op.between]: [minLng, maxLng] };
+      }
+  
+      if (minPrice !== undefined && maxPrice !== undefined) {
+        filterConditions.price = { [Op.between]: [minPrice, maxPrice] };
+      }
+  
+      // Fetch spots using Sequelize with pagination and filtering
+      const spots = await Spot.findAndCountAll({
+        where: filterConditions,
+        limit: size,
+        offset: offset,
+      });
+  
+      // Calculate the total number of pages
+      const totalPages = Math.ceil(spots.count / size);
+  
+      // Prepare the response JSON
+      const response = {
+        AllSpots: allSpots, // Include all spots in the response
+        FilteredSpots: spots.rows, // Include filtered spots
+        page: page,
+        size: size,
+        totalPages: totalPages,
+      };
+  
+      // Send the response
+      res.status(200).json(response);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+
   });
 
+
 // Get all Spots owned by the Current User
-router.get('/current', requireAuth, async (req, res) => {
+router.get('/current', requireAuth,async (req, res) => {
       const userId = req.user.id; 
       const spots = await Spot.findAll({ 
         where: { ownerId: userId } 
@@ -59,7 +194,7 @@ router.get('/current', requireAuth, async (req, res) => {
 router.get('/:spotId', async (req, res) => {
   const spot = await Spot.findByPk(req.params.spotId);
 
-  //! If our spot doesn't exist
+  // If our spot doesn't exist
   if (!spot) {
     res.status(404).json({
       message: "Spot couldn't be found"
@@ -130,13 +265,12 @@ router.get('/:spotId', async (req, res) => {
 //! POST 
 
 // Create a Spot
-router.post("/", requireAuth, async(req,res) => {
+router.post("/", requireAuth, validateData, async (req,res) => {
   const { user } = req;
-  const userId = user.id;
   const { address, city, state, country, lat, lng, name, description, price } = req.body;
 
-  const newSpot = await Spot.create({
-    ownerId: userId,
+  const newSpot = await Spot.create( {
+    ownerId: user.id,
     address: address,
     city: city,
     state: state,
@@ -146,70 +280,71 @@ router.post("/", requireAuth, async(req,res) => {
     name: name,
     description: description,
     price: price,
-  });
+    })
 
-res.status(201)
-   res.json(newSpot);
+    res.status(201).json(newSpot);
 });
 
 // Add an Image to a Spot based on Spot's Id
-router.post('/:spotId/images', requireAuth, async (req, res) => {
-  const { url, preview } = req.body;
+router.post('/:spotId/images', requireAuth, validateCreateReviewImage, async (req, res,) => {
+    const { url, preview } = req.body;
 
-  const spot = await Spot.findAll( {
-      where: {
-          id: req.params.spotId
-      }
-  })
+    //grab our spot via findAll
+    const spot = await Spot.findAll( {
+        where: {
+            id: req.params.spotId
+        }
+    })
 
-  //if spot doesn't exist
-  if (!spot.length) {
-  
-      const err = new Error("Spot doesn't exist");
-          err.message = "Spot couldn't be found";
-          err.status = 404;
-          throw err
-  }
+    //if the spot exists
+    if (!spot) {
+        const error = new Error("Spot doesn't exist");
+        error.message = "Spot couldn't be found";
+        error.status = 404;
+        throw error
+    }
 
-  //if the user doesn't own the spot
-  if (spot[0].dataValues.ownerId !== req.user.id) {
-      const err = new Error("Unauthorized");
-      err.status = 403;
-      err.message = "You must own the spot to add an image"
-      throw err
-  }
+    //checking to see if they own the spot
+    const ifIsOwner = spot[0].dataValues.ownerId === req.user.id
 
-  //if the preview exists within the spot
-  if (preview === true) {
-      const spotPreviewImageData = await SpotImage.findAll({
-          where: {
-              spotId: req.params.spotId,
-              preview: true
-          }
-      })
+    if (ifIsOwner) {
+        const error = new Error("Unauthorized");
+        error.status = 403;
+        error.message = "You must own the spot to add an image"
+        throw error;
+    }
 
-      const spotPreviewImage = spotPreviewImageData[0]
-  
-      if (spotPreviewImage) {
-          await spotPreviewImage.set({
-              preview: false
-          });
-          await spotPreviewImage.save();
-      }
-      //create the spotImage
-      const newSpotImage = await SpotImage.create({
-          url: url,
-          preview: preview,
-          spotId: req.params.spotId
-      })
+    //if there is a preview for a spot already
+    if (preview) {
+        const spotPreviewImageData = await SpotImage.findAll({
+            where: {
+                spotId: req.params.spotId,
+                preview: true
+            }
+        })
+
+        //grab our first preview image
+        const spotPreviewImage = spotPreviewImageData[0]
     
-      return res.status(200).json({
-          id: newSpotImage.id,
-          url: newSpotImage.url,
-          preview: newSpotImage.preview
-      }) 
-  }
-  
+        if (spotPreviewImage) {
+            await spotPreviewImage.set({
+                preview: false
+            });
+            await spotPreviewImage.save();
+        }
+    }
+    
+    const newSpotImage = await SpotImage.create({
+        url: url,
+        preview: preview,
+        spotId: req.params.spotId
+    })
+
+    return res.status(200).json({
+        id: newSpotImage.id,
+        url: newSpotImage.url,
+        preview: newSpotImage.preview
+    }) 
 })
 
 //! PUT
@@ -354,7 +489,7 @@ router.get('/:spotId/reviews', async (req, res) => {
 })
 
 //CREATE a review for a Spot based on SpotID
-router.post('/:spotId/reviews', requireAuth, async (req, res) => {
+router.post('/:spotId/reviews', requireAuth, validateCreateReview, async (req, res) => {
   //check for spot
   const spot = await Spot.findByPk(req.params.spotId) 
 

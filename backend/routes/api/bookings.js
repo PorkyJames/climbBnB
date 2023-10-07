@@ -119,6 +119,9 @@ router.put('/:bookingId', requireAuth, async (req, res) => {
     }
 
     //next we need to make sure that we can validate the booking
+
+    //this will be our validationError object which will have a message of "Bad Request"
+    // and any errors that we push into it. 
     const validationError = {
         message: "Bad Request",
         errors: {}
@@ -246,7 +249,7 @@ router.put('/:bookingId', requireAuth, async (req, res) => {
 
     const updatedBooking = await Booking.findByPk(booking.id);
 
-    return res.status(200).json(updatedBooking)
+    return res.json(updatedBooking)
 })
 
 
