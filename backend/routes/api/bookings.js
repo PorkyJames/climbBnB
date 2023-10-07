@@ -232,11 +232,11 @@ router.put('/:bookingId', requireAuth, async (req, res) => {
 
     if (currentBookingsBothDates.length) {
         dateError.errors.startDate = "Start date conflicts with an existing booking";
-        dateError.errors.endDate = "End date conflics wtih an existing booking"
+        dateError.errors.endDate = "End date conflicts with an existing booking"
     }
 
     if (currentBookingsEndDate.length && !dateError.errors.booking) {
-        dateError.errors.endDate = "End date conflicts with an exisiting booking"
+        dateError.errors.endDate = "End date conflicts with an existing booking"
     }
 
     if (dateError.errors.startDate || dateError.errors.endDate || dateError.errors.booking) {
