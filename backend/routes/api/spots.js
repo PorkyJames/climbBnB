@@ -119,7 +119,6 @@ const validateQueryParams = [
   handleValidationErrors,
 ]
 
-  
 // Get all Spots
 router.get('/', validateQueryParams, async (req, res) => {
   // //get all the spots via findAll from our database
@@ -159,7 +158,7 @@ if (!isNaN(minPrice) && !isNaN(maxPrice)) {
 
 const allFilteredSpots = await Spot.findAll({
   //grab our filteredObj of info
-  filterObj,
+  where: filterObj,
   //limit via our size
   limit: size,
   //create an offset with our page. 
