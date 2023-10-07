@@ -486,7 +486,7 @@ router.get('/:spotId/reviews', async (req, res) => {
 
 })
 
-//CREATE a review for a Spot based on SpotID
+//!CREATE a review for a Spot based on SpotID
 router.post('/:spotId/reviews', requireAuth, validateCreateReview, async (req, res) => {
   //check for spot
   const spot = await Spot.findByPk(req.params.spotId) 
@@ -528,7 +528,7 @@ router.post('/:spotId/reviews', requireAuth, validateCreateReview, async (req, r
 })
 
 
-//Get all Bookings for a Spot based on the Spot's id
+//!Get all Bookings for a Spot based on the Spot's id
 router.get('/:spotId/bookings', requireAuth, async (req, res) => {
   
   //create our booking result obj that we'll push into later
@@ -614,7 +614,7 @@ router.get('/:spotId/bookings', requireAuth, async (req, res) => {
   return res.json(result)
 })
 
-//CREATE a booking for a spot based on Spot ID
+//!CREATE a booking for a spot based on Spot ID
 
 router.post('/:spotId/bookings', requireAuth, async (req, res) => {
   const spot = await Spot.findByPk(req.params.spotId);
