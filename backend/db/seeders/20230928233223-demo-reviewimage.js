@@ -1,14 +1,14 @@
 'use strict';
 
+/** @type {import('sequelize-cli').Migration} */
+
 const { ReviewImage } = require('../models');
-const bcrypt = require('bcryptjs');
 
 let options = {};
 if (process.env.NODE_ENV === 'production') {
-  options.schema = process.env.SCHEMA;
+  options.schema = process.env.SCHEMA
 }
 
-/** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up (queryInterface, Sequelize) {
     /**
@@ -22,18 +22,18 @@ module.exports = {
     */
    await ReviewImage.bulkCreate([
     {
-      reviewId: 1,
       url: 'images.com/image1',
+      reviewId: 1
     },
     {
-      reviewId: 2,
       url: 'images.com/image2',
+      reviewId: 2
     },
     {
-      reviewId: 3,
       url: 'images.com/image3',
-    },
-   ], {validate: true})
+      reviewId: 3
+    }
+   ], { validate: true })
   },
 
   async down (queryInterface, Sequelize) {
@@ -43,10 +43,11 @@ module.exports = {
      * Example:
      * await queryInterface.bulkDelete('People', null, {});
      */
-    options.tableName = "ReviewImages";
+    options.tableName = 'ReviewImages'
     const Op = Sequelize.Op;
     return queryInterface.bulkDelete(options, {
-      reviewId: {[Op.in]: [1,2,3]}
+      reviewId: { [Op.in]: [1, 2, 3]}
     }, {})
+
   }
 };
