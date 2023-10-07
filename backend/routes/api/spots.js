@@ -120,48 +120,82 @@ const validateQueryParams = [
 ]
 
 // Get all Spots
-router.get('/', validateQueryParams, async (req, res) => {
-  try {
-    // Parse data from query parameters
-    const page = parseInt(req.query.page) || 1;
-    const size = parseInt(req.query.size) || 20;
-    const minLat = parseFloat(req.query.minLat);
-    const maxLat = parseFloat(req.query.maxLat);
-    const minLng = parseFloat(req.query.minLng);
-    const maxLng = parseFloat(req.query.maxLng);
-    const minPrice = parseFloat(req.query.minPrice) || 0;
-    const maxPrice = parseFloat(req.query.maxPrice) || 0;
+router.get('/', async (req, res) => {
 
-    // Build a query param object to filter
-    const filterObj = {};
+    // Parse query parameters. We're going to destructure query params from req.query. 
+    let { minLat, maxLat, minLng, maxLng, minPrice, maxPrice } = req.query;
+    let { page, size } = req.query;
 
-    // If minLat and maxLat are valid numbers
+    // Set up the rules by defining a paginated list that we'll get back from our query
+    const paginatedQuery = {
+      where: {},
+      limit: parseInt(size) || 20,
+      offset: (parseInt(page) - 1) * (parseInt(size) || 20),
+    };
+
+    // Validation and error handling
+    const errors = {};
+
+    if (page && (page < 1 || page > 10)) {
+      errors.page = "Page must be between 1 and 10";
+    }
+
+    if (size && (size < 1 || size > 20)) {
+      errors.size = "Size must be between 1 and 20";
+    }
+
+    if (minLat && (minLat < -90 || minLat > 90)) {
+      errors.minLat = "Invalid minimum latitude";
+    }
+
+    if (maxLat && (maxLat < -90 || maxLat > 90)) {
+      errors.maxLat = "Invalid maximum latitude";
+    }
+
+    if (minLng && (minLng < -180 || minLng > 180)) {
+      errors.minLng = "Invalid minimum longitude";
+    }
+
+    if (maxLng && (maxLng < -180 || maxLng > 180)) {
+      errors.maxLng = "Invalid maximum longitude";
+    }
+
+    if (minPrice && minPrice < 0) {
+      errors.minPrice = "Minimum price must be greater than or equal to 0";
+    }
+
+    if (maxPrice && maxPrice < 0) {
+      errors.maxPrice = "Maximum price must be greater than or equal to 0";
+    }
+
+    if (Object.keys(errors).length > 0) {
+      return res.status(400).json({ message: "Bad Request", errors });
+    }
+
+    // Build query conditions based on valid parameters
     if (!isNaN(minLat) && !isNaN(maxLat)) {
-      filterObj.lat = { [Op.between]: [minLat, maxLat] };
+      paginatedQuery.where.lat = { [Op.between]: [parseFloat(minLat), parseFloat(maxLat)] };
     }
-    // Same concept as above for other filters
+
     if (!isNaN(minLng) && !isNaN(maxLng)) {
-      filterObj.lng = { [Op.between]: [minLng, maxLng] };
+      paginatedQuery.where.lng = { [Op.between]: [parseFloat(minLng), parseFloat(maxLng)] };
     }
+
     if (!isNaN(minPrice) && !isNaN(maxPrice)) {
-      filterObj.price = { [Op.between]: [minPrice, maxPrice] };
+      paginatedQuery.where.price = { [Op.between]: [parseFloat(minPrice), parseFloat(maxPrice)] };
     }
 
-    const allFilteredSpots = await Spot.findAll({
-      where: filterObj, // Use the "where" clause for filtering
-      limit: size,
-      offset: (page - 1) * size,
-    });
+    // Retrieve spots based on query options
+    const allFilteredSpots = await Spot.findAll(paginatedQuery);
 
-    res.json({
+    // Prepare the response
+    const paginatedSpotList = {
       Spots: allFilteredSpots,
-      page,
-      size,
-    });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Internal server error' });
-  }
+      page: parseInt(page) || 1,
+      size: parseInt(size) || 20,
+    };
+
+    res.json(paginatedSpotList);
 });
 
 
