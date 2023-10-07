@@ -1,43 +1,45 @@
 const express = require('express');
 const Sequelize = require('sequelize');
-const { Spot, SpotImage, User, Review, ReviewImage, Booking } = require('../../db/models')
+const { Spot, SpotImage, User, Review, ReviewImage, Booking } = require('../../db/models');
+const { Op } = require('sequelize');
 const { requireAuth } = require('../../utils/auth');
 const router = express.Router();
-const { check, optional } = require('express-validator');
+const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
 
 //use to help validate our data
 const validateData = [
-    check('address')
+    check("address")
     .exists({ checkFalsy: true })
     .withMessage("Street address is required"),
-    check('city')
+    check("city")
     .exists({ checkFalsy: true })
     .withMessage("City is required"),
-    check('state')
+    check("state")
     .exists({ checkFalsy: true })
     .withMessage("State is required"),
-    check('country')
+    check("country")
     .exists({ checkFalsy: true })
     .withMessage("Country is required"),
-    check('lat')
+    check("lat")
     .exists({ checkFalsy: true })
     .isFloat({min:-90,max:90})
     .withMessage("Latitude is not valid"),
-    check('lng')
+    check("lng")
     .exists({ checkFalsy: true })
     .isFloat({min:-180,max:180})
     .withMessage("Longitude is not valid"),
-    check('name')
+    check("name")
     .exists({ checkFalsy: true })
     .isLength({ max: 50 })
     .withMessage("Name must be less than 50 characters"),
-    check('description')
+    check("description")
     .exists({ checkFalsy: true })
     .withMessage("Description is required"),
-    check('price')
+    check("price")
     .exists({ checkFalsy: true })
     .withMessage("Price per day is required"),
+
   handleValidationErrors
 ];
 
@@ -52,49 +54,137 @@ const validateCreateReview = [
         max: 5,
       })
       .withMessage("Stars must be an integer from 1 to 5"),
+
     handleValidationErrors,
   ];
+
+const validateQueryParams = [
+  // page: integer, minimum: 1, maximum: 10, default: 1
+  check("page")
+    .isInt({
+      min: 1,
+      max: 10,
+    })
+    .withMessage("Page must be greater than or equal to 1"),
+  // size: integer, minimum: 1, maximum: 20, default: 20
+  check("size")
+    .isInt({
+      min: 1,
+      max: 20
+    })
+    .withMessage("Size must be greater than or equal to 1"),
+  // maxLat: decimal, optional
+  check("maxLat")
+    .isFloat({
+      max: 180
+    })
+    .optional()
+    .withMessage("Maximum latitude is invalid"),
+  // minLat: decimal, optional
+  check("minLat")
+    .isFloat({
+      min: -180
+    })
+    .optional()
+    .withMessage("Minimum latitude is invalid"),
+  // minLng: decimal, optional
+  check("minLng")
+    .isFloat({
+      min: -90
+    })
+    .optional()
+    .withMessage("Maximum longitude is invalid"),
+  // maxLng: decimal, optional
+  check("maxLng")
+    .isFloat({
+      max: 90
+    })
+    .optional()
+    .withMessage("Minimum longitude is invalid"),
+  // minPrice: decimal, optional, minimum: 0
+  check("minPrice")
+    .isFloat({
+      min: 0,
+    })
+    .optional()
+    .withMessage("Minimum price must be greater than or equal to 0"),
+  // maxPrice: decimal, optional, minimum: 0
+  check("maxPrice")
+    .isFloat({
+      min: 0,
+    })
+    .optional()
+    .withMessage("Maximum price must be greater than or equal to 0"),
+
+  handleValidationErrors,
+]
+
   
-//create a function that will help us validate all of our query parameters
-
-function validateQueryParameters(query) {
-    //create an empty validation Errors object to return
-    const validationErrors = {
-      message: "Bad Request",
-      errors: {},
-    };
-
-    // page: integer, minimum: 1, maximum: 10, default: 1
-    if (page && page )
-
-    // size: integer, minimum: 1, maximum: 20, default: 20
-    // minLat: decimal, optional
-    // maxLat: decimal, optional
-    // minLng: decimal, optional
-    // maxLng: decimal, optional
-    // minPrice: decimal, optional, minimum: 0
-    // maxPrice: decimal, optional, minimum: 0
-  
-    return validationErrors;
-  }
-
-
 // Get all Spots
-router.get('/', async (req, res) => {
-      //get all the spots via findAll from our database
-      const allSpots = await Spot.findAll();
-      // Send the response
-      res.json({Spots: spots});
-  });
+router.get('/', validateQueryParams, async (req, res) => {
+  // //get all the spots via findAll from our database
+  // const allSpots = await Spot.findAll();
+  // // Send the response
+  // res.json({ Spots: allSpots });
+
+//parse data first so that we can validate the input data first
+//we're doing this because it allows us to ensure that the data being provided is input correctly
+//in accordance to our constraints. Then we can establish the default values when the values are not provided.
+const page = parseInt(req.query.page) || 1;
+const size = parseInt(req.query.size) || 20;
+const minLat = parseFloat(req.query.minLat);
+const maxLat = parseFloat(req.query.maxLat);
+const minLng = parseFloat(req.query.minLng);
+const maxLng = parseFloat(req.query.maxLng);
+const minPrice = parseFloat(req.query.minPrice) || 0;
+const maxPrice = parseFloat(req.query.maxPrice) || 0;
+
+//build a query param object to filter
+const filterObj = {};
+
+//if minLat and maxLat IS a valid number
+if (!isNaN(minLat) && !isNaN(maxLat)) {
+  //then we can check to see if they fall in between the range of minLat and maxLat
+  filterObj.lat = { [Op.between]: [minLat, maxLat] };
+}
+//same concept as above
+if (!isNaN(minLng) && !isNaN(maxLng)) {
+  filterObj.lng = { [Op.between]: [minLng, maxLng] };
+}
+//if minPrice and maxPrice are valid numbers
+if (!isNaN(minPrice) && !isNaN(maxPrice)) {
+  //then we can also check if the price should fall within the range of min/max price
+  filterObj.price = { [Op.between]: [minPrice, maxPrice] };
+}
+
+const allFilteredSpots = await Spot.findAll({
+  //grab our filteredObj of info
+  filterObj,
+  //limit via our size
+  limit: size,
+  //create an offset with our page. 
+  //for example if we have 100 spots in our db. If page is set to 2, and size is set to 10, then it'll be
+  //(2 - 1) * 10 resulting in 10 spots per page. and if our limit is 10, then each page will return 10. 
+  offset: (page - 1) * size,
+});
+
+//return our spots with our filtered / parsed information and also return our page and size as per our pagination stuff
+res.json({
+  Spots: allFilteredSpots,
+  page,
+  size,
+})
+
+});
 
 
 // Get all Spots owned by the Current User
-router.get('/current', requireAuth,async (req, res) => {
-      const userId = req.user.id; 
-      const spots = await Spot.findAll({ 
-        where: { ownerId: userId } 
-      });
-      res.json({ Spots: spots });
+router.get('/current', requireAuth, async (req, res) => {
+  const userId = req.user.id; 
+  const spots = await Spot.findAll({ 
+    where: { ownerId: userId } 
+  });
+  res.json({ Spots: spots });
   });
 
 // Get details of a Spot from an Id
@@ -248,7 +338,7 @@ router.post('/:spotId/images', requireAuth, async (req, res,) => {
         spotId: req.params.spotId
     })
 
-    return res.status(200).json({
+    return res.json({
         id: newSpotImage.id,
         url: newSpotImage.url,
         preview: newSpotImage.preview
@@ -392,7 +482,7 @@ router.get('/:spotId/reviews', async (req, res) => {
       reviewsRes.Reviews.push(reviewObj)
   };
 
-  return res.status(200).json(reviewsRes)
+  return res.json(reviewsRes)
 
 })
 
@@ -521,7 +611,7 @@ router.get('/:spotId/bookings', requireAuth, async (req, res) => {
 
   }
 
-  return res.status(200).json(result)
+  return res.json(result)
 })
 
 //CREATE a booking for a spot based on Spot ID
@@ -640,7 +730,7 @@ router.post('/:spotId/bookings', requireAuth, async (req, res) => {
       endDate: endDate
   });
 
-  return res.status(200).json(newBooking)
+  return res.json(newBooking)
 
 })
 
