@@ -121,59 +121,47 @@ const validateQueryParams = [
 
 // Get all Spots
 router.get('/', validateQueryParams, async (req, res) => {
-  // //get all the spots via findAll from our database
-  // const allSpots = await Spot.findAll();
-  // // Send the response
-  // res.json({ Spots: allSpots });
+  try {
+    // Parse data from query parameters
+    const page = parseInt(req.query.page) || 1;
+    const size = parseInt(req.query.size) || 20;
+    const minLat = parseFloat(req.query.minLat);
+    const maxLat = parseFloat(req.query.maxLat);
+    const minLng = parseFloat(req.query.minLng);
+    const maxLng = parseFloat(req.query.maxLng);
+    const minPrice = parseFloat(req.query.minPrice) || 0;
+    const maxPrice = parseFloat(req.query.maxPrice) || 0;
 
-//parse data first so that we can validate the input data first
-//we're doing this because it allows us to ensure that the data being provided is input correctly
-//in accordance to our constraints. Then we can establish the default values when the values are not provided.
-const page = parseInt(req.query.page) || 1;
-const size = parseInt(req.query.size) || 20;
-const minLat = parseFloat(req.query.minLat);
-const maxLat = parseFloat(req.query.maxLat);
-const minLng = parseFloat(req.query.minLng);
-const maxLng = parseFloat(req.query.maxLng);
-const minPrice = parseFloat(req.query.minPrice) || 0;
-const maxPrice = parseFloat(req.query.maxPrice) || 0;
+    // Build a query param object to filter
+    const filterObj = {};
 
-//build a query param object to filter
-const filterObj = {};
+    // If minLat and maxLat are valid numbers
+    if (!isNaN(minLat) && !isNaN(maxLat)) {
+      filterObj.lat = { [Op.between]: [minLat, maxLat] };
+    }
+    // Same concept as above for other filters
+    if (!isNaN(minLng) && !isNaN(maxLng)) {
+      filterObj.lng = { [Op.between]: [minLng, maxLng] };
+    }
+    if (!isNaN(minPrice) && !isNaN(maxPrice)) {
+      filterObj.price = { [Op.between]: [minPrice, maxPrice] };
+    }
 
-//if minLat and maxLat IS a valid number
-if (!isNaN(minLat) && !isNaN(maxLat)) {
-  //then we can check to see if they fall in between the range of minLat and maxLat
-  filterObj.lat = { [Op.between]: [minLat, maxLat] };
-}
-//same concept as above
-if (!isNaN(minLng) && !isNaN(maxLng)) {
-  filterObj.lng = { [Op.between]: [minLng, maxLng] };
-}
-//if minPrice and maxPrice are valid numbers
-if (!isNaN(minPrice) && !isNaN(maxPrice)) {
-  //then we can also check if the price should fall within the range of min/max price
-  filterObj.price = { [Op.between]: [minPrice, maxPrice] };
-}
+    const allFilteredSpots = await Spot.findAll({
+      where: filterObj, // Use the "where" clause for filtering
+      limit: size,
+      offset: (page - 1) * size,
+    });
 
-const allFilteredSpots = await Spot.findAll({
-  //grab our filteredObj of info
-  where: filterObj,
-  //limit via our size
-  limit: size,
-  //create an offset with our page. 
-  //for example if we have 100 spots in our db. If page is set to 2, and size is set to 10, then it'll be
-  //(2 - 1) * 10 resulting in 10 spots per page. and if our limit is 10, then each page will return 10. 
-  offset: (page - 1) * size,
-});
-
-//return our spots with our filtered / parsed information and also return our page and size as per our pagination stuff
-res.json({
-  Spots: allFilteredSpots,
-  page,
-  size,
-})
-
+    res.json({
+      Spots: allFilteredSpots,
+      page,
+      size,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
 });
 
 
