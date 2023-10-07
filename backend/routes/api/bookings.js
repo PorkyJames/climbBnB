@@ -256,7 +256,7 @@ router.put('/:bookingId', requireAuth, async (req, res) => {
 //DELETE
 
 //Delete a booking
-router.delete('/bookingId', requireAuth, async (req, res) => {
+router.delete('/:bookingId', requireAuth, async (req, res) => {
     const user = req.user;
     const bookingsList = await Booking.findByPk(req.params.bookingId);
 
@@ -269,7 +269,7 @@ router.delete('/bookingId', requireAuth, async (req, res) => {
 
     //if the booking doesn't belong to the current user
     const currSpot = await Spot.findByPk(bookingsList.spotId);
-    if (user.id !== spot.ownerId && user.id !== bookingsList.userId) {
+    if (user.id !== Spot.ownerId && user.id !== bookingsList.userId) {
         return res.status(403).json({
             message: "You must own the booking or spot to delete the booking"
         })

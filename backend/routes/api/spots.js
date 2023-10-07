@@ -3,7 +3,7 @@ const Sequelize = require('sequelize');
 const { Spot, SpotImage, User, Review, ReviewImage, Booking } = require('../../db/models')
 const { requireAuth } = require('../../utils/auth');
 const router = express.Router();
-const { check } = require('express-validator');
+const { check, optional } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
 
 //use to help validate our data
@@ -55,23 +55,6 @@ const validateCreateReview = [
     handleValidationErrors,
   ];
   
-  const validateCreateReviewImage = [
-    check("title")
-      .exists({ checkFalsy: true })
-      .withMessage("Title is required"),
-    check("message")
-      .exists({ checkFalsy: true })
-      .withMessage("Message is required"),
-    check("errors")
-      .exists({ checkFalsy: true })
-      .withMessage("Errors field is required"),
-    check("url")
-      .exists({ checkFalsy: true })
-      .isURL()
-      .withMessage("URL must be a valid URL"),
-    handleValidationErrors,
-  ];
-
 //create a function that will help us validate all of our query parameters
 
 function validateQueryParameters(query) {
@@ -265,7 +248,7 @@ router.get('/:spotId', async (req, res) => {
 //! POST 
 
 // Create a Spot
-router.post("/", requireAuth, validateData, async (req,res) => {
+router.post("/", requireAuth, async (req,res) => {
   const { user } = req;
   const { address, city, state, country, lat, lng, name, description, price } = req.body;
 
@@ -285,18 +268,18 @@ router.post("/", requireAuth, validateData, async (req,res) => {
     res.status(201).json(newSpot);
 });
 
-// Add an Image to a Spot based on Spot's Id
-router.post('/:spotId/images', requireAuth, validateCreateReviewImage, async (req, res,) => {
+// Create an Image to a Spot based on Spot's Id
+router.post('/:spotId/images', requireAuth, async (req, res,) => {
     const { url, preview } = req.body;
 
-    //grab our spot via findAll
+    //grab our spot via findAll and our spoId
     const spot = await Spot.findAll( {
         where: {
             id: req.params.spotId
         }
     })
 
-    //if the spot exists
+    //if the spot doesn't exist
     if (!spot) {
         const error = new Error("Spot doesn't exist");
         error.message = "Spot couldn't be found";
@@ -304,10 +287,9 @@ router.post('/:spotId/images', requireAuth, validateCreateReviewImage, async (re
         throw error
     }
 
-    //checking to see if they own the spot
-    const ifIsOwner = spot[0].dataValues.ownerId === req.user.id
 
-    if (ifIsOwner) {
+    //if they aren't, then unauthorize them
+    if (spot[0] && spot[0].dataValues.ownerId !== req.user.id) {
         const error = new Error("Unauthorized");
         error.status = 403;
         error.message = "You must own the spot to add an image"
@@ -315,7 +297,7 @@ router.post('/:spotId/images', requireAuth, validateCreateReviewImage, async (re
     }
 
     //if there is a preview for a spot already
-    if (preview) {
+    if (preview === true) {
         const spotPreviewImageData = await SpotImage.findAll({
             where: {
                 spotId: req.params.spotId,
@@ -326,6 +308,7 @@ router.post('/:spotId/images', requireAuth, validateCreateReviewImage, async (re
         //grab our first preview image
         const spotPreviewImage = spotPreviewImageData[0]
     
+        //if the spotPreviewImage exists, then we'll 
         if (spotPreviewImage) {
             await spotPreviewImage.set({
                 preview: false
@@ -334,6 +317,7 @@ router.post('/:spotId/images', requireAuth, validateCreateReviewImage, async (re
         }
     }
     
+    //
     const newSpotImage = await SpotImage.create({
         url: url,
         preview: preview,
@@ -424,7 +408,7 @@ router.delete('/:spotId', requireAuth, async (req, res, next) => {
 router.get('/:spotId/reviews', async (req, res) => {
   const spot = await Spot.findByPk(req.params.spotId);
 
-  //if spot doesnt exist
+  //if spot doesn't exist
   if (!spot) {
       return res.status(404).json({
           message: "Spot couldn't be found"
@@ -717,7 +701,7 @@ router.post('/:spotId/bookings', requireAuth, async (req, res) => {
 
   if (currentBookingsBothDates.length) {
       dateError.errors.startDate = "Start date conflicts with an existing booking";
-      dateError.errors.endDate = "End date conflics wtih an existing booking"
+      dateError.errors.endDate = "End date conflicts with an existing booking"
   }
 
   if (dateError.errors.startDate || dateError.errors.endDate) {
