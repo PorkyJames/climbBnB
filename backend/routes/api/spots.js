@@ -126,7 +126,7 @@ router.get('/', async (req, res) => {
     let { minLat, maxLat, minLng, maxLng, minPrice, maxPrice } = req.query;
     let { page, size } = req.query;
 
-    // Set up the rules by defining a paginated list that we'll get back from our query
+    // Set up the rules by defining a paginated list that we'll get back f
     const paginatedQuery = {
       where: {},
       limit: parseInt(size) || 20,
