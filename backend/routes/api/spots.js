@@ -121,169 +121,82 @@ const validateQueryParams = [
 
 // Get all Spots
 router.get('/', async (req, res) => {
-  //search filters
-  let { minLat, maxLat, minLng, maxLng, minPrice, maxPrice } = req.query;
-  let query = {
+
+    // Parse query parameters. We're going to destructure query params from req.query. 
+    let { minLat, maxLat, minLng, maxLng, minPrice, maxPrice } = req.query;
+    let { page, size } = req.query;
+
+    // Set up the rules by defining a paginated list that we'll get back from our query
+    const paginatedQuery = {
       where: {},
-      include: []
-  }
-  //getting all of the spots
-  // const spots = await Spot.findAll();
-  //pagination
-  let { page, size } = req.query;
+      limit: parseInt(size) || 20,
+      offset: (parseInt(page) - 1) * (parseInt(size) || 20),
+    };
 
-  const error = {
-      message: "Bad Request",
-      errors: {}
-  }
+    // Validation and error handling
+    const errors = {};
 
-  if (page && page < 1) error.errors.page = "Page must be greater than or equal to 1"
-  if (page && page > 10) error.errors.page = "Page must be less than or equal to 10"
-  if (size && size < 1) error.errors.size = "Size must be greater than or equal to 1"
-  if (size && size > 20) error.errors.size = "Size must be less than or equal to 20"
-  if (maxLat && (maxLat > 90 || maxLat < -90)) error.errors.maxLat = "Maximum latitude is invalid"
-  if (minLat && (minLat < -90 || minLat > 90)) error.errors.minLat = "Minimum latitude is invalid"
-  if (maxLng && (maxLng > 180 || maxLng < -180)) error.errors.maxLng = "Maximum longitude is invalid"
-  if (minLng && (minLng < -180 || minLng > 180)) error.errors.minLng = "Minimum longitude is invalid"
-  if (minPrice && minPrice < 0) error.errors.minPrice = "Minimum price must be greater than or equal to 0"
-  if (maxPrice && maxPrice < 0) error.errors.maxPrice = "Maximum price must be greater than or equal to 0"
+    if (page && (page < 1 || page > 10)) {
+      errors.page = "Page must be between 1 and 10";
+    }
 
-  if (Object.keys(error.errors).length) {
-      return res.status(400).json(error);
-  }
-  
+    if (size && (size < 1 || size > 20)) {
+      errors.size = "Size must be between 1 and 20";
+    }
 
+    if (minLat && (minLat < -90 || minLat > 90)) {
+      errors.minLat = "Invalid minimum latitude";
+    }
 
-  if (!Number.isNaN(page) && parseInt(page) <= 1) page = 1;
-  else if (!Number.isNaN(page) && parseInt(page) >= 10) page = 10;
-  else if (!Number.isNaN(page)) page = parseInt(page);
-  else page = 1;
+    if (maxLat && (maxLat < -90 || maxLat > 90)) {
+      errors.maxLat = "Invalid maximum latitude";
+    }
 
-  if (!Number.isNaN(size) && parseInt(size) <= 1) size = 1;
-  else if (!Number.isNaN(size) && parseInt(size) >= 20) size = 20;
-  else if (!Number.isNaN(size)) size = parseInt(size);
-  else size = 20;
+    if (minLng && (minLng < -180 || minLng > 180)) {
+      errors.minLng = "Invalid minimum longitude";
+    }
 
-  const pagination = {};
+    if (maxLng && (maxLng < -180 || maxLng > 180)) {
+      errors.maxLng = "Invalid maximum longitude";
+    }
 
-  if (size >= 1 && page >= 1) {
-      query.limit = size;
-      query.offset = size * (page - 1)
-  }
+    if (minPrice && minPrice < 0) {
+      errors.minPrice = "Minimum price must be greater than or equal to 0";
+    }
 
-  //querying
+    if (maxPrice && maxPrice < 0) {
+      errors.maxPrice = "Maximum price must be greater than or equal to 0";
+    }
 
-  const Op = Sequelize.Op;
+    if (Object.keys(errors).length > 0) {
+      return res.status(400).json({ message: "Bad Request", errors });
+    }
 
-  if (minLat) {
-      minLat = parseFloat(minLat)
-      query.where.lat = {
-          [Op.gte]: minLat
-      }
-  }
+    // Build query conditions based on valid parameters
+    if (!isNaN(minLat) && !isNaN(maxLat)) {
+      paginatedQuery.where.lat = { [Op.between]: [parseFloat(minLat), parseFloat(maxLat)] };
+    }
 
-  if (maxLat) {
-      maxLat = parseFloat(maxLat);
-      query.where.lat = {
-          [Op.lte]: maxLat
-      }
-  }
+    if (!isNaN(minLng) && !isNaN(maxLng)) {
+      paginatedQuery.where.lng = { [Op.between]: [parseFloat(minLng), parseFloat(maxLng)] };
+    }
 
-  if (minLng) {
-      minLng = parseFloat(minLng);
-      query.where.lng = {
-          [Op.gte]: minLng
-      }
-  }
+    if (!isNaN(minPrice) && !isNaN(maxPrice)) {
+      paginatedQuery.where.price = { [Op.between]: [parseFloat(minPrice), parseFloat(maxPrice)] };
+    }
 
-  if (maxLng) {
-      maxLng = parseFloat(maxLng);
-      query.where.lng = {
-          [Op.lte]: maxLng
-      }
-  }
+    // Retrieve spots based on query options
+    const allFilteredSpots = await Spot.findAll(paginatedQuery);
 
-  if (minPrice) {
-      minPrice = parseFloat(minPrice);
-      query.where.price = {
-          [Op.gte]: minPrice
-      }
-  }
+    // Prepare the response
+    const paginatedSpotList = {
+      Spots: allFilteredSpots,
+      page: parseInt(page) || 1,
+      size: parseInt(size) || 20,
+    };
 
-  if (maxPrice) {
-      maxPrice = parseFloat(maxPrice);
-      query.where.price = {
-          [Op.lte]: maxPrice
-      }
-  }
-
-  //
-  const spots = await Spot.findAll(query);
-
-  let allSpots = {
-      Spots: []
-  }
-
-  //iterating through each spot to create each spot object
-  for (let i = 0; i < spots.length; i++) {
-      const spot = spots[i];
-      //getting all reviews associated with each spot
-      const reviews = await Review.findAll({
-          where: {
-              spotId: spot.id
-          }
-      });
-      //calculating average rating for each spot
-      let total = 0;
-
-      reviews.forEach(review => {
-          total += review.dataValues.stars
-      })
-
-      const avgRating = total / reviews.length;
-
-      const spotPreviewImage = await SpotImage.findAll({
-          where : {
-              spotId: spot.id,
-              preview: true
-          }
-      })
-
-      let imageUrl;
-
-      if (spotPreviewImage[0]) {
-          imageUrl = spotPreviewImage[0].dataValues.url;
-      } else imageUrl = 'none'
-
-      //creating each spot object
-      const spotObj = {
-          id: spot.id,
-          ownerId: spot.ownerId,
-          address: spot.address,
-          city: spot.city,
-          state: spot.state,
-          country: spot.country,
-          lat: spot.lat,
-          lng: spot.lng,
-          name: spot.name,
-          description: spot.description,
-          price: spot.price,
-          createdAt: spot.createdAt,
-          updatedAt: spot.updatedAt,
-          avgRating: avgRating,
-          previewImage: imageUrl
-      };
-
-      //adding each spot object to the array of spot objects
-      allSpots.Spots.push(spotObj);
-  }
-
-  allSpots.page = page;
-  allSpots.size = size;
-
- return res.status(200).json(allSpots);
-
-})
+    res.json(paginatedSpotList);
+});
 
 
 // Get all Spots owned by the Current User
