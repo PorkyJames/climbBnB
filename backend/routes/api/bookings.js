@@ -45,22 +45,25 @@ router.get('/current', requireAuth, async (req, res) => {
         spot = spot[0].dataValues;
 
         //then we find all of the Spot Images where it relates to our spotId that we 
-        //freshly create in our where / findall
-        const spotPreviewImage = await SpotImage.findAll({
+        //freshly create in our where / findAll
+        const spotPrevImage = await SpotImage.findAll({
             where : {
                 spotId: spot.id,
                 preview: true
             }
         })
 
-        let imageUrl;
+        //create a normal image url as a spot holder
+        let url;
 
-        if (spotPreviewImage[0]) {
-            imageUrl = spotPreviewImage[0].dataValues.url;
+        //if the first item in our preview image exists, then we'll assign the url from the first item to our url variable
+        if (spotPrevImage[0]) {
+            url = spotPrevImage[0].dataValues.url;
         } else {
-            imageUrl = 'none'
+            url = 'none'
         }
 
+        //create the structure of our booking object
         const bookingObj = {
             id: booking.id,
             spotId: booking.spotId,
@@ -75,6 +78,7 @@ router.get('/current', requireAuth, async (req, res) => {
             updatedAt: booking.updatedAt
         };
 
+        //push it all into our result that we created above
         result.Bookings.push(bookingObj);
     }
 

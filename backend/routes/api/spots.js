@@ -59,42 +59,21 @@ const validateCreateReview = [
 
 function validateQueryParameters(query) {
     //create an empty validation Errors object to return
-    const validationErrors = {};
-  
-    //page is an integer, minimum of 1, maximum of 10, and default of 1
-    if (query.page && (isNaN(query.page) || query.page < 1 || query.page > 10)) {
-      validationErrors.page = "Page must be between 1 and 10";
-    }
-  
-    //size is an integer, minimum of 1, maximum of 20, default of 20
-    if (query.size && (isNaN(query.size) || query.size < 1 || query.size > 20)) {
-      validationErrors.size = "Size must be between 1 and 20";
-    }
-    
-    //minLat must be a decimal and must be optional
-    if (query.minLat && isNaN(query.minLat)) {
-      validationErrors.minLat = "Minimum latitude is invalid";
-    }
-  
-    if (query.maxLat && isNaN(query.maxLat)) {
-      validationErrors.maxLat = "Maximum latitude is invalid";
-    }
-  
-    if (query.minLng && isNaN(query.minLng)) {
-      validationErrors.minLng = "Minimum longitude is invalid";
-    }
-  
-    if (query.maxLng && isNaN(query.maxLng)) {
-      validationErrors.maxLng = "Maximum longitude is invalid";
-    }
-  
-    if (query.minPrice && (isNaN(query.minPrice) || query.minPrice < 0)) {
-      validationErrors.minPrice = "Minimum price must be greater than or equal to 0";
-    }
-  
-    if (query.maxPrice && (isNaN(query.maxPrice) || query.maxPrice < 0)) {
-      validationErrors.maxPrice = "Maximum price must be greater than or equal to 0";
-    }
+    const validationErrors = {
+      message: "Bad Request",
+      errors: {},
+    };
+
+    // page: integer, minimum: 1, maximum: 10, default: 1
+    if (page && page )
+
+    // size: integer, minimum: 1, maximum: 20, default: 20
+    // minLat: decimal, optional
+    // maxLat: decimal, optional
+    // minLng: decimal, optional
+    // maxLng: decimal, optional
+    // minPrice: decimal, optional, minimum: 0
+    // maxPrice: decimal, optional, minimum: 0
   
     return validationErrors;
   }
@@ -102,65 +81,10 @@ function validateQueryParameters(query) {
 
 // Get all Spots
 router.get('/', async (req, res) => {
-    try {
-      //get all spots
+      //get all the spots via findAll from our database
       const allSpots = await Spot.findAll();
-  
-      // Extract and validate query parameters
-      const { page = 1, size = 20, minLat, maxLat, minLng, maxLng, minPrice, maxPrice } = req.query;
-      const validationErrors = validateQueryParameters(req.query);
-  
-      if (Object.keys(validationErrors).length > 0) {
-        return res.status(400).json({
-          message: "Bad Request",
-          errors: validationErrors,
-        });
-      }
-  
-      // Calculate the offset for pagination
-      const offset = (page - 1) * size;
-  
-      // Define the filter conditions based on query parameters
-      const filterConditions = {};
-  
-      if (minLat && maxLat) {
-        filterConditions.lat = { [Op.between]: [minLat, maxLat] };
-      }
-  
-      if (minLng && maxLng) {
-        filterConditions.lng = { [Op.between]: [minLng, maxLng] };
-      }
-  
-      if (minPrice !== undefined && maxPrice !== undefined) {
-        filterConditions.price = { [Op.between]: [minPrice, maxPrice] };
-      }
-  
-      // Fetch spots using Sequelize with pagination and filtering
-      const spots = await Spot.findAndCountAll({
-        where: filterConditions,
-        limit: size,
-        offset: offset,
-      });
-  
-      // Calculate the total number of pages
-      const totalPages = Math.ceil(spots.count / size);
-  
-      // Prepare the response JSON
-      const response = {
-        AllSpots: allSpots, // Include all spots in the response
-        FilteredSpots: spots.rows, // Include filtered spots
-        page: page,
-        size: size,
-        totalPages: totalPages,
-      };
-  
       // Send the response
-      res.status(200).json(response);
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: 'Internal Server Error' });
-    }
-
+      res.json({Spots: spots});
   });
 
 
@@ -708,7 +632,7 @@ router.post('/:spotId/bookings', requireAuth, async (req, res) => {
       return res.status(403).json(dateError)
   }
 
-  //if everything checks out fine
+  //if everything checks out fine, create a new booking with all of the relevant information. 
   const newBooking = await Booking.create({
       spotId: spot.id,
       userId: user.id,
@@ -719,7 +643,6 @@ router.post('/:spotId/bookings', requireAuth, async (req, res) => {
   return res.status(200).json(newBooking)
 
 })
-
 
 //! Always need to export the router
 module.exports = router;
