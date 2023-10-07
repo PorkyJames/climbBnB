@@ -1,6 +1,7 @@
 // backend/routes/api/users.js
 const express = require('express')
 const bcrypt = require('bcryptjs');
+
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
 
@@ -25,10 +26,18 @@ const validateSignup = [
     .exists({ checkFalsy: true })
     .isLength({ min: 6 })
     .withMessage('Password must be 6 characters or more.'),
+  check('firstName')
+    .exists({ checkFalsy: true })
+    .isLength({ min: 1})
+    .withMessage('First name is required'),
+  check('lastName')
+    .exists({ checkFalsy: true })
+    .isLength({ min: 1})
+    .withMessage('Last name is required'),
   handleValidationErrors
 ];
 
-//! Sign-up
+// Sign-up
 router.post(
     '/',
     validateSignup,
