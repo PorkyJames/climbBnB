@@ -43,6 +43,17 @@ const validateData = [
   handleValidationErrors
 ];
 
+const validateBooking = [
+    check("startDate")
+      .exists({ checkFalsy: true })
+      .isISO8601()
+      .withMessage("Enter a valid start date YYYY-MM-DD"),
+    check("endDate")
+      .exists({ checkFalsy: true })
+      .isISO8601()
+      .withMessage("Enter a valid end date YYYY-MM-DD"),
+    handleValidationErrors,
+  ];
 
 // Get all Spots
 router.get('/', async (req, res) => {
@@ -664,7 +675,7 @@ router.get('/:spotId/bookings', requireAuth, async (req, res) => {
 
 //!CREATE a booking for a spot based on Spot ID
 
-router.post('/:spotId/bookings', requireAuth, async (req, res) => {
+router.post('/:spotId/bookings', requireAuth, validateBooking, async (req, res) => {
   const spot = await Spot.findByPk(req.params.spotId);
   const user = req.user;
 
@@ -684,27 +695,22 @@ router.post('/:spotId/bookings', requireAuth, async (req, res) => {
 
   const { startDate, endDate } = req.body;
 
-  //create our validation errors for any bad requests. Similar to what we've done before
-
-  const validationError = {
-      message: "Bad Request",
-      errors: {}
-  }
-
-  if (!startDate) {
-      validationError.errors.startDate = "Please enter a valid start date"
-  }
-
-  if (!endDate) {
-      validationError.errors.endDate = "Please enter a valid end date"
-  }
-
-  if (validationError.errors.startDate || validationError.errors.endDate) {
-      return res.status(400).json(validationError)
-  }
-
   const bookingStartDate = new Date(startDate);
   const bookingEndDate = new Date(endDate);
+
+  //if the start date and end date cannot be the same
+  if (bookingStartDate.toDateString() === bookingEndDate.toDateString()) {
+    return res.status(403).json({
+      message: "Start date and end date cannot be the same"
+    });
+  }
+
+  //if the end date is before or on the start date
+  if (bookingEndDate <= bookingStartDate) {
+    return res.status(403).json({
+      message: "End date cannot be before the start date"
+    });
+  }
 
   const dateError = {
       message: "Sorry, this spot is already booked for the specified dates",
@@ -746,7 +752,7 @@ router.post('/:spotId/bookings', requireAuth, async (req, res) => {
   })
 
   if (currentBookingsEndDate.length) {
-      dateError.errors.endDate = "End date conflicts with an exisiting booking"
+      dateError.errors.endDate = "End date conflicts with an existing booking"
   }
 
   const currentBookingsBothDates = await Booking.findAll({
