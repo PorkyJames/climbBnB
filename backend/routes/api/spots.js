@@ -370,10 +370,9 @@ router.post('/:spotId/images', requireAuth, async (req, res,) => {
 
     //if they aren't, then unauthorize them
     if (spot[0] && spot[0].dataValues.ownerId !== req.user.id) {
-        const error = new Error("Unauthorized");
-        error.status = 403;
-        error.message = "You must own the spot to add an image"
-        throw error;
+        return res.status(401).json({
+            message: "You must own the spot to add an image"
+        })
     }
 
     //if there is a preview for a spot already
@@ -414,7 +413,7 @@ router.post('/:spotId/images', requireAuth, async (req, res,) => {
 //! PUT
 
 // Edit a Spot
-router.put('/:spotId', requireAuth, async(req, res) => {
+router.put('/:spotId', requireAuth, validateData, async(req, res) => {
   const userId = req.user.id;
   
   const spot = await Spot.findByPk(req.params.spotId);
@@ -529,10 +528,7 @@ router.get('/:spotId/reviews', async (req, res) => {
       });
 
       const reviewObj = {
-          id: review.id,
-          userId: review.userId,
-          review: review.review,
-          stars: review.stars,
+          ...review,
           User: {
               ...user
           },
