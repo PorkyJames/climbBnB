@@ -61,43 +61,49 @@ const validateCreateReview = [
 // Get all Spots
 router.get('/', async (req, res) => {
   // Validate the query parameters
-  const { page, size, maxLat, minLat, maxLng, minLng, minPrice, maxPrice } = req.query;
+  let { minLat, maxLat, minLng, maxLng, minPrice, maxPrice } = req.query;
+  
+  let query = {
+      where: {},
+      include: []
+  }
+
+  let { page, size } = req.query;
 
   const error = {
     message: "Bad Request",
     errors: {},
   };
 
-  if (page && (page < 1 || page > 10)) {
-    error.errors.page = "Page must be between 1 and 10";
-  }
-  
-  if (size && (size < 1 || size > 20)) {
-    error.errors.size = "Size must be between 1 and 20";
-  }
-  
+  if (page && page < 1) {
+    error.errors.page = "Page must be greater than or equal to 1"
+  } 
+  if (page && page > 10) {
+    error.errors.page = "Page must be less than or equal to 10"
+  } 
+  if (size && size < 1) {
+    error.errors.size = "Size must be greater than or equal to 1"
+  } 
+  if (size && size > 20) {
+    error.errors.size = "Size must be less than or equal to 20"
+  } 
   if (maxLat && (maxLat > 90 || maxLat < -90)) {
-    error.errors.maxLat = "Maximum latitude must be between -90 and 90";
-  }
-  
+    error.errors.maxLat = "Maximum latitude is invalid"
+  } 
   if (minLat && (minLat < -90 || minLat > 90)) {
-    error.errors.minLat = "Minimum latitude must be between -90 and 90";
-  }
-  
+    error.errors.minLat = "Minimum latitude is invalid"
+  } 
   if (maxLng && (maxLng > 180 || maxLng < -180)) {
-    error.errors.maxLng = "Maximum longitude must be between -180 and 180";
-  }
-  
+    error.errors.maxLng = "Maximum longitude is invalid"
+  } 
   if (minLng && (minLng < -180 || minLng > 180)) {
-    error.errors.minLng = "Minimum longitude must be between -180 and 180";
-  }
-  
+    error.errors.minLng = "Minimum longitude is invalid"
+  } 
   if (minPrice && minPrice < 0) {
-    error.errors.minPrice = "Minimum price must be greater than or equal to 0";
-  }
-  
+    error.errors.minPrice = "Minimum price must be greater than or equal to 0"
+  } 
   if (maxPrice && maxPrice < 0) {
-    error.errors.maxPrice = "Maximum price must be greater than or equal to 0";
+    error.errors.maxPrice = "Maximum price must be greater than or equal to 0"
   }
   
   // Check if there are any errors
@@ -114,8 +120,6 @@ router.get('/', async (req, res) => {
   else if (!Number.isNaN(size) && parseInt(size) >= 20) size = 20;
   else if (!Number.isNaN(size)) size = parseInt(size);
   else size = 20;
-
-  const pagination = {};
 
   if (size >= 1 && page >= 1) {
       query.limit = size;
@@ -168,7 +172,6 @@ router.get('/', async (req, res) => {
       }
   }
 
-  
   const allSpots = await Spot.findAll(query);
 
   let result = {
@@ -234,10 +237,7 @@ router.get('/', async (req, res) => {
   result.size = size;
 
  return res.json(result);
-
 })
-  
-
 
 // Get all Spots owned by the Current User
 router.get('/current', requireAuth, async (req, res) => {
