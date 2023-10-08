@@ -42,7 +42,7 @@ module.exports = {
     }, options);
   },
   async down(queryInterface, Sequelize) {
-    options.tableName("SpotImages")
+    options.tableName = "SpotImages"
     await queryInterface.dropTable(options);
   }
 };
