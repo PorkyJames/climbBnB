@@ -69,7 +69,7 @@ router.get('/current', requireAuth, async (req, res) => {
             spotId: booking.spotId,
             Spot: {
                 ...spot,
-                previewImage: imageUrl
+                previewImage: url
             },
             userId: user.id,
             startDate: booking.startDate,
