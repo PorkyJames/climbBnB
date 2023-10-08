@@ -121,103 +121,104 @@ const validateQueryParams = [
 
 // Get all Spots
 router.get('/', async (req, res) => {
-  // Validate query parameters
-  const { page, size, minLat, maxLat, minLng, maxLng, minPrice, maxPrice } = req.query;
+  
+ // Validate query parameters
+ const { page, size, minLat, maxLat, minLng, maxLng, minPrice, maxPrice } = req.query;
 
-  // Set default values if query parameters are not provided
-  page = page || 1;
-  size = size || 20;
+ // Set default values if query parameters are not provided
+ page = page || 1;
+ size = size || 20;
 
-  // Validate page and size parameters
-  if (page < 1 || page > 10) {
-    return res.status(400).json({
-      message: 'Page must be greater than or equal to 1 and less than or equal to 10',
-    });
-  }
+ // Validate page and size parameters
+ if (page < 1 || page > 10) {
+   return res.status(400).json({
+     message: 'Page must be greater than or equal to 1 and less than or equal to 10',
+   });
+ }
 
-  if (size < 1 || size > 20) {
-    return res.status(400).json({
-      message: 'Size must be greater than or equal to 1 and less than or equal to 20',
-    });
-  }
+ if (size < 1 || size > 20) {
+   return res.status(400).json({
+     message: 'Size must be greater than or equal to 1 and less than or equal to 20',
+   });
+ }
 
-  // Validate latitude and longitude parameters
-  if (minLat && isNaN(minLat)) {
-    return res.status(400).json({
-      message: 'Minimum latitude is invalid',
-    });
-  }
+ // Validate latitude and longitude parameters
+ if (minLat && isNaN(minLat)) {
+   return res.status(400).json({
+     message: 'Minimum latitude is invalid',
+   });
+ }
 
-  if (maxLat && isNaN(maxLat)) {
-    return res.status(400).json({
-      message: 'Maximum latitude is invalid',
-    });
-  }
+ if (maxLat && isNaN(maxLat)) {
+   return res.status(400).json({
+     message: 'Maximum latitude is invalid',
+   });
+ }
 
-  if (minLng && isNaN(minLng)) {
-    return res.status(400).json({
-      message: 'Minimum longitude is invalid',
-    });
-  }
+ if (minLng && isNaN(minLng)) {
+   return res.status(400).json({
+     message: 'Minimum longitude is invalid',
+   });
+ }
 
-  if (maxLng && isNaN(maxLng)) {
-    return res.status(400).json({
-      message: 'Maximum longitude is invalid',
-    });
-  }
+ if (maxLng && isNaN(maxLng)) {
+   return res.status(400).json({
+     message: 'Maximum longitude is invalid',
+   });
+ }
 
-  // Validate price parameters
-  if (minPrice && isNaN(minPrice)) {
-    return res.status(400).json({
-      message: 'Minimum price must be a number',
-    });
-  }
+ // Validate price parameters
+ if (minPrice && isNaN(minPrice)) {
+   return res.status(400).json({
+     message: 'Minimum price must be a number',
+   });
+ }
 
-  if (maxPrice && isNaN(maxPrice)) {
-    return res.status(400).json({
-      message: 'Maximum price must be a number',
-    });
-  }
+ if (maxPrice && isNaN(maxPrice)) {
+   return res.status(400).json({
+     message: 'Maximum price must be a number',
+   });
+ }
 
-  // Build Sequelize query
-  const query = {
-    limit: size,
-    offset: (page - 1) * size,
-  };
+ // Build Sequelize query
+ const query = {
+   limit: size,
+   offset: (page - 1) * size,
+ };
 
-  if (minLat && maxLat) {
-    query.where = {
-      lat: {
-        between: [minLat, maxLat],
-      },
-    };
-  }
+ if (minLat && maxLat) {
+   query.where = {
+     lat: {
+       between: [minLat, maxLat],
+     },
+   };
+ }
 
-  if (minLng && maxLng) {
-    query.where = {
-      lng: {
-        between: [minLng, maxLng],
-      },
-    };
-  }
+ if (minLng && maxLng) {
+   query.where = {
+     lng: {
+       between: [minLng, maxLng],
+     },
+   };
+ }
 
-  if (minPrice && maxPrice) {
-    query.where = {
-      price: {
-        between: [minPrice, maxPrice],
-      },
-    };
-  }
+ if (minPrice && maxPrice) {
+   query.where = {
+     price: {
+       between: [minPrice, maxPrice],
+     },
+   };
+ }
 
-  // Find all spots
-  const allSpots = await Spot.findAll(query);
+ // Find spots
+ const filteredSpots = await Spot.findAll(query);
 
-  // Return spots
-  res.json({
-    Spots: allSpots,
-    page,
-    size,
-  });
+ // Return spots
+ res.status(200).json({
+   Spots: filteredSpots,
+   page,
+   size,
+ });
 });
 
 
