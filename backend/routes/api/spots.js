@@ -323,18 +323,9 @@ router.get('/:spotId', async (req, res) => {
 //! POST 
 
 // Create a Spot
-router.post("/", requireAuth, async (req,res) => {
+router.post("/", requireAuth, validateData, async (req,res) => {
   const { user } = req;
   const { address, city, state, country, lat, lng, name, description, price } = req.body;
-
-  //if spot doesn't exist
-  const spot = await Spot.findByPk(req.params.spotId);
-
-  if (!spot) {
-    return res.status(404).json({
-      message: "Spot couldn't be found"
-    })
-  }
 
   const newSpot = await Spot.create( {
     ownerId: user.id,
@@ -364,12 +355,17 @@ router.post('/:spotId/images', requireAuth, async (req, res,) => {
     })
 
     //if the spot doesn't exist
+    // if (!spot) {
+    //     const error = new Error("Spot doesn't exist");
+    //     error.message = "Spot couldn't be found";
+    //     error.status = 404;
+    //     throw error
+    // }
     if (!spot) {
-        const error = new Error("Spot doesn't exist");
-        error.message = "Spot couldn't be found";
-        error.status = 404;
-        throw error
-    }
+        return res.status(404).json({
+          message: "Spot couldn't be found"
+        })
+      }
 
 
     //if they aren't, then unauthorize them
