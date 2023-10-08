@@ -4,6 +4,20 @@ const { Review, ReviewImage, Spot, User, SpotImage } = require('../../db/models'
 const { requireAuth } = require('../../utils/auth');
 const router = express.Router();
 
+const validateCreateReview = [
+    check("review")
+      .exists({ checkFalsy: true })
+      .withMessage("Review text is required"),
+    check("stars")
+      .exists({ checkFalsy: true })
+      .isInt({
+        min: 1,
+        max: 5,
+      })
+      .withMessage("Stars must be an integer from 1 to 5"),
+
+    handleValidationErrors,
+  ];
 
 //GET 
 
@@ -96,7 +110,7 @@ router.post('/:reviewId/images', requireAuth, async (req, res) => {
 //PUT
 
 //Edit a Review
-router.put('/:reviewId', requireAuth, async (req, res) => {
+router.put('/:reviewId', requireAuth, validateCreateReview, async (req, res) => {
     const currReview = await Review.findByPk(req.params.reviewId);
     const user = req.user;
 
