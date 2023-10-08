@@ -3,6 +3,8 @@ const Sequelize = require('sequelize');
 const { Review, ReviewImage, Spot, User, SpotImage } = require('../../db/models')
 const { requireAuth } = require('../../utils/auth');
 const router = express.Router();
+const { check } = require('express-validator');
+const { handleValidationErrors } = require('../../utils/validation');
 
 const validateCreateReview = [
     check("review")
