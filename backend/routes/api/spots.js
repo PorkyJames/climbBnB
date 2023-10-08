@@ -130,6 +130,16 @@ const validateQueryParams = [
       include: [],
     };
 
+    if (!Number.isNaN(page) && parseInt(page) <= 1) page = 1;
+    else if (!Number.isNaN(page) && parseInt(page) >= 10) page = 10;
+    else if (!Number.isNaN(page)) page = parseInt(page);
+    else page = 1;
+
+    if (!Number.isNaN(size) && parseInt(size) <= 1) size = 1;
+    else if (!Number.isNaN(size) && parseInt(size) >= 20) size = 20;
+    else if (!Number.isNaN(size)) size = parseInt(size);
+    else size = 20;
+
     // Add pagination to the query
     if (size >= 1 && page >= 1) {
       query.limit = size;
