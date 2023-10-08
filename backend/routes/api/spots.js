@@ -120,106 +120,128 @@ const validateQueryParams = [
 ]
 
 // Get all Spots
-router.get('/', async (req, res) => {
+  router.get('/', validateQueryParams, async (req, res) => {
+    // Search filters
+    let { page, size, maxLat, minLat, maxLng, minLng, minPrice, maxPrice } = req.query;
   
- // Validate query parameters
- const { page, size, minLat, maxLat, minLng, maxLng, minPrice, maxPrice } = req.query;
-
- // Set default values if query parameters are not provided
- page = page || 1;
- size = size || 20;
-
- // Validate page and size parameters
- if (page < 1 || page > 10) {
-   return res.status(400).json({
-     message: 'Page must be greater than or equal to 1 and less than or equal to 10',
-   });
- }
-
- if (size < 1 || size > 20) {
-   return res.status(400).json({
-     message: 'Size must be greater than or equal to 1 and less than or equal to 20',
-   });
- }
-
- // Validate latitude and longitude parameters
- if (minLat && isNaN(minLat)) {
-   return res.status(400).json({
-     message: 'Minimum latitude is invalid',
-   });
- }
-
- if (maxLat && isNaN(maxLat)) {
-   return res.status(400).json({
-     message: 'Maximum latitude is invalid',
-   });
- }
-
- if (minLng && isNaN(minLng)) {
-   return res.status(400).json({
-     message: 'Minimum longitude is invalid',
-   });
- }
-
- if (maxLng && isNaN(maxLng)) {
-   return res.status(400).json({
-     message: 'Maximum longitude is invalid',
-   });
- }
-
- // Validate price parameters
- if (minPrice && isNaN(minPrice)) {
-   return res.status(400).json({
-     message: 'Minimum price must be a number',
-   });
- }
-
- if (maxPrice && isNaN(maxPrice)) {
-   return res.status(400).json({
-     message: 'Maximum price must be a number',
-   });
- }
-
- // Build Sequelize query
- const query = {
-   limit: size,
-   offset: (page - 1) * size,
- };
-
- if (minLat && maxLat) {
-   query.where = {
-     lat: {
-       between: [minLat, maxLat],
-     },
-   };
- }
-
- if (minLng && maxLng) {
-   query.where = {
-     lng: {
-       between: [minLng, maxLng],
-     },
-   };
- }
-
- if (minPrice && maxPrice) {
-   query.where = {
-     price: {
-       between: [minPrice, maxPrice],
-     },
-   };
- }
-
- // Find spots
- const filteredSpots = await Spot.findAll(query);
-
- // Return spots
- res.status(200).json({
-   Spots: filteredSpots,
-   page,
-   size,
- });
-});
+    // Build the Sequelize query
+    const query = {
+      where: {},
+      include: [],
+    };
+  
+    // Add the search filters to the query
+    if (maxLat) {
+      query.where.lat = {
+        [Sequelize.Op.lte]: maxLat,
+      };
+    }
+  
+    if (minLat) {
+      query.where.lat = {
+        [Sequelize.Op.gte]: minLat,
+      };
+    }
+  
+    if (maxLng) {
+      query.where.lng = {
+        [Sequelize.Op.lte]: maxLng,
+      };
+    }
+  
+    if (minLng) {
+      query.where.lng = {
+        [Sequelize.Op.gte]: minLng,
+      };
+    }
+  
+    if (minPrice) {
+      query.where.price = {
+        [Sequelize.Op.gte]: minPrice,
+      };
+    }
+  
+    if (maxPrice) {
+      query.where.price = {
+        [Sequelize.Op.lte]: maxPrice,
+      };
+    }
+  
+    // Add pagination to the query
+    if (size >= 1 && page >= 1) {
+      query.limit = size;
+      query.offset = size * (page - 1);
+    }
+  
+    // Execute the query and get the results
+    const spots = await Spot.findAll(query);
+  
+    // Create an array of spot objects
+    const allSpots = {
+      Spots: [],
+    };
+  
+    for (const spot of spots) {
+      // Get the reviews for the spot
+      const reviews = await Review.findAll({
+        where: {
+          spotId: spot.id,
+        },
+      });
+  
+      // Calculate the average rating for the spot
+      let total = 0;
+      reviews.forEach((review) => {
+        total += review.dataValues.stars;
+      });
+      const avgRating = total / reviews.length;
+  
+      // Get the preview image for the spot
+      const spotPreviewImage = await SpotImage.findAll({
+        where: {
+          spotId: spot.id,
+          preview: true,
+        },
+      });
+  
+      let imageUrl;
+      if (spotPreviewImage[0]) {
+        imageUrl = spotPreviewImage[0].dataValues.url;
+      } else {
+        imageUrl = 'none';
+      }
+  
+      // Create the spot object
+      const spotObj = {
+        id: spot.id,
+        ownerId: spot.ownerId,
+        address: spot.address,
+        city: spot.city,
+        state: spot.state,
+        country: spot.country,
+        lat: spot.lat,
+        lng: spot.lng,
+        name: spot.name,
+        description: spot.description,
+        price: spot.price,
+        createdAt: spot.createdAt,
+        updatedAt: spot.updatedAt,
+        avgRating,
+        previewImage: imageUrl,
+      };
+  
+      // Add the spot object to the array of spot objects
+      allSpots.Spots.push(spotObj);
+    }
+  
+    // Add the pagination information to the response
+    allSpots.page = page;
+    allSpots.size = size;
+  
+    // Send the response
+    res.status(200).json(allSpots);
+  });
+  
 
 
 // Get all Spots owned by the Current User
