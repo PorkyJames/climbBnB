@@ -131,41 +131,43 @@ const validateQueryParams = [
     };
   
     // Add the search filters to the query
-    if (maxLat) {
-      query.where.lat = {
-        [Sequelize.Op.lte]: maxLat,
-      };
-    }
-  
     if (minLat) {
       query.where.lat = {
-        [Sequelize.Op.gte]: minLat,
+        [Op.gte]: minLat,
+      };
+    }
+
+    if (maxLat) {
+      query.where.lat = {
+        [Op.lte]: maxLat,
       };
     }
   
     if (maxLng) {
       query.where.lng = {
-        [Sequelize.Op.lte]: maxLng,
+        [Op.lte]: maxLng,
       };
     }
   
     if (minLng) {
       query.where.lng = {
-        [Sequelize.Op.gte]: minLng,
+        [Op.gte]: minLng,
       };
     }
   
     if (minPrice) {
       query.where.price = {
-        [Sequelize.Op.gte]: minPrice,
+        [Op.gte]: minPrice,
       };
     }
   
     if (maxPrice) {
       query.where.price = {
-        [Sequelize.Op.lte]: maxPrice,
+        [Op.lte]: maxPrice,
       };
     }
+
+    const pagination = {};
   
     // Add pagination to the query
     if (size >= 1 && page >= 1) {
@@ -191,9 +193,11 @@ const validateQueryParams = [
   
       // Calculate the average rating for the spot
       let total = 0;
+
       reviews.forEach((review) => {
         total += review.dataValues.stars;
       });
+
       const avgRating = total / reviews.length;
   
       // Get the preview image for the spot
@@ -239,7 +243,7 @@ const validateQueryParams = [
     allSpots.size = size;
   
     // Send the response
-    res.status(200).json(allSpots);
+    res.json(allSpots);
   });
   
 
