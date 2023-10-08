@@ -123,58 +123,64 @@ const validateQueryParams = [
   router.get('/', validateQueryParams, async (req, res) => {
     // Search filters
     let { page, size, maxLat, minLat, maxLng, minLng, minPrice, maxPrice } = req.query;
-  
+
     // Build the Sequelize query
-    const query = {
+    let query = {
       where: {},
       include: [],
     };
-  
+
+    // Add pagination to the query
+    if (size >= 1 && page >= 1) {
+      query.limit = size;
+      query.offset = size * (page - 1);
+    }
+
+    const Op = Sequelize.Op;
+
     // Add the search filters to the query
     if (minLat) {
+      minLat = parseFloat(minLat)
       query.where.lat = {
         [Op.gte]: minLat,
       };
     }
 
     if (maxLat) {
+      maxLat = parseFloat(maxLat)
       query.where.lat = {
         [Op.lte]: maxLat,
       };
     }
   
     if (maxLng) {
+      maxLng = parseFloat(maxLng)
       query.where.lng = {
         [Op.lte]: maxLng,
       };
     }
   
     if (minLng) {
+      minLng = parseFloat(minLng)
       query.where.lng = {
         [Op.gte]: minLng,
       };
     }
   
     if (minPrice) {
+      minPrice = parseFloat(minPrice)
       query.where.price = {
         [Op.gte]: minPrice,
       };
     }
   
     if (maxPrice) {
+      maxPrice = parseFloat(maxPrice)
       query.where.price = {
         [Op.lte]: maxPrice,
       };
     }
 
-    const pagination = {};
-  
-    // Add pagination to the query
-    if (size >= 1 && page >= 1) {
-      query.limit = size;
-      query.offset = size * (page - 1);
-    }
-  
     // Execute the query and get the results
     const spots = await Spot.findAll(query);
   
