@@ -873,19 +873,13 @@ router.post("/:spotId/bookings", requireAuth, validateBooking, async (req, res, 
     
 
         if (currentBookingsBothDates.length) {
-            if (!dateError.errors.startDate) {
-                dateError.errors.startDate = "Start date conflicts with an existing booking";
-            }
-            if (!dateError.errors.endDate) {
-                dateError.errors.endDate = "End date conflicts with an existing booking";
-            }
+            dateError.errors.startDate = "Start date conflicts with an existing booking";
+            dateError.errors.endDate = "End date conflicts with an existing booking"
         }
         
     if (dateError.errors.startDate || dateError.errors.endDate) {
         return res.status(403).json(dateError)
     }
-
-
 
 
     const newBooking = await Booking.create({
