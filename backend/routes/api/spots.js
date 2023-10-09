@@ -246,7 +246,7 @@ router.get('/', async (req, res) => {
           price: spot.price,
           createdAt: spot.createdAt,
           updatedAt: spot.updatedAt,
-          average: average,
+          avgStarRating: average,
           previewImage: urlImage
       };
 
