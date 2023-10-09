@@ -1,7 +1,5 @@
-'use strict';
-const {
-  Model
-} = require('sequelize');
+"use strict";
+const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class Booking extends Model {
     /**
@@ -11,43 +9,46 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       Booking.belongsTo(models.Spot, {
-        foreignKey: 'spotId'
-      })
+        foreignKey: "spotId",
+      });
+
       Booking.belongsTo(models.User, {
-        foreignKey: 'userId'
-      })
+        foreignKey: "userId",
+      });
     }
   }
-  Booking.init({
-    spotId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
-    userId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
-    startDate: {
-      type: DataTypes.DATE,
-      allowNull: false,
-      validate: {
-        isDate: true,
+  Booking.init(
+    {
+      spotId: {
+        type: DataTypes.INTEGER,
+      },
+      userId: {
+        type: DataTypes.INTEGER,
+      },
+      startDate: {
+        allowNull: false,
+        type: DataTypes.DATEONLY,
+        validate: {
+          isDate: true,
+        },
+      },
+      endDate: {
+        allowNull: false,
+        type: DataTypes.DATEONLY,
+        validate: {
+          isDate: true,
+          afterStart(value) {
+            if (value <= this.startDate) {
+              throw new Error("endDate cannot be on or before startDate");
+            }
+          },
+        },
       },
     },
-    endDate: {
-      type: DataTypes.DATE,
-      allowNull: false,
-      validate: {
-        isDate: true,
-        afterStart(currVal) {
-          if (currVal <= this.startDate) {
-            throw new Error("endDate cannot be on or before startDate");
-          }
-      },
+    {
+      sequelize,
+      modelName: "Booking",
     }
-  }, 
-    sequelize,
-    modelName: 'Booking',
-  });
+  );
   return Booking;
 };
