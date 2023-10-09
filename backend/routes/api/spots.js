@@ -438,7 +438,7 @@ router.put('/:spotId', requireAuth, validateData, async(req, res) => {
   const spot = await Spot.findByPk(req.params.spotId);
 
   //if spot doesn't exist
-  if (!spot.length) {
+  if (!spot) {
     const err = new Error("Spot doesn't exist");
         err.message = "Spot couldn't be found";
         err.status = 404;
