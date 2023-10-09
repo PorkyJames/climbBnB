@@ -799,6 +799,7 @@ router.post("/:spotId/bookings", requireAuth, validateBooking, async (req, res, 
         ],
       },
     });
+    
     for (let booking of bookedDates) {
       const start = new Date(booking.startDate);
       const end = new Date(booking.endDate);

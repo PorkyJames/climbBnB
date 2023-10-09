@@ -25,79 +25,85 @@ const validateCreateReview = [
 
 //Get all Reviews of Current User
 router.get("/current", requireAuth, async (req, res, next) => {
-    const userId = req.user.id;
-
-    const allUserSpots = await Spot.findAll({
+    const user = req.user
+    const userReviews = await Review.findAll({
         where: {
-            ownerId: userId
+            userId: user.id
         }
     })
 
-    let allUserSpotsRes = {
-        Spots: []
-    };
+    console.log(userReviews)
 
-    //iterating through each spot to create each spot object
-    for (let i = 0; i < allUserSpots.length; i++) {
-        const spot = allUserSpots[i];
-        //getting all reviews associated with each spot
-        const reviews = await Review.findAll({
+    const reviewRes = {
+        Reviews: [],
+
+    }
+
+    for (let i = 0; i < userReviews.length; i++) {
+        const review = userReviews[i].dataValues;
+
+        const userObj = await User.findByPk(user.id)
+        const refinedUser = userObj.dataValues
+
+        const spot = await Spot.findByPk(review.spotId);
+        const refinedSpot = spot.dataValues
+
+        const spotImage = await SpotImage.findAll({
             where: {
-                spotId: spot.id
-            }
-        });
-
-        //calculating average rating for each spot
-
-        let avgRating;
-
-        if (!reviews.length) avgRating = "No reviews yet";
-        else {
-            let total = 0;
-
-            reviews.forEach(review => {
-                total += review.dataValues.stars
-            })
-    
-            avgRating = total / reviews.length;
-        }
-
-        const spotPreviewImage = await SpotImage.findAll({
-            where : {
-                spotId: spot.id,
                 preview: true
             }
         })
 
-        let imageUrl;
+        let imageUrl; 
+        if (!spotImage.length) imageUrl = 'none'
+        else imageUrl = spotImage[0].dataValues.url
 
-        if (spotPreviewImage[0]) {
-            imageUrl = spotPreviewImage[0].dataValues.url;
-        } else imageUrl = 'none'
+        const reviewImages = await ReviewImage.findAll({
+            where: {
+                reviewId: review.id
+            },
+            attributes: {
+                include: ['id', 'url'],
+                exclude: ['reviewId', 'createdAt', 'updatedAt']
+            }
+        })
 
-        const spotObj = {
-            id: spot.id,
-            ownerId: spot.ownerId,
-            address: spot.address,
-            city: spot.city,
-            state: spot.state,
-            country: spot.country,
-            lat: spot.lat,
-            lng: spot.lng,
-            name: spot.name,
-            description: spot.description,
-            price: spot.price,
-            createdAt: spot.createdAt,
-            updatedAt: spot.updatedAt,
-            avgRating: avgRating,
-            previewImage: imageUrl
-        };
+        // let allReviewImages = [];
 
-        allUserSpotsRes.Spots.push(spotObj)
+        // for (let i = 0; i < reviewImages.length; i++) {
+
+        // }
+
+        // console.log(userObj)
+
+        const reviewObj = {
+            ...review,
+            User: {
+                id: refinedUser.id,
+                firstName: refinedUser.firstName,
+                lastName: refinedUser.lastName
+            },
+            Spot: {
+                id: refinedSpot.id,
+                ownerId: refinedSpot.ownerId,
+                address: refinedSpot.address,
+                city: refinedSpot.city,
+                state: refinedSpot.state,
+                country: refinedSpot.country,
+                lat: refinedSpot.lat,
+                lng: refinedSpot.lng,
+                name: refinedSpot.name,
+                price: refinedSpot.price,
+                previewImage: imageUrl
+            },
+            ReviewImages: reviewImages
+        }
+
+        reviewRes.Reviews.push(reviewObj);
+
     }
 
-    return res.json(allUserSpotsRes);
-
+    return res.status(200).json(reviewRes)
   });
 
 
