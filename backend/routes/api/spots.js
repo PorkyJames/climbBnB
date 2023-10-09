@@ -817,7 +817,15 @@ router.post("/:spotId/bookings", requireAuth, validateBooking, async (req, res, 
 		});
     }
 
-    
+    if (bookingEndDate === bookingStartDate) {
+        res.status(400);
+		return res.json({
+			message: "Bad Request",
+            errors: {
+                endDate: "endDate cannot be on or before startDate"
+            }
+		});
+    }
 
     //error message to be sent
     const dateError = {
