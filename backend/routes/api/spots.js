@@ -870,6 +870,9 @@ router.post("/:spotId/bookings", requireAuth, validateBooking, async (req, res, 
         return res.status(403).json(dateError)
     }
 
+    
+
+
     const newBooking = await Booking.create({
         spotId: spot.id,
         userId: user.id,
