@@ -767,92 +767,143 @@ router.get('/:spotId/bookings', requireAuth, async (req, res) => {
 //!CREATE a booking for a spot based on Spot ID
 
 router.post("/:spotId/bookings", requireAuth, validateBooking, async (req, res, next) => {
-    let { startDate, endDate } = req.body;
-    const { user } = req;
-    const spotId = Number(req.params.spotId);
-    const currSpot = await Spot.findByPk(spotId);
-    if (!currSpot) {
-      const err = new Error("Spot couldn't be found");
-      err.status = 404;
-      return next(err);
+    //check if you are the owner
+    const user = req.user;
+    const spot = await Spot.findByPk(req.params.spotId);
+
+    //check if spot exists
+    if (!spot) {
+        return res.status(404).json({
+            message: "Spot couldn't be found"
+        })
     }
 
-    if (currSpot.ownerId === user.id) {
-      const err = new Error("Forbidden");
-      err.status = 403;
-      return next(err);
+    const bookingsRes = {
+        Bookings: []
+    }
+    //if you are the owner
+    if (user.id === spot.ownerId) {
+        const bookings = await Booking.findAll({
+            where: {
+                spotId:  spot.id
+            }
+        })
+
+        for (let i = 0; i < bookings.length; i++) {
+            const booking = bookings[i].dataValues;
+            let user = await User.findAll({
+                where: {
+                    id: booking.userId
+                },
+                attributes: {
+                    include: ['id', 'firstName', 'lastName'],
+                    exclude: ['email', 'username', 'hashedPassword', 'createdAt', 'updatedAt']
+                }
+            });
+
+            user = user[0].dataValues
+
+            const bookingObj = {
+                User: user,
+                ...booking
+            }
+
+            bookingsRes.Bookings.push(bookingObj);
+        }
+
+        
+    } else {
+        //if you are not the owner
+        const bookings = await Booking.findAll({
+            where: {
+                spotId:  spot.id
+            }
+        })
+
+        for (let i = 0; i < bookings.length; i++) {
+            const booking = bookings[i].dataValues;
+
+            const bookingsObj = {
+                spotId: booking.spotId,
+                startDate: booking.startDate,
+                endDate: booking.endDate
+            }
+
+            bookingsRes.Bookings.push(bookingsObj)
+        }
+
     }
 
-    const bookedDates = await Booking.findAll({
-      where: {
-        spotId,
+    //if you are not the owner
 
-        [Op.or]: [
-          {
-            startDate: {
-              [Op.gte]: startDate,
+    //if you are the owner
+
+    return res.status(200).json(bookingsRes)
+})
+
+router.get('/:spotId/reviews', async (req, res) => {
+    const spot = await Spot.findByPk(req.params.spotId);
+    //if spot doesnt exist
+    if (!spot) {
+        return res.status(404).json({
+            message: "Spot couldn't be found"
+        })
+    }
+
+    const reviewsData = await Review.findAll({
+        where: {
+            spotId: req.params.spotId
+        }
+    })
+
+    const reviewsRes = {
+        Reviews: []
+    };
+
+    for (let i = 0; i < reviewsData.length; i++) {
+        const review = reviewsData[i].dataValues;
+        const userData = await User.findAll({
+            where: {
+                id: review.userId
             },
-          },
-          {
-            endDate: { [Op.lte]: endDate },
-          },
-        ],
-      },
-    });
+            attributes: {
+                include: ['id', 'firstName', 'lastName'],
+                exclude: ['username', 'hashedPassword', 'createdAt', 'updatedAt']
+            }
+        });
+        const user = userData[0].dataValues
+        const reviewImages = await ReviewImage.findAll({
+            where: {
+                reviewId: review.id,
+            },
+            attributes: {
+                include: ['id', 'url'],
+                exclude: ['reviewId', 'createdAt', 'updatedAt']
+            }
+        });
 
-    for (let booking of bookedDates) {
-      const start = new Date(booking.startDate);
-      const end = new Date(booking.endDate);
-      //    start      startDate      end      endDate
-      if (new Date(startDate) - start >= 0 && end - new Date(startDate) >= 0) {
-        const err = new Error(
-          "Sorry, this spot is already booked for the specified dates"
-        );
-        err.status = 403;
-        err.errors = {
-          startDate: "Start date conflicts with an existing booking",
+        const reviewObj = {
+            // id: review.id,
+            // userId: review.userId,
+            // review: review.review,
+            // stars: review.stars,
+            ...review,
+            User: {
+                ...user
+            },
+            ReviewImages: []
         };
-        return next(err);
-      }
 
-      //   startDate    start    endDate    end
-      if (new Date(endDate) - start >= 0 && end - new Date(endDate) >= 0) {
-        const err = new Error(
-          "Sorry, this spot is already booked for the specified dates"
-        );
-        err.status = 403;
-        err.errors = {
-          endDate: "End date conflicts with an existing booking",
-        };
-        return next(err);
-      }
+        for (let i = 0; i < reviewImages.length; i++) {
+            const reviewData = reviewImages[i].dataValues;
+            const reviewImage = {...reviewData};
+            reviewObj.ReviewImages.push(reviewImage);
+        }
 
-      // startDate       start        end      endDate
-      if (
-        (start - new Date(endDate) >= 0 && new Date(endDate) - start >= 0) ||
-        (end - new Date(startDate) >= 0 && new Date(endDate) - end >= 0)
-      ) {
-        const err = new Error(
-          "Sorry, a booking already exists within your reservation dates"
-        );
-        err.status = 403;
-        err.errors = {
-          message:
-            "A reservation already exists within your start and end dates",
-        };
-        return next(err);
-      }
-    }
+        reviewsRes.Reviews.push(reviewObj)
+    };
 
-    const newBooking = await Booking.create({
-      userId: user.id,
-      spotId,
-      startDate,
-      endDate,
-    });
-
-    return res.status(201).json(newBooking);
-  }
+    return res.status(200).json(reviewsRes)
 );
 
 //! Always need to export the router
