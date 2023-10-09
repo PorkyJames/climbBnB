@@ -904,7 +904,7 @@ router.get('/:spotId/reviews', async (req, res) => {
     };
 
     return res.status(200).json(reviewsRes)
-);
+  });
 
 //! Always need to export the router
 module.exports = router;
