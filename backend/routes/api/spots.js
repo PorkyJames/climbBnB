@@ -43,6 +43,7 @@ const validateData = [
   handleValidationErrors
 ];
 
+//used to help validate our booking
 const validateBooking = [
     check("startDate")
       .exists({ checkFalsy: true })
@@ -55,6 +56,7 @@ const validateBooking = [
     handleValidationErrors,
   ];
 
+//used to help validate our create Review
   const validateCreateReview = [
     check("review")
       .exists({ checkFalsy: true })
