@@ -25,89 +25,79 @@ const validateCreateReview = [
 
 //Get all Reviews of Current User
 router.get("/current", requireAuth, async (req, res, next) => {
-    const { user } = req;
-  
-    const userReviews = await Review.findAll({
-      where: {
-        userId: user.id,
-      },
-      include: [
-        {
-          model: User,
-          attributes: ["id", "firstName", "lastName"],
-        },
-        {
-          model: Spot,
-          attributes: {
-            exclude: ["createdAt", "updatedAt", "description"],
-          },
-          include: {
-            model: Image,
-  
-            attributes: ["preview", "url"],
-          },
-        },
-        {
-          model: Image,
-  
-          attributes: ["id", "url"],
-        },
-      ],
-    });
-  
-    if (!userReviews.length) {
-      return res.json({ message: "You have not entered any reviews yet." });
+    const userId = req.user.id;
+
+    const allUserSpots = await Spot.findAll({
+        where: {
+            ownerId: userId
+        }
+    })
+
+    let allUserSpotsRes = {
+        Spots: []
+    };
+
+    //iterating through each spot to create each spot object
+    for (let i = 0; i < allUserSpots.length; i++) {
+        const spot = allUserSpots[i];
+        //getting all reviews associated with each spot
+        const reviews = await Review.findAll({
+            where: {
+                spotId: spot.id
+            }
+        });
+
+        //calculating average rating for each spot
+
+        let avgRating;
+
+        if (!reviews.length) avgRating = "No reviews yet";
+        else {
+            let total = 0;
+
+            reviews.forEach(review => {
+                total += review.dataValues.stars
+            })
+    
+            avgRating = total / reviews.length;
+        }
+
+        const spotPreviewImage = await SpotImage.findAll({
+            where : {
+                spotId: spot.id,
+                preview: true
+            }
+        })
+
+        let imageUrl;
+
+        if (spotPreviewImage[0]) {
+            imageUrl = spotPreviewImage[0].dataValues.url;
+        } else imageUrl = 'none'
+
+        const spotObj = {
+            id: spot.id,
+            ownerId: spot.ownerId,
+            address: spot.address,
+            city: spot.city,
+            state: spot.state,
+            country: spot.country,
+            lat: spot.lat,
+            lng: spot.lng,
+            name: spot.name,
+            description: spot.description,
+            price: spot.price,
+            createdAt: spot.createdAt,
+            updatedAt: spot.updatedAt,
+            avgRating: avgRating,
+            previewImage: imageUrl
+        };
+
+        allUserSpotsRes.Spots.push(spotObj)
     }
-  
-    const updatedReviews = userReviews.map((userReview) => {
-      const {
-        id,
-        userId,
-        spotId,
-        review,
-        stars,
-        createdAt,
-        updatedAt,
-        User,
-        Spot,
-        Images,
-      } = userReview;
-      let previewImage;
-      if (!Spot.Images[0]) {
-        previewImage = "There are currently no images for this spot";
-      } else {
-        previewImage = Spot.Images[0].url;
-      }
-  
-      let newSpot = {
-        id: Spot.id,
-        ownerId: Spot.ownerId,
-        address: Spot.address,
-        city: Spot.city,
-        state: Spot.state,
-        country: Spot.country,
-        lat: Spot.lat,
-        lng: Spot.lng,
-        name: Spot.name,
-        price: Spot.price,
-        previewImage: previewImage,
-      };
-  
-      return {
-        id,
-        userId,
-        spotId,
-        review,
-        stars,
-        createdAt,
-        updatedAt,
-        User,
-        Spot: newSpot,
-        ReviewImages: Images,
-      };
-    });
-  
-    return res.json({ Reviews: updatedReviews });
+
+    return res.json(allUserSpotsRes);
+
   });
 
 
