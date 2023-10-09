@@ -345,23 +345,27 @@ router.get('/:spotId', async (req, res) => {
 
 // Create a Spot
 router.post("/", requireAuth, validateData, async (req,res) => {
+  let { address, city, state, country, lat, lng, name, description, price } = req.body;
   const { user } = req;
-  const { address, city, state, country, lat, lng, name, description, price } = req.body;
 
-  const newSpot = await Spot.create( {
+  lat = Number(lat);
+  lng = Number(lng);
+  price = Number(price);
+
+  const newSpot = await Spot.create({
     ownerId: user.id,
-    address: address,
-    city: city,
-    state: state,
-    country: country,
-    lat: lat,
-    lng: lng,
-    name: name,
-    description: description,
-    price: price,
-    })
+    address,
+    city,
+    state,
+    country,
+    lat,
+    lng,
+    name,
+    description,
+    price,
+  });
 
-    res.status(201).json(newSpot);
+  return res.status(201).json(newSpot);
 });
 
 // Create an Image to a Spot based on Spot's Id
