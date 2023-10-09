@@ -30,7 +30,7 @@ router.delete('/:imageId', requireAuth, async (req, res) => {
 
     //return the res.json status if successfully destroyed
     return res.json({
-        message: "Successfully delete"
+        message: "Successfully deleted"
     })
 })
 
