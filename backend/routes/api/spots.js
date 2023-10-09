@@ -803,8 +803,13 @@ router.post("/:spotId/bookings", requireAuth, validateBooking, async (req, res, 
         return res.status(400).json(validationError)
     }
 
+
     const bookingStartDate = new Date(startDate);
     const bookingEndDate = new Date(endDate);
+
+    if (bookingStartDate >= bookingEndDate) {
+        return res.status(400).json(validationError)
+    }
 
     //error message to be sent
     const dateError = {
@@ -870,7 +875,7 @@ router.post("/:spotId/bookings", requireAuth, validateBooking, async (req, res, 
         return res.status(403).json(dateError)
     }
 
-    
+
 
 
     const newBooking = await Booking.create({
