@@ -766,7 +766,7 @@ router.get('/:spotId/bookings', requireAuth, async (req, res) => {
 
 //!CREATE a booking for a spot based on Spot ID
 
-router.post("/:spotId/bookings", requireAuth, async (req, res, next) => {
+router.post("/:spotId/bookings", requireAuth, validateBooking, async (req, res, next) => {
     let { startDate, endDate } = req.body;
     const { user } = req;
     const spotId = Number(req.params.spotId);
@@ -814,6 +814,18 @@ router.post("/:spotId/bookings", requireAuth, async (req, res, next) => {
         };
         return next(err);
       }
+
+      if (new Date(startDate) >= new Date(endDate)) {
+        const err = new Error(
+          "Sorry, this spot is already booked for the specified dates"
+        );
+        err.status = 403;
+        err.errors = {
+          startDate: "Start date conflicts with an existing booking",
+        };
+        return next(err);
+      }
+
       //   startDate    start    endDate    end
       if (new Date(endDate) - start >= 0 && end - new Date(endDate) >= 0) {
         const err = new Error(
