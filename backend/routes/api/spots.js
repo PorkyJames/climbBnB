@@ -45,7 +45,7 @@ const validateData = [
   .isFloat({
     min: 0,
   })
-  .withMessage("Price per day is required and must be 0 or greater"),
+  .withMessage("Price per day is required"),
 
 handleValidationErrors,
 ];
