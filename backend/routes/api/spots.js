@@ -369,7 +369,7 @@ router.post('/:spotId/images', requireAuth, async (req, res,) => {
     })
 
     // if the spot doesn't exist
-    if (!spot) {
+    if (!spot.length) {
         const error = new Error("Spot doesn't exist");
         error.message = "Spot couldn't be found";
         error.status = 404;
