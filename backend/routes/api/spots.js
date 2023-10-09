@@ -766,7 +766,7 @@ router.get('/:spotId/bookings', requireAuth, async (req, res) => {
 
 //!CREATE a booking for a spot based on Spot ID
 
-router.post("/:spotId/bookings", requireAuth, validateBooking, async (req, res, next) => {
+router.post("/:spotId/bookings", requireAuth, async (req, res, next) => {
     let { startDate, endDate } = req.body;
     const { user } = req;
     const spotId = Number(req.params.spotId);
@@ -799,7 +799,7 @@ router.post("/:spotId/bookings", requireAuth, validateBooking, async (req, res, 
         ],
       },
     });
-    
+
     for (let booking of bookedDates) {
       const start = new Date(booking.startDate);
       const end = new Date(booking.endDate);
