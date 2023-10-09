@@ -84,7 +84,7 @@ router.get('/', async (req, res) => {
   // Validate the query parameters
   let { minLat, maxLat, minLng, maxLng, minPrice, maxPrice } = req.query;
   
-  let query = {
+  let queryObj = {
       where: {},
       include: []
   }
@@ -142,58 +142,58 @@ router.get('/', async (req, res) => {
   else if (!Number.isNaN(size)) size = parseInt(size);
   else size = 20;
 
-  if (size >= 1 && page >= 1) {
-      query.limit = size;
-      query.offset = size * (page - 1)
-  }
+  const paginate = {};
 
-  //querying
+  if (size >= 1 && page >= 1) {
+    queryObj.limit = size;
+    queryObj.offset = size * (page - 1)
+  }
 
   const Op = Sequelize.Op;
 
   if (minLat) {
       minLat = parseFloat(minLat)
-      query.where.lat = {
+      queryObj.where.lat = {
           [Op.gte]: minLat
       }
   }
 
   if (maxLat) {
       maxLat = parseFloat(maxLat);
-      query.where.lat = {
+      queryObj.where.lat = {
           [Op.lte]: maxLat
       }
   }
 
   if (minLng) {
       minLng = parseFloat(minLng);
-      query.where.lng = {
+      queryObj.where.lng = {
           [Op.gte]: minLng
       }
   }
 
   if (maxLng) {
       maxLng = parseFloat(maxLng);
-      query.where.lng = {
+      queryObj.where.lng = {
           [Op.lte]: maxLng
       }
   }
 
   if (minPrice) {
       minPrice = parseFloat(minPrice);
-      query.where.price = {
+      queryObj.where.price = {
           [Op.gte]: minPrice
       }
   }
 
   if (maxPrice) {
       maxPrice = parseFloat(maxPrice);
-      query.where.price = {
+      queryObj.where.price = {
           [Op.lte]: maxPrice
       }
   }
 
-  const allSpots = await Spot.findAll(query);
+  const allSpots = await Spot.findAll(queryObj);
 
   let result = {
       Spots: []
@@ -209,7 +209,7 @@ router.get('/', async (req, res) => {
           }
       });
 
-      //calculating average rating for each spot
+      //avgrating calcualtae
       let total = 0;
 
       for (const review of reviews) {
