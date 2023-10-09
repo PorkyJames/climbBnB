@@ -783,9 +783,11 @@ router.post("/:spotId/bookings", requireAuth, validateBooking, async (req, res, 
         })
     };
 
+    //grab the dates from our response
 
     const { startDate, endDate } = req.body;
 
+    //if there are any validation errors, then we'll send this bad request error response back
     const validationError = {
         message: "Bad Request",
         errors: {}
@@ -803,10 +805,11 @@ router.post("/:spotId/bookings", requireAuth, validateBooking, async (req, res, 
         return res.status(400).json(validationError)
     }
 
-
+    //anytime we get a request for new booking start dates, we'll add them as such
     const bookingStartDate = new Date(startDate);
     const bookingEndDate = new Date(endDate);
 
+    //if the bookingstart date is on or after booking end Date, then we'll send a bad request error
     if (bookingStartDate >= bookingEndDate) {
         res.status(400);
 		return res.json({
@@ -825,6 +828,7 @@ router.post("/:spotId/bookings", requireAuth, validateBooking, async (req, res, 
 
     let Op = Sequelize.Op
 
+    //for every new booking item that we get back, 
     const currentBookingsStartDate = await Booking.findAll({
         where: {
             spotId: spot.id,
@@ -881,7 +885,6 @@ router.post("/:spotId/bookings", requireAuth, validateBooking, async (req, res, 
         return res.status(403).json(dateError)
     }
 
-
     const newBooking = await Booking.create({
         spotId: spot.id,
         userId: user.id,
@@ -935,10 +938,6 @@ router.get('/:spotId/reviews', async (req, res) => {
         });
 
         const reviewObj = {
-            // id: review.id,
-            // userId: review.userId,
-            // review: review.review,
-            // stars: review.stars,
             ...review,
             User: {
                 ...user
@@ -955,7 +954,7 @@ router.get('/:spotId/reviews', async (req, res) => {
         reviewsRes.Reviews.push(reviewObj)
     };
 
-    return res.status(200).json(reviewsRes)
+    return res.json(reviewsRes)
   });
 
 //! Always need to export the router
