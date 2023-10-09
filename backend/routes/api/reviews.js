@@ -24,34 +24,91 @@ const validateCreateReview = [
 //GET 
 
 //Get all Reviews of Current User
-router.get('/current', requireAuth, async (req, res) => {
-    //get our current userId
-    const userId = req.user.id;
-
-    //find all of the reviews by the current user:
-    const allUserReviews = await Review.findAll({
-        where: {
-            userId
-        }
+router.get("/current", requireAuth, async (req, res, next) => {
+    const { user } = req;
+  
+    const userReviews = await Review.findAll({
+      where: {
+        userId: user.id,
+      },
+      include: [
+        {
+          model: User,
+          attributes: ["id", "firstName", "lastName"],
+        },
+        {
+          model: Spot,
+          attributes: {
+            exclude: ["createdAt", "updatedAt", "description"],
+          },
+          include: {
+            model: Image,
+  
+            attributes: ["preview", "url"],
+          },
+        },
+        {
+          model: Image,
+  
+          attributes: ["id", "url"],
+        },
+      ],
     });
-
-    //Convert our all user Reviews into json format
-    const newUserReviews = allUserReviews.map(review => {
-        return {
-            id: review.id,
-            userId: review.userId,
-            spotId: review.spotId,
-            review: review.review,
-            stars: review.stars,
-            createdAt: review.createdAt,
-            updatedAt: review.updatedAt,
-            User: review.User,
-            Spot: review.Spot,
-        };
-    })
-
-    return res.status(200).json(newUserReviews)
-})
+  
+    if (!userReviews.length) {
+      return res.json({ message: "You have not entered any reviews yet." });
+    }
+  
+    const updatedReviews = userReviews.map((userReview) => {
+      const {
+        id,
+        userId,
+        spotId,
+        review,
+        stars,
+        createdAt,
+        updatedAt,
+        User,
+        Spot,
+        Images,
+      } = userReview;
+      let previewImage;
+      if (!Spot.Images[0]) {
+        previewImage = "There are currently no images for this spot";
+      } else {
+        previewImage = Spot.Images[0].url;
+      }
+  
+      let newSpot = {
+        id: Spot.id,
+        ownerId: Spot.ownerId,
+        address: Spot.address,
+        city: Spot.city,
+        state: Spot.state,
+        country: Spot.country,
+        lat: Spot.lat,
+        lng: Spot.lng,
+        name: Spot.name,
+        price: Spot.price,
+        previewImage: previewImage,
+      };
+  
+      return {
+        id,
+        userId,
+        spotId,
+        review,
+        stars,
+        createdAt,
+        updatedAt,
+        User,
+        Spot: newSpot,
+        ReviewImages: Images,
+      };
+    });
+  
+    return res.json({ Reviews: updatedReviews });
+  });
 
 
 //POST
