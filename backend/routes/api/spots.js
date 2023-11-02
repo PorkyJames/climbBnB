@@ -114,6 +114,9 @@ router.get('/', async (req, res) => {
   if (minLat && (minLat < -90 || minLat > 90)) {
     error.errors.minLat = "Minimum latitude is invalid"
   } 
+
+//! MaxLng not showing up on the Query Parameter validation error? Not sure how to fix. 
+
   if (maxLng && (maxLng > 180 || maxLng < -180)) {
     error.errors.maxLng = "Maximum longitude is invalid"
   } 
