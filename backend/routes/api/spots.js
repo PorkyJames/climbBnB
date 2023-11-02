@@ -84,7 +84,7 @@ router.get('/', async (req, res) => {
   // Validate the query parameters
   let { minLat, maxLat, minLng, maxLng, minPrice, maxPrice } = req.query;
   
-  let queryObj = {
+  let query = {
       where: {},
       include: []
   }
@@ -142,58 +142,60 @@ router.get('/', async (req, res) => {
   else if (!Number.isNaN(size)) size = parseInt(size);
   else size = 20;
 
-  const paginate = {};
+  const pagination = {};
 
   if (size >= 1 && page >= 1) {
-    queryObj.limit = size;
-    queryObj.offset = size * (page - 1)
+      query.limit = size;
+      query.offset = size * (page - 1)
   }
+
+  //querying
 
   const Op = Sequelize.Op;
 
   if (minLat) {
       minLat = parseFloat(minLat)
-      queryObj.where.lat = {
+      query.where.lat = {
           [Op.gte]: minLat
       }
   }
 
   if (maxLat) {
       maxLat = parseFloat(maxLat);
-      queryObj.where.lat = {
+      query.where.lat = {
           [Op.lte]: maxLat
       }
   }
 
   if (minLng) {
       minLng = parseFloat(minLng);
-      queryObj.where.lng = {
+      query.where.lng = {
           [Op.gte]: minLng
       }
   }
 
   if (maxLng) {
       maxLng = parseFloat(maxLng);
-      queryObj.where.lng = {
+      query.where.lng = {
           [Op.lte]: maxLng
       }
   }
 
   if (minPrice) {
       minPrice = parseFloat(minPrice);
-      queryObj.where.price = {
+      query.where.price = {
           [Op.gte]: minPrice
       }
   }
 
   if (maxPrice) {
       maxPrice = parseFloat(maxPrice);
-      queryObj.where.price = {
+      query.where.price = {
           [Op.lte]: maxPrice
       }
   }
 
-  const allSpots = await Spot.findAll(queryObj);
+  const allSpots = await Spot.findAll(query);
 
   let result = {
       Spots: []
@@ -209,7 +211,7 @@ router.get('/', async (req, res) => {
           }
       });
 
-      //avgrating calcualtae
+      //calculating average rating for each spot
       let total = 0;
 
       for (const review of reviews) {
@@ -896,6 +898,7 @@ router.post("/:spotId/bookings", requireAuth, validateBooking, async (req, res, 
 
 })
 
+//GET All reviews based on Spot ID
 router.get('/:spotId/reviews', async (req, res) => {
     const spot = await Spot.findByPk(req.params.spotId);
     //if spot doesn't exist

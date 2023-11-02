@@ -157,7 +157,7 @@ router.post('/:reviewId/images', requireAuth, async (req, res) => {
     })
 
     return res.status(200).json({
-        id: addedReviewImage,
+        id: addedReviewImage.id,
         url: addedReviewImage.url
     })
 })

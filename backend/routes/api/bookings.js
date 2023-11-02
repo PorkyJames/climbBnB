@@ -99,7 +99,6 @@ router.get('/current', requireAuth, async (req, res) => {
 //In our spots.js route file
 
 
-
 //PUT
 
 //Edit a booking
