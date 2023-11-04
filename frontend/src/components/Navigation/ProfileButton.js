@@ -13,10 +13,13 @@ function ProfileButton({ user }) {
   const logout = (e) => {
     e.preventDefault();
     dispatch(sessionActions.logout());
+    closeMenu();
   };
 
+  const closeMenu = () => setShowMenu(false)
+
   const openMenu = () => {
-    if (!showMenu) return;
+    if (showMenu) return;
     setShowMenu(true);
   }
 
@@ -56,12 +59,14 @@ function ProfileButton({ user }) {
             <li>
               <OpenModalButton
                 buttonText="Log In"
+                onButtonClick={closeMenu}
                 modalComponent={<LoginFormModal />}
               />
             </li>
             <li>
               <OpenModalButton
                 buttonText="Sign Up"
+                onButtonClick={closeMenu}
                 modalComponent={<SignupFormModal />}
               />
             </li>
