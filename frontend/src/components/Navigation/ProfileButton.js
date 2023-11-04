@@ -10,32 +10,32 @@ function ProfileButton({ user }) {
   const [showMenu, setShowMenu] = useState(false);
   const ulRef = useRef();
 
-  const logout = (e) => {
-    e.preventDefault();
-    dispatch(sessionActions.logout());
-    closeMenu();
-  };
-
+  
   const closeMenu = () => setShowMenu(false)
-
+  
   const openMenu = () => {
     if (showMenu) return;
     setShowMenu(true);
   }
-
+  
   useEffect(() => {
     if (!showMenu) return;
-
+    
     const closeMenu = (e) => {
       if (ulRef.current && !ulRef.current.contains(e.target)) {
         setShowMenu(false);
       }
     };
-
+    
     document.addEventListener('click', closeMenu);
-
+    
     return () => document.removeEventListener("click", closeMenu);
   }, [showMenu]);
+  
+  const logout = (e) => {
+    e.preventDefault();
+    dispatch(sessionActions.logout());
+  };
 
   const ulClassName = "profile-dropdown" + (showMenu ? "" : " hidden");
 
@@ -44,6 +44,7 @@ function ProfileButton({ user }) {
       <button onClick={openMenu}>
         <i className="fas fa-user-circle" />
       </button>
+      {showMenu && (
       <ul className={ulClassName} ref={ulRef}>
         {user ? (
           <>
@@ -73,6 +74,7 @@ function ProfileButton({ user }) {
           </>
         )}
       </ul>
+      )}
     </>
   );
 }
