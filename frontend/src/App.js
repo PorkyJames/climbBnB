@@ -4,7 +4,7 @@ import { Switch, Route } from "react-router-dom";
 import * as sessionActions from "./store/session";
 import Navigation from "./components/Navigation";
 
-//! Import components
+//! Components
 import AllSpotsLandingPage from "./components/AllSpotsLandingPage";
 
 function App() {

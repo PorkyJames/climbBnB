@@ -36,8 +36,8 @@ export const spotsReducer = (state = initialState, action) => {
             const newState = {};
             action.spots.Spots.forEach((spot) => {
                 newState[spot.id] = spot;
-                return newState;
             })
+            return newState;
         }
         default:
             return state;

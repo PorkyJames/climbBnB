@@ -1,12 +1,16 @@
 import { useDispatch, useSelector } from "react-redux"
 import { useEffect } from "react";
 import { loadAllSpotsThunk } from "../../store/spot"
+import { Link } from "react-router-dom";
+
+//! Component
+import TiledSpot from "../TiledSpot";
 
 const AllSpotsLandingPage = () => {
 
     const dispatch = useDispatch();
     const allSpots = useSelector((state) => Object.values(state.spots))
-
+    console.log(allSpots)
 
     useEffect(() => {
         dispatch(loadAllSpotsThunk())
@@ -14,7 +18,13 @@ const AllSpotsLandingPage = () => {
 
     return(
         <>
-            <h1>Here is all spots</h1>
+            <div className = "landing-page">
+                {allSpots.map((spot) => (
+                    <Link to={`spot/${spot.id}`} key={spot.id}>
+                        <TiledSpot spot={spot} />
+                    </Link>
+                ))}
+            </div>
         </>
     )
 }
