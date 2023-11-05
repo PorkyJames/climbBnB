@@ -24,7 +24,7 @@ const TiledSpot = ({ spot }) => {
                     <div className="spot-city">{spot.name}</div>
                     <div className="spot-state">{spot.state}</div>
                     <div className="spot-starRating">{reviewExists}</div>
-                    <div className="spot-price">{spot.price}</div>
+                    <div className="spot-price">${spot.price}.00 / night</div>
                 </div>
             </Link>
         </>
