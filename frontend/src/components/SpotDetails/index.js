@@ -45,6 +45,16 @@ const reserveButtonAlert = () => {
 
                 <h1>{name}</h1>
 
+                {/* Our Large Image */}
+                <img src={SpotImages[0].url} className="spot-details-large-image" />
+
+                {/* Our other Small Images */}
+                <div className="spot-details-small-images">
+                {SpotImages.slice(1, 5).map((img, i) => (
+                    <img key={i} src={img.url}/>
+                ))}
+                </div>
+
                 <p>Location: {city}, {state}, {country}</p>
 
                 <p>Hosted by {Owner.firstName} {Owner.lastName}</p>
