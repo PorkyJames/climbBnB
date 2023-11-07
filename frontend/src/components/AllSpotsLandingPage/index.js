@@ -10,7 +10,6 @@ const AllSpotsLandingPage = () => {
 
     const dispatch = useDispatch();
     const allSpots = useSelector((state) => Object.values(state.spots))
-    console.log(allSpots)
 
     useEffect(() => {
         dispatch(loadAllSpotsThunk())

@@ -4,8 +4,6 @@ const TiledSpot = ({ spot }) => {
 
     //! Get all of the spot information
     const { id, name, city, state, price, avgStarRating, previewImage, description } = spot;
-    console.log(avgStarRating)
-
 
     //! If review exists / doesn't exist
     let rating;

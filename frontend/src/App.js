@@ -23,7 +23,7 @@ function App() {
         <Route exact path = "/">
           <AllSpotsLandingPage />
         </Route>
-        <Route path='/spots/:spotsId'>
+        <Route path='/spot/:spotId'>
           <SpotDetails />
         </Route>
       </Switch>}
