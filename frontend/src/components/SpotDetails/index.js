@@ -3,13 +3,18 @@ import { useSelector, useDispatch } from "react-redux"
 import { useEffect, useState } from "react";
 import { loadSpotDetailsThunk } from "../../store/spot";
 
+import SpotDetailReviews from "../SpotDetailReviews";
+
 const SpotDetails = () => {
 const dispatch = useDispatch();
 const { spotId } = useParams();
+
 const spotState = useSelector((state) => state.spots)
 const eachSpotDetail = spotState[spotId]
 
-const [isLoading, setIsLoading] = useState(true)
+
+const avgStarRatingState = useSelector((state) => state.spots[spotId].average)
+const numReviewsState = useSelector((state) => state.spots[spotId].numReviews)
 
 //! Destructure our Each Spot
 const {
@@ -25,10 +30,12 @@ const {
     price,
     state } = eachSpotDetail;
 
+const [isLoading, setIsLoading] = useState(true)
 
 useEffect(() => {
     dispatch(loadSpotDetailsThunk(spotId)).then(() => setIsLoading(false))
 }, [dispatch, spotId])
+
 
 if (!eachSpotDetail) {
     return <div>Loading...</div>
@@ -63,14 +70,21 @@ const reserveButtonAlert = () => {
 
                 <div className="spot-reserve-box">
                     <div className="spot-reserve-box-price-and-reviews">
+                        <p> CalloutInfoBox Down Here </p>
                         <p>${price} per night</p>
-                        <p>Reviews Go here</p>
+                        <p>Average Star Rating: {avgStarRatingState}</p>
+                        <p>Review Count: {numReviewsState}</p>
                     </div>
                     <button 
                         className ="reserve-button" 
                         onClick={reserveButtonAlert}>
                             Reserve
                     </button>
+                </div>
+
+                <div className = "spot-details-review-section">
+                    <h1> Spot Detail Reviews goes</h1>
+                    <SpotDetailReviews spotId={spotId} />
                 </div>
 
             </>

@@ -14,7 +14,7 @@ const TiledSpot = ({ spot }) => {
     //! If review exists / doesn't exist
     const reviewExists = () => {
         if (avgStarRating > 0) {
-            return avgStarRating
+            return formatAvgStarRating(avgStarRating)
         } else {
             return "New"
         }
@@ -32,7 +32,7 @@ const TiledSpot = ({ spot }) => {
                     <div>
                         <div className="spot-starRating" title={spot.name}>
                             <i className="fas fa-star"></i>
-                            {formatAvgStarRating(reviewExists())}
+                            {reviewExists()}
                         </div>
                     </div>
                     <div className="spot-price" title={spot.name}>${spot.price}.00 / night</div>

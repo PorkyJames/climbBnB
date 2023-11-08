@@ -25,6 +25,17 @@ const loadSpotDetails = (spot) => {
     }
 }
 
+//! Reviews of a Spot
+
+const LOAD_SPOT_REVIEWS = "/spots/loadSpotReviews"
+
+const loadSpotReviews = (review) => {
+    return {
+        type: LOAD_SPOT_REVIEWS,
+        review,
+    }
+}
+
 // * Thunks
 //! All Spots
 export const loadAllSpotsThunk = () => async dispatch => {
@@ -49,6 +60,18 @@ export const loadSpotDetailsThunk = (spotId) => async dispatch => {
     }
     return res;
 }
+
+// //! Spot Details Reviews
+// export const loadSpotReviewsThunk = (spotId) => async dispatch => {
+//     const res = await csrfFetch(`/api/spots/${spotId}/reviews`)
+
+//     if (res.ok) {
+//         const data = await res.json();
+//         dispatch(loadSpotReviews(data))
+//         return data;
+//     }
+//     return res;
+// }
 
 //! Our reducer for spots
 
