@@ -25,14 +25,24 @@ const loadSpotDetails = (spot) => {
     }
 }
 
-//! Reviews of a Spot
+// //! Reviews of a Spot
 
-const LOAD_SPOT_REVIEWS = "/spots/loadSpotReviews"
+// const LOAD_SPOT_REVIEWS = "/spots/loadSpotReviews"
 
-const loadSpotReviews = (review) => {
+// const loadSpotReviews = (review) => {
+//     return {
+//         type: LOAD_SPOT_REVIEWS,
+//         review,
+//     }
+// }
+
+//! Create a new Spot
+const CREATE_NEW_SPOT = "/spots/createNewSpot"
+
+const createNewSpot = (spot) => {
     return {
-        type: LOAD_SPOT_REVIEWS,
-        review,
+        type: CREATE_NEW_SPOT,
+        spot,
     }
 }
 
@@ -59,6 +69,25 @@ export const loadSpotDetailsThunk = (spotId) => async dispatch => {
         return data
     }
     return res;
+}
+
+//! Create a New Spot
+export const createNewSpotThunk = (dataFromForm) => async dispatch => {
+    const requestMethods = {
+        method: "POST",
+        headers: {
+            "Content-Type": "application-json",
+        },
+        body: JSON.stringify(dataFromForm)
+    }
+
+    const res = await csrfFetch("/api/spots", requestMethods)
+
+    if (res.ok) {
+        const createdSpot = await res.json();
+        dispatch(createNewSpotThunk());
+        return createdSpot
+    } 
 }
 
 // //! Spot Details Reviews
@@ -92,6 +121,12 @@ export const spotsReducer = (state = initialState, action) => {
             const newState = {};
             newState[action.spot.id] = action.spot;
             return newState;
+        }
+        case CREATE_NEW_SPOT: {
+            return {
+                ...state,
+                [action.spot.id]: action.spot
+            }
         }
         default:
             return state;

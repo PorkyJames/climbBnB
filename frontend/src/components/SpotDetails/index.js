@@ -83,7 +83,7 @@ const reserveButtonAlert = () => {
                 </div>
 
                 <div className = "spot-details-review-section">
-                    <h1> Spot Detail Reviews goes</h1>
+                    <h1> Spot Detail Reviews goes here</h1>
                     <SpotDetailReviews spotId={spotId} />
                 </div>
 

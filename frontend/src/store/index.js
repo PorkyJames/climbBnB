@@ -32,3 +32,4 @@ const configureStore = (preloadedState) => {
 //! Configure Store will allow us to attach the Redux store to our React application
 
 export default configureStore;
+

@@ -32,6 +32,13 @@ function Navigation({ isLoaded }) {
   //   );
   // }
 
+  //! If logged in, include a Create a Spot button in Nav Bar
+  const userLoggedIn = !sessionUser ? false : true
+
+  const createASpotButton = () => {
+    return <button className="create-a-spot-button">Create a New Spot</button>
+  }
+
   return (
     <ul>
       <li>
@@ -39,11 +46,14 @@ function Navigation({ isLoaded }) {
           Home
         </NavLink>
       </li>
-      {isLoaded && (
-        <li>
-          <ProfileButton user={sessionUser} />
-        </li>
-      )}
+      <div className="user-and-nav">
+        {userLoggedIn && createASpotButton()}
+        {isLoaded && (
+          <li className="profile-button">
+            <ProfileButton user={sessionUser} />
+          </li>
+        )}
+      </div>
     </ul>
   );
 }
