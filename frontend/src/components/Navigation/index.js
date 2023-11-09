@@ -36,7 +36,7 @@ function Navigation({ isLoaded }) {
   const userLoggedIn = !sessionUser ? false : true
 
   const createASpotButton = () => {
-    return <button className="create-a-spot-button">Create a New Spot</button>
+    return <NavLink className="create-a-spot-button" to='/spot/new'>Create a New Spot</NavLink>
   }
 
   return (
