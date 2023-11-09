@@ -9,7 +9,6 @@ const loadSpotReviews = (spotId, reviews) => ({
     reviews,
 }); 
 
-
 //! Thunks
 export const loadSpotReviewsThunk = (spotId) => async (dispatch) => {
     const res = await csrfFetch(`/api/spots/${spotId}/reviews`);
@@ -17,7 +16,9 @@ export const loadSpotReviewsThunk = (spotId) => async (dispatch) => {
     if (res.ok) {
       const data = await res.json();
       dispatch(loadSpotReviews(spotId, data))
+      return data;
     }
+    return res;
   };
 
 //! Reducer

@@ -1,59 +1,45 @@
 import { useSelector, useDispatch } from "react-redux";
-
 import { loadSpotReviewsThunk } from "../../store/review";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 
 const SpotDetailReviews = ({spotId}) => {
 
     const dispatch = useDispatch();
     const spotReviews = useSelector((state) => state.reviews[spotId]);
-
-    const newSpotReviews = spotReviews.Reviews;
+    
+    const [isLoading, setIsLoading] = useState(true)
 
     useEffect(() => {
-        dispatch(loadSpotReviewsThunk(spotId));
+        dispatch(loadSpotReviewsThunk(spotId)).then(() => setIsLoading(false));
     }, [dispatch, spotId]);
 
-    const calculateTotalAvgRating = () => {
-        //! Return New if nothing exists
-        if (!spotReviews || spotReviews.length === 0) {
-            return "New"
-        }
-        
-        //! If reviews exists:
-        //! Format and calculate the avg rating of reviews
-        const totalStars = spotReviews.reduce((sum, review) => sum + review.stars, 0)
-        const avgRating = (totalStars / spotReviews.length).toFixed(2)
-        return avgRating;
+    if (spotReviews === undefined) {
+        return (
+            <p> Loading ...</p>
+        )
     }
 
-    //! Reassign avgRating to our function above for calculating the avgRating
-    const avgRating = calculateTotalAvgRating();
-
     return (
-        <div className="spot-detail-reviews">
-                <ul>
-                    {newSpotReviews.map((review) => (
-                    <li key={review.id}>
-                        <p>Review: {review.review}</p>
-                        <div className ="spot-star-icon">
-                            <i className="fas fa-star"></i>
-                            <p>Stars: {review.stars}</p>
-                        </div>
-                        <p>Posted by: {review.User.firstName} {review.User.lastName}</p>
-                    </li>
-                    ))}
-                </ul>
-                <div className="average-rating">
-                    {avgRating === "New" ? (<p>New</p> ) : 
-                    (
-                    <p>
-                        <i className="fas fa-star"></i>
-                        {avgRating}
-                    </p>
-                    )}
-                </div>
+        <div>
+            {!isLoading &&
+            <>
+            <div className="spot-detail-reviews">
+                    <ul>
+                        {spotReviews.Reviews.map((review) => (
+                        <li key={review.id}>
+                            <p>Review: {review.review}</p>
+                            <div className ="spot-star-icon">
+                                <i className="fas fa-star"></i>
+                                <p>Stars: {review.stars}</p>
+                            </div>
+                            <p>Posted by: {review.User.firstName} {review.User.lastName}</p>
+                        </li>
+                        ))}
+                    </ul>
+            </div>
+            </>
+            }
         </div>
     );
 }

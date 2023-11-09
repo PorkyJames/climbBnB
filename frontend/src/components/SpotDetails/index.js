@@ -9,26 +9,8 @@ const SpotDetails = () => {
 const dispatch = useDispatch();
 const { spotId } = useParams();
 
-const spotState = useSelector((state) => state.spots)
-const eachSpotDetail = spotState[spotId]
+const spotState = useSelector((state) => state.spots[spotId])
 
-
-const avgStarRatingState = useSelector((state) => state.spots[spotId].average)
-const numReviewsState = useSelector((state) => state.spots[spotId].numReviews)
-
-//! Destructure our Each Spot
-const {
-    Owner,
-    SpotImages,
-    address,
-    average,
-    city,
-    country,
-    description,
-    name,
-    numReviews,
-    price,
-    state } = eachSpotDetail;
 
 const [isLoading, setIsLoading] = useState(true)
 
@@ -36,10 +18,28 @@ useEffect(() => {
     dispatch(loadSpotDetailsThunk(spotId)).then(() => setIsLoading(false))
 }, [dispatch, spotId])
 
+if (spotState === undefined) {
+    return (
+        <p> Loading... </p>
+        )
+    } 
+    
+    //! Destructure our Each Spot
+    const {
+        Owner,
+        SpotImages,
+        address,
+        average,
+        city,
+        country,
+        description,
+        name,
+        numReviews,
+        price,
+        state } = spotState;
 
-if (!eachSpotDetail) {
-    return <div>Loading...</div>
-}
+const avgStarRatingItem = spotState.average //5
+const numReviewsItem = spotState.numReviews //1
 
 const reserveButtonAlert = () => {
     alert("Feature Coming Soon.")
@@ -72,8 +72,8 @@ const reserveButtonAlert = () => {
                     <div className="spot-reserve-box-price-and-reviews">
                         <p> CalloutInfoBox Down Here </p>
                         <p>${price} per night</p>
-                        <p>Average Star Rating: {avgStarRatingState}</p>
-                        <p>Review Count: {numReviewsState}</p>
+                        <p>Average Star Rating: {avgStarRatingItem}</p>
+                        <p>Review Count: {numReviewsItem}</p>
                     </div>
                     <button 
                         className ="reserve-button" 
