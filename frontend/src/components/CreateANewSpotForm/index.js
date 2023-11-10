@@ -20,29 +20,97 @@ const CreateANewSpotForm = () => {
     const [imageURL3, setImageURL3] = useState("");
     const [imageURL4, setImageURL4] = useState("");
 
+    //! Set Error States for our Form
+    const [countryError, setCountryError] = useState('');
+    const [streetAddressError, setStreetAddressError] = useState('');
+    const [cityError, setCityError] = useState('');
+    const [stateError, setStateError] = useState('');
+    const [descriptionError, setDescriptionError] = useState('');
+    const [spotTitleError, setSpotTitleError] = useState('');
+    const [spotPriceError, setSpotPriceError] = useState('');
+    const [previewImageURLError, setPreviewImageURLError] = useState('');
+
 
     //! Handle submit for form
     const handleSubmit = (e) => {
         e.preventDefault();
+        let isValid = true;
 
-        //! When we submit our form, we're going to dispatch the form data to our thunk
-        const formData = {
-            country,
-            streetAddress,
-            city,
-            state,
-            description,
-            spotTitle,
-            spotPrice,
-            previewImageURL,
-            imageURL1,
-            imageURL2,
-            imageURL3,
-            imageURL4,
+        if (!country) {
+            setCountryError('Country is required');
+            isValid = false;
+        } else {
+            setCountryError('');
         }
 
-        dispatch(createNewSpotThunk(formData))
-    }
+        if (!streetAddress) {
+            setStreetAddressError('Street Address is required');
+            isValid = false;
+          } else {
+            setStreetAddressError('');
+          }
+      
+          if (!city) {
+            setCityError('City is required');
+            isValid = false;
+          } else {
+            setCityError('');
+          }
+      
+          if (!state) {
+            setStateError('State is required');
+            isValid = false;
+          } else {
+            setStateError('');
+          }
+      
+          if (description.length < 30) {
+            setDescriptionError('Description needs 30 or more characters');
+            isValid = false;
+          } else {
+            setDescriptionError('');
+          }
+      
+          if (!spotTitle) {
+            setSpotTitleError('Name of your Spot is required');
+            isValid = false;
+          } else {
+            setSpotTitleError('');
+          }
+      
+          if (!spotPrice) {
+            setSpotPriceError('Price per night (USD) is required');
+            isValid = false;
+          } else {
+            setSpotPriceError('');
+          }
+      
+          if (!previewImageURL) {
+            setPreviewImageURLError('Preview Image URL is required');
+            isValid = false;
+          } else {
+            setPreviewImageURLError('');
+          }
+
+        //! When we submit our form, we're going to dispatch the form data to our thunk
+        if (isValid){
+            const formData = {
+                country,
+                streetAddress,
+                city,
+                state,
+                description,
+                spotTitle,
+                spotPrice,
+                previewImageURL,
+                imageURL1,
+                imageURL2,
+                imageURL3,
+                imageURL4,
+            }
+            dispatch(createNewSpotThunk(formData))
+        }
+    };
 
     return (
         <>
@@ -64,6 +132,8 @@ const CreateANewSpotForm = () => {
                 value={country}
                 onChange={(e) => setCountry(e.target.value)}
             />
+            <div className="error-message">{countryError}</div>
+
             {/* //? Street Address Input */}
             <label htmlFor="streetAddress">Street Address</label>
             <input 
@@ -73,6 +143,8 @@ const CreateANewSpotForm = () => {
                 value={streetAddress}
                 onChange={(e) => setStreetAddress(e.target.value)}
             />
+            <div className="error-message">{streetAddressError}</div>
+
             {/* //? City Input */}
             <label htmlFor="city">City</label>
             <input 
@@ -82,6 +154,8 @@ const CreateANewSpotForm = () => {
                 value={city}
                 onChange={(e) => setCity(e.target.value)}
             />
+            <div className="error-message">{cityError}</div>
+
             {/* //? State Input */}
             <label htmlFor="state">State</label>
             <input 
@@ -91,6 +165,7 @@ const CreateANewSpotForm = () => {
                 value={state}
                 onChange={(e) => setState(e.target.value)}
             />
+            <div className="error-message">{stateError}</div>
         </div>
 
         {/* //! Section Two */}
@@ -104,6 +179,7 @@ const CreateANewSpotForm = () => {
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
             />
+            <div className="error-message">{descriptionError}</div>
         </div>
 
         {/* //! Section Three */}
@@ -118,6 +194,7 @@ const CreateANewSpotForm = () => {
                 value={spotTitle}
                 onChange={(e) => setSpotTitle(e.target.value)}
             />
+            <div className="error-message">{spotTitleError}</div>
         </div>
 
         {/* //! Section Four */}
@@ -132,6 +209,7 @@ const CreateANewSpotForm = () => {
                 value={spotPrice}
                 onChange={(e) => setSpotPrice(e.target.value)}
             />
+            <div className="error-message">{spotPriceError}</div>
         </div>
 
         {/* //! Section Five */}
@@ -147,6 +225,9 @@ const CreateANewSpotForm = () => {
                 value={previewImageURL}
                 onChange={(e) => setPreviewImageURL(e.target.value)}
             />
+            <div className="error-message">{previewImageURLError}</div>
+
+
             <label htmlFor="imageURL1">Image URL 1:</label>
             <input
                 type="text"
