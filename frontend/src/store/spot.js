@@ -76,17 +76,19 @@ export const createNewSpotThunk = (dataFromForm) => async dispatch => {
     const requestMethods = {
         method: "POST",
         headers: {
-            "Content-Type": "application-json",
+            "Content-Type": "application/json",
         },
         body: JSON.stringify(dataFromForm)
     }
+
+    console.log(dataFromForm)
 
     const res = await csrfFetch("/api/spots", requestMethods)
 
     if (res.ok) {
         const createdSpot = await res.json();
-        dispatch(createNewSpotThunk());
-        return createdSpot
+        dispatch(createNewSpot(createdSpot));
+        return createdSpot;
     } 
 }
 

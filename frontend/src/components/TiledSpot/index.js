@@ -22,10 +22,10 @@ const TiledSpot = ({ spot }) => {
     
     return (
         <>
-            <Link to={`/spot/${spot.id}`}>
+            <Link to={`/spots/${spot.id}`}>
                 <div className="each-spot-tile-details">
                     <div title={spot.name}>
-                        <img src={spot.previewImage} className="spot-thumbnail" />
+                        <img src={spot.previewImage} className="spot-thumbnail" alt="spot-thumbnail"/>
                     </div>
                     <div className="spot-city" title={spot.name}>{spot.name}</div>
                     <div className="spot-state" title={spot.name}>{spot.state}</div>

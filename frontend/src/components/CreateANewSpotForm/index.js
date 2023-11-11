@@ -1,8 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { createNewSpotThunk } from "../../store/spot";
 import { useHistory } from "react-router-dom"
-
 
 const CreateANewSpotForm = () => {
     
@@ -12,12 +11,14 @@ const CreateANewSpotForm = () => {
 
     //! Create States for our Forms
     const [country, setCountry] = useState("")
-    const [streetAddress, setStreetAddress] = useState("")
+    const [address, setAddress] = useState("")
     const [city, setCity] = useState("")
     const [state, setState] = useState("")
+    const [lng, setLng ] = useState("")
+    const [lat, setLat] = useState("")
     const [description, setDescription] = useState("")
-    const [spotTitle, setSpotTitle] = useState("")
-    const [spotPrice, setSpotPrice] = useState("")
+    const [name, setName] = useState("")
+    const [price, setPrice] = useState("")
     const [previewImageURL, setPreviewImageURL] = useState("");
     const [imageURL1, setImageURL1] = useState("");
     const [imageURL2, setImageURL2] = useState("");
@@ -26,12 +27,12 @@ const CreateANewSpotForm = () => {
 
     //! Set Error States for our Form
     const [countryError, setCountryError] = useState('');
-    const [streetAddressError, setStreetAddressError] = useState('');
+    const [addressError, setAddressError] = useState('');
     const [cityError, setCityError] = useState('');
     const [stateError, setStateError] = useState('');
     const [descriptionError, setDescriptionError] = useState('');
-    const [spotTitleError, setSpotTitleError] = useState('');
-    const [spotPriceError, setSpotPriceError] = useState('');
+    const [nameError, setNameError] = useState('');
+    const [priceError, setPriceError] = useState('');
     const [previewImageURLError, setPreviewImageURLError] = useState('');
 
 
@@ -47,11 +48,11 @@ const CreateANewSpotForm = () => {
             setCountryError('');
         }
 
-        if (!streetAddress) {
-            setStreetAddressError('Street Address is required');
+        if (!address) {
+            setAddressError('Street Address is required');
             isValid = false;
           } else {
-            setStreetAddressError('');
+            setAddressError('');
           }
       
           if (!city) {
@@ -75,18 +76,18 @@ const CreateANewSpotForm = () => {
             setDescriptionError('');
           }
       
-          if (!spotTitle) {
-            setSpotTitleError('Name of your Spot is required');
+          if (!name) {
+            setNameError('Name of your Spot is required');
             isValid = false;
           } else {
-            setSpotTitleError('');
+            setNameError('');
           }
       
-          if (!spotPrice) {
-            setSpotPriceError('Price per night (USD) is required');
+          if (!price) {
+            setPriceError('Price per night (USD) is required');
             isValid = false;
           } else {
-            setSpotPriceError('');
+            setPriceError('');
           }
       
           if (!previewImageURL) {
@@ -100,12 +101,14 @@ const CreateANewSpotForm = () => {
         if (isValid){
             const formData = {
                 country,
-                streetAddress,
+                address,
                 city,
                 state,
+                lng,
+                lat,
                 description,
-                spotTitle,
-                spotPrice,
+                name,
+                price,
                 previewImageURL,
                 imageURL1,
                 imageURL2,
@@ -115,11 +118,42 @@ const CreateANewSpotForm = () => {
 
             dispatch(createNewSpotThunk(formData)).then((result) => {
               if (result) {
-                history.push(`/api/spot/${result.spotId}`);
+                history.push(`/spots/${result.id}`);
               }
             });
         }
     };
+
+useEffect(() => {
+  const resetForm = history.listen(() => {
+    //! Reset the actual Form
+    setCountry("");
+    setAddress("");
+    setCity("");
+    setState("");
+    setLng("");
+    setLat("");
+    setDescription("");
+    setName("");
+    setPrice("");
+    setPreviewImageURL("");
+    //! Reset the Errors
+    setCountryError("");
+    setAddressError("");
+    setCityError("");
+    setStateError("");
+    setDescriptionError("");
+    setNameError("");
+    setPriceError("");
+    setPreviewImageURLError("");
+  })
+
+  return () => {
+    resetForm();
+  }
+
+}, [history])
+
 
     return (
         <>
@@ -147,12 +181,12 @@ const CreateANewSpotForm = () => {
             <label htmlFor="streetAddress">Street Address</label>
             <input 
                 type="text"
-                id="streetAddress"
+                id="address"
                 placeholder="Street Address"
-                value={streetAddress}
-                onChange={(e) => setStreetAddress(e.target.value)}
+                value={address}
+                onChange={(e) => setAddress(e.target.value)}
             />
-            <div className="error-message">{streetAddressError}</div>
+            <div className="error-message">{addressError}</div>
 
             {/* //? City Input */}
             <label htmlFor="city">City</label>
@@ -175,6 +209,30 @@ const CreateANewSpotForm = () => {
                 onChange={(e) => setState(e.target.value)}
             />
             <div className="error-message">{stateError}</div>
+
+          {/* //? Lat Input */}
+          <label htmlFor="latitude">Latitude</label>
+              <input 
+                  type="text"
+                  id="lat"
+                  placeholder="Latitude"
+                  value={lat}
+                  onChange={(e) => setLat(e.target.value)}
+              />
+              {/* <div className="error-message">{stateError}</div> */}
+
+
+            {/* //? Lng Input */}
+            <label htmlFor="longitude">Longitude</label>
+            <input 
+                type="text"
+                id="lng"
+                placeholder="Longitude"
+                value={lng}
+                onChange={(e) => setLng(e.target.value)}
+            />
+            {/* <div className="error-message">{stateError}</div> */}
+
         </div>
 
         {/* //! Section Two */}
@@ -198,12 +256,12 @@ const CreateANewSpotForm = () => {
             <label htmlFor="spotTitle">Name of your Spot</label>
             <input 
                 type="text"
-                id="spotTitle"
+                id="name"
                 placeholder="Name of your spot"
-                value={spotTitle}
-                onChange={(e) => setSpotTitle(e.target.value)}
+                value={name}
+                onChange={(e) => setName(e.target.value)}
             />
-            <div className="error-message">{spotTitleError}</div>
+            <div className="error-message">{nameError}</div>
         </div>
 
         {/* //! Section Four */}
@@ -215,10 +273,10 @@ const CreateANewSpotForm = () => {
                 type="text"
                 id="spotPrice"
                 placeholder="Price per night (USD)"
-                value={spotPrice}
-                onChange={(e) => setSpotPrice(e.target.value)}
+                value={price}
+                onChange={(e) => setPrice(e.target.value)}
             />
-            <div className="error-message">{spotPriceError}</div>
+            <div className="error-message">{priceError}</div>
         </div>
 
         {/* //! Section Five */}

@@ -25,10 +25,10 @@ function App() {
         <Route exact path = "/">
           <AllSpotsLandingPage />
         </Route>
-        <Route exact path = "/spot/new">
+        <Route exact path = "/spots/new">
           <CreateANewSpotForm />
         </Route>
-        <Route path='/spot/:spotId'>
+        <Route path='/spots/:spotId'>
           <SpotDetails />
         </Route>
       </Switch>}
