@@ -1,11 +1,15 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { createNewSpotThunk } from "../../store/spot";
+import { useHistory } from "react-router-dom"
+
 
 const CreateANewSpotForm = () => {
     
     const dispatch = useDispatch();
     
+    const history = useHistory();
+
     //! Create States for our Forms
     const [country, setCountry] = useState("")
     const [streetAddress, setStreetAddress] = useState("")
@@ -108,7 +112,12 @@ const CreateANewSpotForm = () => {
                 imageURL3,
                 imageURL4,
             }
-            dispatch(createNewSpotThunk(formData))
+
+            dispatch(createNewSpotThunk(formData)).then((result) => {
+              if (result) {
+                history.push(`/api/spot/${result.spotId}`);
+              }
+            });
         }
     };
 
