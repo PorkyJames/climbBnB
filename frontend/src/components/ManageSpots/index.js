@@ -7,7 +7,7 @@ const ManageSpots = () => {
 const dispatch = useDispatch();
 
 const sessionUser = useSelector((state) => state.session)
-const userSpots = useSelector((state) => Object.values(state.spot))
+const userSpots = useSelector((state) => Object.values(state.spots))
 
 const [isLoading, setIsLoading] = useState(true)
 
@@ -15,7 +15,7 @@ useEffect(() => {
     dispatch(loadUserSpotsThunk()).then(() => setIsLoading(false))
 }, [dispatch])
 
-if (userSpots === undefined) {
+if (isLoading) {
     return (
         <p> Loading... </p>
         )
