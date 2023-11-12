@@ -2,6 +2,10 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { loadUserSpotsThunk } from "../../store/spot";
 
+import { NavLink } from "react-router-dom"
+
+import TiledSpot from "../TiledSpot";
+
 const ManageSpots = () => {
 
 const dispatch = useDispatch();
@@ -21,14 +25,31 @@ if (isLoading) {
         )
     } 
 
+const spotsCreatedByUser = userSpots.filter((spot) => spot.ownerId === sessionUser.id)
+
+//! Need to create an updateSpotThunk and a deleteSpotThunk
+
     return (
         <div>
         {!isLoading &&
         <>
-        <h1> Manage Spots Page</h1>
-        {userSpots.map((spot) => (
-            <li key={spot.id}>{spot.name}</li>
-        ))}
+        <h1> Manage Spots</h1>
+        {spotsCreatedByUser.length > 0 ? (
+            <ul>
+              {spotsCreatedByUser.map((spot) => (
+                <li key={spot.id}>
+                <TiledSpot spot={spot} />
+                <button>Update</button>
+                <button>Delete</button>
+              </li>
+              ))}
+            </ul>
+          ) : (
+            <p>
+              No spots posted yet.
+              <NavLink to="/spots/new">Create a New Spot</NavLink>
+            </p>
+          )}
         </>
         }
         </div>
