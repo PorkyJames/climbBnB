@@ -48,6 +48,11 @@ function Navigation({ isLoaded }) {
       </li>
       <div className="user-and-nav">
         {userLoggedIn && createASpotButton()}
+        {userLoggedIn && (
+          <li>
+            <NavLink className ="manage-spots-button" to="/spots/current">Manage Spots</NavLink>
+          </li>
+        )}
         {isLoaded && (
           <li className="profile-button">
             <ProfileButton user={sessionUser} />

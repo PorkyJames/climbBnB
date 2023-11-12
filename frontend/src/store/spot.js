@@ -25,6 +25,17 @@ const loadSpotDetails = (spot) => {
     }
 }
 
+
+//! Current spot of Logged in User
+const LOAD_USER_SPOTS = '/spots/loadUserSpots'
+
+const loadUserSpots = (spot) => {
+    return {
+        type: LOAD_USER_SPOTS,
+        spot,
+    }
+}
+
 // //! Reviews of a Spot
 
 // const LOAD_SPOT_REVIEWS = "/spots/loadSpotReviews"
@@ -92,6 +103,17 @@ export const createNewSpotThunk = (dataFromForm) => async dispatch => {
     } 
 }
 
+//! Get User Spots
+export const loadUserSpotsThunk = (spotId) => async dispatch => {
+    const res = await csrfFetch(`/api/spots/current`)
+
+    if (res.ok) {
+        const data = await res.json();
+        dispatch(loadUserSpots(data))
+        return data;
+    }
+}
+
 // //! Spot Details Reviews
 // export const loadSpotReviewsThunk = (spotId) => async dispatch => {
 //     const res = await csrfFetch(`/api/spots/${spotId}/reviews`)
@@ -129,6 +151,13 @@ export const spotsReducer = (state = initialState, action) => {
                 ...state,
                 [action.spot.id]: action.spot
             }
+        }
+        case LOAD_USER_SPOTS: {
+            const newState = { ...state };
+            action.spot.Spots.forEach((spot) => {
+                newState[spot.id] = spot;
+            });
+            return newState;
         }
         default:
             return state;

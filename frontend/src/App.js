@@ -8,6 +8,7 @@ import Navigation from "./components/Navigation";
 import AllSpotsLandingPage from "./components/AllSpotsLandingPage";
 import SpotDetails from "./components/SpotDetails";
 import CreateANewSpotForm from "./components/CreateANewSpotForm";
+import ManageSpots from "./components/ManageSpots";
 
 
 function App() {
@@ -24,6 +25,9 @@ function App() {
       <Switch>
         <Route exact path = "/">
           <AllSpotsLandingPage />
+        </Route>
+        <Route path = "/spots/current">
+          <ManageSpots />
         </Route>
         <Route exact path = "/spots/new">
           <CreateANewSpotForm />
