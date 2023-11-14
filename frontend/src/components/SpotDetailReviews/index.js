@@ -2,17 +2,47 @@ import { useSelector, useDispatch } from "react-redux";
 import { loadSpotReviewsThunk } from "../../store/review";
 import { useEffect, useState } from "react";
 
+import PostReviewModal from '../PostReviewModal'
 
 const SpotDetailReviews = ({spotId}) => {
 
     const dispatch = useDispatch();
     const spotReviews = useSelector((state) => state.reviews[spotId]);
+    const sessionUser = useSelector((state) => state.session.user)
     
     const [isLoading, setIsLoading] = useState(true)
+    const [showReviewModal, setShowReviewModal] = useState(false)
 
     useEffect(() => {
         dispatch(loadSpotReviewsThunk(spotId)).then(() => setIsLoading(false));
     }, [dispatch, spotId]);
+
+    const openReviewModal = () => {
+        setShowReviewModal(true);
+    }
+
+    const closeReviewModal = () => {
+        setShowReviewModal(false);
+    }
+
+    const hasUserReviewedSpot = () => {
+
+        return spotReviews && spotReviews.Reviews.some(review => review.userId === sessionUser?.id);
+      };
+
+      const renderPostReviewButton = () => {
+        if (!sessionUser) {
+          return null;
+        }
+    
+        if (hasUserReviewedSpot()) {
+          return null;
+        }
+    
+        return (
+          <button onClick={openReviewModal}>Post Your Review</button>
+        );
+      };
 
     if (spotReviews === undefined) {
         return (
@@ -43,6 +73,10 @@ const SpotDetailReviews = ({spotId}) => {
                     <div className="spot-detail-reviews">
                         <div className="star-rating">
                             <i className="fas fa-star"></i>
+                            {renderPostReviewButton()}
+                            {showReviewModal && (
+                                <PostReviewModal onClose={closeReviewModal} />
+                            )}
                             {avgRating === "New" ? (
                                 <p>New</p>
                             ) : (

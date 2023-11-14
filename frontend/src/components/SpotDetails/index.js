@@ -11,7 +11,6 @@ const { spotId } = useParams();
 
 const spotState = useSelector((state) => state.spots[spotId])
 
-
 const [isLoading, setIsLoading] = useState(true)
 
 useEffect(() => {
