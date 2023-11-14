@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { deleteUserSpotThunk, loadUserSpotsThunk, updateUserSpotThunk } from "../../store/spot";
 import { NavLink } from "react-router-dom"
+import DeleteSpotModal from "../DeleteSpotModal";
 
 import TiledSpot from "../TiledSpot";
 
@@ -15,6 +16,10 @@ const sessionUser = useSelector((state) => state.session.user)
 const userSpots = useSelector((state) => Object.values(state.spots))
 
 const [isLoading, setIsLoading] = useState(true)
+
+//! DeleteSpotModal
+const [showDeleteModal, setShowDeleteModal] = useState(false);
+const [spotToDelete, setSpotToDelete] = useState(null);
 
 useEffect(() => {
     dispatch(loadUserSpotsThunk()).then(() => setIsLoading(false))
@@ -30,9 +35,19 @@ const handleUpdate = (spotId) => {
   dispatch(updateUserSpotThunk(spotId))
 }
 
+//! DeleteSpotModal
 const handleDelete = (spotId) => {
-  dispatch(deleteUserSpotThunk(spotId))
-}
+  setSpotToDelete(spotId);
+  setShowDeleteModal(true);
+};
+
+const handleModalConfirm = () => {
+  if (spotToDelete) {
+    dispatch(deleteUserSpotThunk(spotToDelete))
+    setSpotToDelete(null);
+  }
+  setShowDeleteModal(false);
+};
 
     return (
         <div>
@@ -45,7 +60,7 @@ const handleDelete = (spotId) => {
                 <li key={spot.id}>
                   <TiledSpot spot={spot} />
                   <button onClick={() => history.push(`/spots/${spot.id}/edit`)}>Update</button>
-                  <button>Delete</button>
+                  <button onClick={() => handleDelete(spot.id)}>Delete</button>
                 </li>
               ))}
             </ul>
@@ -55,6 +70,12 @@ const handleDelete = (spotId) => {
               <NavLink to="/spots/new">Create a New Spot</NavLink>
             </p>
           )}
+          {showDeleteModal && (
+          <DeleteSpotModal
+            onCancel={() => setShowDeleteModal(false)}  
+            onDelete={handleModalConfirm}              
+          />
+)}
         </>
         }
         </div>

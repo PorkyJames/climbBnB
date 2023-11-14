@@ -218,6 +218,11 @@ export const spotsReducer = (state = initialState, action) => {
               [updatedSpot.id]: updatedSpot,
             };
         }
+        case DELETE_USER_SPOT: {
+            const newState = { ...state };
+            delete newState[action.spotId];
+            return newState;
+        }
         default:
             return state;
     }
