@@ -36,6 +36,26 @@ const loadUserSpots = (spot) => {
     }
 }
 
+//! Update a spot of Logged In User
+const UPDATE_USER_SPOT = '/spots/updateUserSpot'
+
+const updateUserSpot = (spot) => {
+    return {
+        type: UPDATE_USER_SPOT,
+        spot,
+    }
+}
+
+//! Delete a spot of the Logged in User
+const DELETE_USER_SPOT = '/spots/deleteUserSpot'
+
+const deleteUserSpot = (spotId) => {
+    return {
+        type: DELETE_USER_SPOT,
+        spotId,
+    }
+}
+
 // //! Reviews of a Spot
 
 // const LOAD_SPOT_REVIEWS = "/spots/loadSpotReviews"
@@ -114,6 +134,38 @@ export const loadUserSpotsThunk = (spotId) => async dispatch => {
     }
 }
 
+//! Update A User Spot
+export const updateUserSpotThunk = (spotId, spotDataFromForm) => async dispatch => {
+    const requestMethods = {
+        method: "PUT",
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(spotDataFromForm)
+    }
+    
+    const res = await csrfFetch(`/api/spots/${spotId}`, requestMethods)
+
+    if (res.ok) {
+        const updatedSpot = await res.json();
+        dispatch(updateUserSpot(updatedSpot));
+        return updatedSpot;
+    }
+}
+
+//! Delete User Spot
+export const deleteUserSpotThunk = (spotId) => async (dispatch) => {
+    const res = await csrfFetch(`/api/spots/${spotId}`, {
+        method: "DELETE",
+    })
+
+    if (res.ok) {
+        dispatch(deleteUserSpot(spotId));
+        return spotId;
+    }
+
+}
+
 // //! Spot Details Reviews
 // export const loadSpotReviewsThunk = (spotId) => async dispatch => {
 //     const res = await csrfFetch(`/api/spots/${spotId}/reviews`)
@@ -158,6 +210,13 @@ export const spotsReducer = (state = initialState, action) => {
                 newState[spot.id] = spot;
             });
             return newState;
+        }
+        case UPDATE_USER_SPOT: {
+            const updatedSpot = action.spot;
+            return {
+              ...state,
+              [updatedSpot.id]: updatedSpot,
+            };
         }
         default:
             return state;

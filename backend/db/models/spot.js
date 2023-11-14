@@ -61,20 +61,20 @@ module.exports = (sequelize, DataTypes) => {
     lat: {
       //DataTypes.DECIMAL(10, 7) ||
       type: DataTypes.DECIMAL(10, 7),
-        validate: {
-          isNumeric: true,
-          min: -90,
-          max: 90,
-        } 
+        // validate: {
+        //   isNumeric: true,
+        //   min: -90,
+        //   max: 90,
+        // } 
     },
     lng: {
       //DataTypes.DECIMAL(10, 7) ||
       type: DataTypes.DECIMAL(10, 7),
-      validate: {
-        isNumeric: true,
-        min: -180,
-        max: 180,
-      }
+      // validate: {
+      //   isNumeric: true,
+      //   min: -180,
+      //   max: 180,
+      // }
     },
     name: {
       type: DataTypes.STRING,

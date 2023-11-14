@@ -9,6 +9,7 @@ import AllSpotsLandingPage from "./components/AllSpotsLandingPage";
 import SpotDetails from "./components/SpotDetails";
 import CreateANewSpotForm from "./components/CreateANewSpotForm";
 import ManageSpots from "./components/ManageSpots";
+import UpdateUserSpotForm from "./components/UpdateUserSpotForm";
 
 
 function App() {
@@ -31,6 +32,9 @@ function App() {
         </Route>
         <Route exact path = "/spots/new">
           <CreateANewSpotForm />
+        </Route>
+        <Route path="/spots/:spotId/edit">
+          <UpdateUserSpotForm />
         </Route>
         <Route path='/spots/:spotId'>
           <SpotDetails />

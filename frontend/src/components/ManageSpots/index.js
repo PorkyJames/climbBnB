@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { loadUserSpotsThunk } from "../../store/spot";
-
+import { useHistory } from "react-router-dom";
+import { deleteUserSpotThunk, loadUserSpotsThunk, updateUserSpotThunk } from "../../store/spot";
 import { NavLink } from "react-router-dom"
 
 import TiledSpot from "../TiledSpot";
@@ -9,8 +9,9 @@ import TiledSpot from "../TiledSpot";
 const ManageSpots = () => {
 
 const dispatch = useDispatch();
+const history = useHistory();
 
-const sessionUser = useSelector((state) => state.session)
+const sessionUser = useSelector((state) => state.session.user)
 const userSpots = useSelector((state) => Object.values(state.spots))
 
 const [isLoading, setIsLoading] = useState(true)
@@ -20,14 +21,18 @@ useEffect(() => {
 }, [dispatch])
 
 if (isLoading) {
-    return (
-        <p> Loading... </p>
-        )
+    return <p> Loading... </p>    
     } 
 
 const spotsCreatedByUser = userSpots.filter((spot) => spot.ownerId === sessionUser.id)
 
-//! Need to create an updateSpotThunk and a deleteSpotThunk
+const handleUpdate = (spotId) => {
+  dispatch(updateUserSpotThunk(spotId))
+}
+
+const handleDelete = (spotId) => {
+  dispatch(deleteUserSpotThunk(spotId))
+}
 
     return (
         <div>
@@ -38,10 +43,10 @@ const spotsCreatedByUser = userSpots.filter((spot) => spot.ownerId === sessionUs
             <ul>
               {spotsCreatedByUser.map((spot) => (
                 <li key={spot.id}>
-                <TiledSpot spot={spot} />
-                <button>Update</button>
-                <button>Delete</button>
-              </li>
+                  <TiledSpot spot={spot} />
+                  <button onClick={() => history.push(`/spots/${spot.id}/edit`)}>Update</button>
+                  <button>Delete</button>
+                </li>
               ))}
             </ul>
           ) : (
