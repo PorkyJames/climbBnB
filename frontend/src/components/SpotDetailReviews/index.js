@@ -37,7 +37,7 @@ const SpotDetailReviews = ({spotId}) => {
 
     const hasUserReviewedSpot = () => {
         if (spotReviews) {
-            const reviews = spotReviews.Reviews;
+            const reviews = spotReviews;
             const sessionUserId = sessionUser ? sessionUser.id : null;
           
             for (let i = 0; i < reviews.length; i++) {
@@ -70,21 +70,23 @@ const SpotDetailReviews = ({spotId}) => {
         )
     }
 
-    // Calculate average rating and review count
+    //! Calculate average rating and review count
     const calculateTotalAvgRating = () => {
-        if (!spotReviews || !spotReviews.Reviews || spotReviews.Reviews.length === 0) {
+        if (!spotReviews || !spotReviews || spotReviews.length === 0) {
             return "New";
         }
 
-        const totalStars = spotReviews.Reviews.reduce((sum, review) => sum + review.stars, 0);
-        const avgRating = (totalStars / spotReviews.Reviews.length).toFixed(2);
+        const totalStars = spotReviews.reduce((sum, review) => sum + review.stars, 0);
+        const avgRating = (totalStars / spotReviews.length).toFixed(2);
         return avgRating;
     };
 
     const avgRating = calculateTotalAvgRating();
 
-   // Render content conditionally based on the number of reviews
-    const reviewCount = spotReviews ? spotReviews.Reviews.length : 0;
+   //! Render content conditionally based on the number of reviews
+    const reviewCount = spotReviews ? spotReviews.length : 0;
+
+    console.log(spotReviews)
 
     return (
         <div>
@@ -113,10 +115,12 @@ const SpotDetailReviews = ({spotId}) => {
                         )}
                         <ul className="review-list">
                             {reviewCount > 0 ? (
-                                spotReviews.Reviews.map((review, index) => (
+                                spotReviews.map((review, index) => (
                                     <li key={review.id}>
                                         <div className="review-header">
-                                            <p>{review.User.firstName} {review.User.lastName}</p>
+                                            {review.User && (
+                                                <p>{review.User.firstName} {review.User.lastName}</p>
+                                            )}
                                             <p>{new Date(review.createdAt).toLocaleString('en-US', { month: 'long', year: 'numeric' })}</p>
                                         </div>
                                         <p className="review-comment">{review.review}</p>

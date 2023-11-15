@@ -2,12 +2,12 @@ import { useState } from "react";
 
 
 const PostReviewModal = ({onClose, onSubmit }) => {
-    const [comment, setComment] = useState('');
+    const [review, setReview] = useState('');
     const [hoveredRating, setHoveredRating] = useState(0);
     const [selectedRating, setSelectedRating] = useState(0);
   
     const handleCommentChange = (e) => {
-      setComment(e.target.value);
+      setReview(e.target.value);
     };
   
     const handleStarHover = (hoveredStar) => {
@@ -22,8 +22,8 @@ const PostReviewModal = ({onClose, onSubmit }) => {
   
     const handleSubmit = () => {
       const reviewData = {
-        comment,
-        rating: selectedRating,
+        review,
+        stars: selectedRating,
       };
       //! Comes from the onSubmit in the SpotDetailsReviews component
       onSubmit(reviewData);
@@ -58,7 +58,7 @@ const PostReviewModal = ({onClose, onSubmit }) => {
           <label>
             Leave your review here:
             <textarea
-              value={comment}
+              value={review}
               onChange={handleCommentChange}
               placeholder="Leave your review here..."
             />
@@ -69,7 +69,7 @@ const PostReviewModal = ({onClose, onSubmit }) => {
             <div className="stars">{renderStars()}</div>
           </label>
   
-          <button disabled={comment.length < 10 || selectedRating === 0} onClick={handleSubmit}>
+          <button disabled={review.length < 10 || selectedRating === 0} onClick={handleSubmit}>
             Submit Your Review
           </button>
         </div>

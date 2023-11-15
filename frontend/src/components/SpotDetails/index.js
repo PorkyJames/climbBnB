@@ -72,7 +72,7 @@ const reserveButtonAlert = () => {
                     <div className="spot-reserve-box-price-and-reviews">
                         <p> CalloutInfoBox Down Here </p>
                         <p>${price} per night</p>
-                        <p>Average Star Rating: {avgStarRatingItem}</p>
+                        <p>Average Star Rating: {avgStarRatingItem.toFixed(2)}</p>
                         <p>Review Count: {numReviewsItem}</p>
                     </div>
                     <button 

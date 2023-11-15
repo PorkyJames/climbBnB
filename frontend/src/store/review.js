@@ -60,12 +60,12 @@ const reviewReducer = (state = initialState, action) => {
     case LOAD_SPOT_REVIEWS:
         return {
             ...state,
-            [action.spotId]: action.reviews,
+            [action.spotId]: action.reviews.Reviews,
           };
     case POST_SPOT_REVIEWS: 
     return {
       ...state,
-      [action.spotId]: action.reviewData,
+      [action.spotId]: [...state[action.spotId], action.reviewData],
     };
     default:
       return state;
