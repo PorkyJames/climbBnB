@@ -42,13 +42,14 @@ export const postSpotReviewThunk = (spotId, reviewData) => async (dispatch) => {
     },
     body: JSON.stringify(reviewData)
   }
-  const res = await csrfFetch(`/spots/${spotId}/reviews`)
+  const res = await csrfFetch(`/api/spots/${spotId}/reviews`, requestMethods)
 
   if (res.ok) {
     const newReview = await res.json();
     dispatch(postSpotReviews(spotId, newReview))
     return newReview;
   }
+  return res;
 }
 
 //! Reducer
@@ -62,11 +63,10 @@ const reviewReducer = (state = initialState, action) => {
             [action.spotId]: action.reviews,
           };
     case POST_SPOT_REVIEWS: 
-      const updatedSpotReviews = state[action.spotId] || [];
-      return {
-        ...state,
-        [action.spotId]: [...updatedSpotReviews, action.reviewData],
-      }
+    return {
+      ...state,
+      [action.spotId]: action.reviewData,
+    };
     default:
       return state;
   }

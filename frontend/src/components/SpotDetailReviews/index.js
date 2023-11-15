@@ -2,6 +2,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { loadSpotReviewsThunk } from "../../store/review";
 import { useEffect, useState } from "react";
 
+import { postSpotReviewThunk } from "../../store/review";
+
 import PostReviewModal from '../PostReviewModal'
 
 const SpotDetailReviews = ({spotId}) => {
@@ -25,9 +27,27 @@ const SpotDetailReviews = ({spotId}) => {
         setShowReviewModal(false);
     }
 
-    const hasUserReviewedSpot = () => {
+    const handleSubmitReview = (reviewData) => {
+        dispatch(postSpotReviewThunk(spotId, reviewData)).then(() => {
+          //! Reload reviews after posting a new review
+          dispatch(loadSpotReviewsThunk(spotId));
+          setShowReviewModal(false);
+        });
+      };
 
-        return spotReviews && spotReviews.Reviews.some(review => review.userId === sessionUser?.id);
+    const hasUserReviewedSpot = () => {
+        if (spotReviews) {
+            const reviews = spotReviews.Reviews;
+            const sessionUserId = sessionUser ? sessionUser.id : null;
+          
+            for (let i = 0; i < reviews.length; i++) {
+              if (reviews[i].userId === sessionUserId) {
+                return true;
+              }
+            }
+          }
+          
+          return false;
       };
 
       const renderPostReviewButton = () => {
@@ -75,7 +95,7 @@ const SpotDetailReviews = ({spotId}) => {
                             <i className="fas fa-star"></i>
                             {renderPostReviewButton()}
                             {showReviewModal && (
-                                <PostReviewModal onClose={closeReviewModal} />
+                            <PostReviewModal onClose={closeReviewModal} onSubmit={handleSubmitReview} />
                             )}
                             {avgRating === "New" ? (
                                 <p>New</p>
