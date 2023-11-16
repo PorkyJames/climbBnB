@@ -41,7 +41,7 @@ const avgStarRatingItem = spotState.average //5
 const numReviewsItem = spotState.numReviews //1
 
 const reserveButtonAlert = () => {
-    alert("Feature Coming Soon.")
+    alert("Feature Coming Soon...")
 };
 
     return (

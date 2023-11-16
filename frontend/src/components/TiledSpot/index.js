@@ -13,7 +13,7 @@ const TiledSpot = ({ spot }) => {
 
     //! If review exists / doesn't exist
     const reviewExists = () => {
-        if (avgStarRating > 0) {
+        if (avgStarRating && avgStarRating > 0) {
             return formatAvgStarRating(avgStarRating)
         } else {
             return "New"
@@ -23,7 +23,7 @@ const TiledSpot = ({ spot }) => {
     return (
         <>
             <Link to={`/spots/${spot.id}`}>
-                <div className="each-spot-tile-details">
+                <div key={spot.id} className="each-spot-tile-details">
                     <div title={spot.name}>
                         <img src={spot.previewImage} className="spot-thumbnail" alt="spot-thumbnail"/>
                     </div>

@@ -1,8 +1,11 @@
+
+
 const DeleteSpotModal = ({ onCancel, onDelete }) => {
     
     return (
       <div className="delete-spot-modal">
         <div className="modal-content">
+          &times;
           <h2>Confirm Delete</h2>
           <p>Are you sure you want to remove this spot?</p>
           <div className="button-container">
