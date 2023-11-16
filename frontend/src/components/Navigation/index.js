@@ -40,6 +40,12 @@ function Navigation({ isLoaded }) {
   }
 
   return (
+  <header className="header">
+    <div className="logo-container">
+        <NavLink to="/">
+          <i class="fa-brands fa-airbnb"></i>
+        </NavLink>
+    </div>
     <ul>
       <li>
         <NavLink exact to="/">
@@ -60,6 +66,7 @@ function Navigation({ isLoaded }) {
         )}
       </div>
     </ul>
+  </header>
   );
 }
 
