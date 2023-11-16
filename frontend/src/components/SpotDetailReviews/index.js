@@ -3,8 +3,10 @@ import { loadSpotReviewsThunk } from "../../store/review";
 import { useEffect, useState } from "react";
 
 import { postSpotReviewThunk } from "../../store/review";
+import { deleteSpotReviewThunk } from "../../store/review";
 
 import PostReviewModal from '../PostReviewModal'
+import DeleteReviewModal from "../DeleteReviewModal";
 
 const SpotDetailReviews = ({spotId}) => {
 
@@ -14,11 +16,14 @@ const SpotDetailReviews = ({spotId}) => {
     
     const [isLoading, setIsLoading] = useState(true)
     const [showReviewModal, setShowReviewModal] = useState(false)
+    const [showDeleteModal, setShowDeleteModal] = useState(false)
+    const [reviewToDelete, setReviewToDelete] = useState(null)
 
     useEffect(() => {
         dispatch(loadSpotReviewsThunk(spotId)).then(() => setIsLoading(false));
     }, [dispatch, spotId]);
 
+    //* Review Modal
     const openReviewModal = () => {
         setShowReviewModal(true);
     }
@@ -27,12 +32,28 @@ const SpotDetailReviews = ({spotId}) => {
         setShowReviewModal(false);
     }
 
+    const openDeleteModal = (reviewId) => {
+        setReviewToDelete(reviewId);
+        setShowDeleteModal(true);
+      };
+    
+      const closeDeleteModal = () => {
+        setReviewToDelete(null);
+        setShowDeleteModal(false);
+      };
+
     const handleSubmitReview = (reviewData) => {
         dispatch(postSpotReviewThunk(spotId, reviewData)).then(() => {
           //! Reload reviews after posting a new review
           dispatch(loadSpotReviewsThunk(spotId));
           setShowReviewModal(false);
         });
+      };
+
+      const handleDeleteReview = (reviewId) => {
+        dispatch(deleteSpotReviewThunk(spotId, reviewId));
+        dispatch(loadSpotReviewsThunk(spotId));
+        closeDeleteModal();
       };
 
     const hasUserReviewedSpot = () => {
@@ -63,6 +84,7 @@ const SpotDetailReviews = ({spotId}) => {
           <button onClick={openReviewModal}>Post Your Review</button>
         );
       };
+    
 
     if (spotReviews === undefined) {
         return (
@@ -85,8 +107,6 @@ const SpotDetailReviews = ({spotId}) => {
 
    //! Render content conditionally based on the number of reviews
     const reviewCount = spotReviews ? spotReviews.length : 0;
-
-    console.log(spotReviews)
 
     return (
         <div>
@@ -124,6 +144,9 @@ const SpotDetailReviews = ({spotId}) => {
                                             <p>{new Date(review.createdAt).toLocaleString('en-US', { month: 'long', year: 'numeric' })}</p>
                                         </div>
                                         <p className="review-comment">{review.review}</p>
+                                        {sessionUser && review && review.User && review.User.id === sessionUser.id && (
+                                            <button onClick={() => openDeleteModal(review.id)}>Delete</button>
+                                        )}
                                     </li>
                                 ))
                             ) : (
@@ -131,6 +154,13 @@ const SpotDetailReviews = ({spotId}) => {
                             )}
                         </ul>
                     </div>
+                    {showDeleteModal && (
+                        <DeleteReviewModal
+                            reviewId={reviewToDelete}
+                            onDelete={handleDeleteReview}
+                            onClose={closeDeleteModal}
+                        />
+                    )}
                 </>
             )}
         </div>
