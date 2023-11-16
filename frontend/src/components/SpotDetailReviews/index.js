@@ -23,6 +23,13 @@ const SpotDetailReviews = ({spotId}) => {
         dispatch(loadSpotReviewsThunk(spotId)).then(() => setIsLoading(false));
     }, [dispatch, spotId]);
 
+
+    useEffect(() => {
+        if (spotReviews) {
+            spotReviews.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        }
+  }, [spotReviews]);
+
     //* Review Modal
     const openReviewModal = () => {
         setShowReviewModal(true);

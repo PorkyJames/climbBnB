@@ -24,6 +24,15 @@ function LoginFormModal() {
       });
   };
 
+  const handleDemoLogin = () => {
+    const credentials = {
+      credential: 'Demo-lition',
+      password: 'password'
+    }
+      dispatch(sessionActions.login(credentials)).then(closeModal)
+    }
+
+
   return (
     <>
       <h1>Log In</h1>
@@ -50,9 +59,11 @@ function LoginFormModal() {
           <p>{errors.credential}</p>
         )}
         <button type="submit">Log In</button>
+        <button type="button" onClick={handleDemoLogin}>
+          Log in as Demo User
+        </button>
       </form>
     </>
   );
 }
-
 export default LoginFormModal;
