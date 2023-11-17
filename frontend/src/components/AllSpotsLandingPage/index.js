@@ -15,17 +15,33 @@ const AllSpotsLandingPage = () => {
         dispatch(loadAllSpotsThunk())
     }, [dispatch])
 
-    return(
+    //! Format our AvgStarRating to return to the 2nd decimal place
+    const formatAvgStarRating = (rating) => {
+        return rating.toFixed(2);
+    }
+
+    //! If review exists / doesn't exist
+    const reviewExists = (avgStarRating) => {
+        if (avgStarRating && avgStarRating > 0) {
+            return formatAvgStarRating(avgStarRating)
+        } else {
+            return "New"
+        }
+    }
+
+    return (
         <>
-            <div className = "landing-page">
-                {allSpots.map((spot) => (
-                    <Link to={`spot/${spot.id}`} key={spot.id}>
-                        <TiledSpot spot={spot} />
-                    </Link>
-                ))}
-            </div>
+          <div className="landing-page">
+            {allSpots.map((spot) => {
+              return (
+                <Link to={`spot/${spot.id}`} key={spot.id}>
+                  <TiledSpot spot={spot} reviewExists={reviewExists(spot.avgStarRating)} />
+                </Link>
+              );
+            })}
+          </div>
         </>
-    )
+      );
 }
 
 export default AllSpotsLandingPage

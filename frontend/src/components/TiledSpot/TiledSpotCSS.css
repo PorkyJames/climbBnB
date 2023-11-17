@@ -1,0 +1,17 @@
+.each-spot-tile-details {
+    width: 400px;
+    height: 500px;
+  }
+  
+  .image-container {
+    width: 100%;
+    height: 60%; 
+    overflow: hidden; /* Prevents images from overflowing */
+    margin-bottom: 10px; 
+  }
+  
+  .spot-thumbnail {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; 
+  }

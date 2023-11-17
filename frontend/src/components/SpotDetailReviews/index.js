@@ -13,11 +13,13 @@ const SpotDetailReviews = ({spotId}) => {
     const dispatch = useDispatch();
     const spotReviews = useSelector((state) => state.reviews[spotId]);
     const sessionUser = useSelector((state) => state.session.user)
+    const spotState = useSelector((state) => state.spots[spotId])
     
     const [isLoading, setIsLoading] = useState(true)
     const [showReviewModal, setShowReviewModal] = useState(false)
     const [showDeleteModal, setShowDeleteModal] = useState(false)
     const [reviewToDelete, setReviewToDelete] = useState(null)
+    const [sortedReviews, setSortedReviews] = useState([]);
 
     useEffect(() => {
         dispatch(loadSpotReviewsThunk(spotId)).then(() => setIsLoading(false));
@@ -26,7 +28,8 @@ const SpotDetailReviews = ({spotId}) => {
 
     useEffect(() => {
         if (spotReviews) {
-            spotReviews.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+            const sortedReviews = spotReviews.slice().sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+            setSortedReviews(sortedReviews);
         }
   }, [spotReviews]);
 
@@ -64,24 +67,29 @@ const SpotDetailReviews = ({spotId}) => {
       };
 
     const hasUserReviewedSpot = () => {
-        if (spotReviews) {
-            const reviews = spotReviews;
-            const sessionUserId = sessionUser ? sessionUser.id : null;
-          
-            for (let i = 0; i < reviews.length; i++) {
-              if (reviews[i].userId === sessionUserId) {
-                return true;
-              }
-            }
+        if (!spotReviews || !sessionUser || !spotState) {
+            return false;
           }
-          
-          return false;
+        
+          const sessionUserId = sessionUser.id;
+        
+          // Check if the logged-in user has written a review for any spot
+          const userReviewedSpot = spotReviews.some(
+            (review) => review.userId === sessionUserId
+          );
+        
+          return userReviewedSpot;
       };
 
       const renderPostReviewButton = () => {
         if (!sessionUser) {
           return null;
         }
+
+        if (sessionUser.id === spotState.ownerId) {
+            // Hide the button for the spot's owner
+            return null;
+          }
     
         if (hasUserReviewedSpot()) {
           return null;
@@ -121,8 +129,8 @@ const SpotDetailReviews = ({spotId}) => {
                 <>
                     <div className="spot-detail-reviews">
                         <div className="star-rating">
-                            <i className="fas fa-star"></i>
                             {renderPostReviewButton()}
+                            <i className="fas fa-star"></i>
                             {showReviewModal && (
                             <PostReviewModal onClose={closeReviewModal} onSubmit={handleSubmitReview} />
                             )}
@@ -141,8 +149,8 @@ const SpotDetailReviews = ({spotId}) => {
                             </div>
                         )}
                         <ul className="review-list">
-                            {reviewCount > 0 ? (
-                                spotReviews.map((review, index) => (
+                            {sortedReviews && sortedReviews.length > 0 ? (
+                                sortedReviews.map((review, index) => (
                                     <li key={review.id}>
                                         <div className="review-header">
                                             {review.User && (

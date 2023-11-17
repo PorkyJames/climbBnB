@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { loadSpotDetailsThunk } from "../../store/spot";
 
 import SpotDetailReviews from "../SpotDetailReviews";
+import "./SpotDetailsCSS.css"
 
 const SpotDetails = () => {
 const dispatch = useDispatch();
@@ -38,6 +39,8 @@ if (spotState === undefined) {
         state } = spotState;
 
 const avgStarRatingItem = spotState.average //5
+console.log(spotState)
+console.log(avgStarRatingItem)
 const numReviewsItem = spotState.numReviews //1
 
 const reserveButtonAlert = () => {
@@ -51,15 +54,20 @@ const reserveButtonAlert = () => {
 
                 <h1>{name}</h1>
 
-                {/* Our Large Image */}
-                {SpotImages.length > 0 && <img src={SpotImages[0]?.url} 
-                className="spot-details-large-image" />}
+                <div className="spot-details-images-container">
+                    {/* Our Large Image */}
+                    <div className="spot-details-large-image-container">
+                        {SpotImages.length > 0 && <img src={SpotImages[0]?.url} 
+                        className="spot-details-large-image" />}
+                    </div>
 
-                {/* Our other Small Images */}
-                <div className="spot-details-small-images">
-                    {SpotImages.slice(1, 5).map((img, i) => (
-                        <img key={i} src={img?.url} />
-                    ))}
+                    {/* Our other Small Images */}
+
+                    <div className="spot-details-small-images-container">
+                        {SpotImages.slice(1, 5).map((img, i) => (
+                            <img key={i} src={img?.url} />
+                        ))}
+                    </div>
                 </div>
 
                 <p>Location: {city}, {state}, {country}</p>
@@ -72,7 +80,7 @@ const reserveButtonAlert = () => {
                     <div className="spot-reserve-box-price-and-reviews">
                         <p> CalloutInfoBox Down Here </p>
                         <p>${price} per night</p>
-                        <p>Average Star Rating: {avgStarRatingItem.toFixed(2)}</p>
+                        <p>Average Star Rating: {avgStarRatingItem !== null ? avgStarRatingItem.toFixed(2) : "New"}</p>
                         <p>Review Count: {numReviewsItem}</p>
                     </div>
                     <button 

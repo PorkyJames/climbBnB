@@ -41,6 +41,19 @@ function SignupFormModal() {
     });
   };
 
+  const formInvalid = () => {
+    return (
+      !email ||
+      !username ||
+      !firstName ||
+      !lastName ||
+      !password ||
+      !confirmPassword ||
+      username.length < 4 ||
+      password.length < 6
+    );
+  };
+
   return (
     <>
       <h1>Sign Up</h1>
@@ -107,7 +120,7 @@ function SignupFormModal() {
         {errors.confirmPassword && (
           <p>{errors.confirmPassword}</p>
         )}
-        <button type="submit">Sign Up</button>
+        <button type="submit" disabled={formInvalid()}>Sign Up</button>
       </form>
     </>
   );
