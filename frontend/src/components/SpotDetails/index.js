@@ -29,7 +29,7 @@ if (spotState === undefined) {
         Owner,
         SpotImages,
         address,
-        average,
+        avgStarRating,
         city,
         country,
         description,
@@ -38,7 +38,7 @@ if (spotState === undefined) {
         price,
         state } = spotState;
 
-const avgStarRatingItem = spotState.average //5
+const avgStarRatingItem = spotState.avgStarRating //5
 console.log(spotState)
 console.log(avgStarRatingItem)
 const numReviewsItem = spotState.numReviews //1

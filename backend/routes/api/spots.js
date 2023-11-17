@@ -372,13 +372,13 @@ router.get('/:spotId', async (req, res) => {
   }
 
   //then we can get the average rating
-  const average = sum / adjustedSpotReviews.length;
+  const avgStarRating = sum / adjustedSpotReviews.length;
 
   //this will be the result of what our res.json will return
   const result = {
     ...dvSpot,
     numReviews,
-    average,
+    avgStarRating,
     SpotImages: [],
   }
   
