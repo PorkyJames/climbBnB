@@ -39,8 +39,6 @@ if (spotState === undefined) {
         state } = spotState;
 
 const avgStarRatingItem = spotState.avgStarRating //5
-console.log(spotState)
-console.log(avgStarRatingItem)
 const numReviewsItem = spotState.numReviews //1
 
 const reserveButtonAlert = () => {
@@ -57,8 +55,13 @@ const reserveButtonAlert = () => {
                 <div className="spot-details-images-container">
                     {/* Our Large Image */}
                     <div className="spot-details-large-image-container">
-                        {SpotImages.length > 0 && <img src={SpotImages[0]?.url} 
-                        className="spot-details-large-image" />}
+                    {SpotImages.length > 0 && (
+                        <img
+                        src={SpotImages[0]?.url}
+                        alt="Spot Preview"
+                        className="spot-details-large-image"
+                        />
+                    )}
                     </div>
 
                     {/* Our other Small Images */}

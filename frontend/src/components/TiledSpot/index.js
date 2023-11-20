@@ -2,24 +2,24 @@ import { Link } from "react-router-dom";
 import "./TiledSpotCSS.css"
 
 
-const TiledSpot = ({ spot, reviewExists }) => {
+const TiledSpot = ({ spot }) => {
     
-    // //! Get all of the spot information
-    // const { id, name, city, state, price, avgStarRating, previewImage, description } = spot;
+    //! Get all of the spot information
+    const { id, name, city, state, price, avgStarRating, previewImage, description } = spot;
 
-    // //! Format our AvgStarRating to return to the 2nd decimal place
-    // const formatAvgStarRating = (rating) => {
-    //     return rating.toFixed(2);
-    // }
+    //! Format our AvgStarRating to return to the 2nd decimal place
+    const formatAvgStarRating = (rating) => {
+        return rating.toFixed(2);
+    }
 
-    // //! If review exists / doesn't exist
-    // const reviewExists = () => {
-    //     if (avgStarRating && avgStarRating > 0) {
-    //         return formatAvgStarRating(avgStarRating)
-    //     } else {
-    //         return "New"
-    //     }
-    // }
+    //! If review exists / doesn't exist
+    const reviewExists = () => {
+        if (avgStarRating && avgStarRating > 0) {
+            return formatAvgStarRating(avgStarRating)
+        } else {
+            return "New"
+        }
+    }
     
     return (
         <>
@@ -36,7 +36,7 @@ const TiledSpot = ({ spot, reviewExists }) => {
                     <div>
                         <div className="spot-starRating" title={spot.name}>
                             <i className="fas fa-star"></i>
-                            {reviewExists}
+                            {reviewExists()}
                         </div>
                     </div>
                     <div className="spot-price" title={spot.name}>${spot.price.toFixed(2)} / night</div>

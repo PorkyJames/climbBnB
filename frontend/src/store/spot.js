@@ -77,6 +77,17 @@ const createNewSpot = (spot) => {
     }
 }
 
+//! Add an Image to a Spot
+const ADD_IMAGE_TO_SPOT = "/spots/addImageToSpot"
+
+const addImageToSpot = (spotId, imageURL) => {
+    return {
+        type: ADD_IMAGE_TO_SPOT,
+        spotId,
+        imageURL,
+    }
+}
+
 // * Thunks
 //! All Spots
 export const loadAllSpotsThunk = () => async dispatch => {
@@ -118,6 +129,7 @@ export const createNewSpotThunk = (dataFromForm) => async dispatch => {
 
     if (res.ok) {
         const createdSpot = await res.json();
+        console.log(createdSpot)
         dispatch(createNewSpot(createdSpot));
         return createdSpot;
     } 
@@ -164,6 +176,25 @@ export const deleteUserSpotThunk = (spotId) => async (dispatch) => {
         return spotId;
     }
 
+}
+
+//! Add Image to Spot
+export const addImageToSpotThunk = (spotId, imageURL) => async (dispatch) => {
+    const requestMethods = {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(imageURL)
+    }
+
+    const res = await csrfFetch(`/api/spots/${spotId}/images`, requestMethods)
+
+    if (res.ok) {
+         const newImageURL = await res.json();
+         dispatch(addImageToSpot(spotId, newImageURL))
+         return newImageURL
+    }
 }
 
 // //! Spot Details Reviews
@@ -222,6 +253,15 @@ export const spotsReducer = (state = initialState, action) => {
             const newState = { ...state };
             delete newState[action.spotId];
             return newState;
+        }
+        case ADD_IMAGE_TO_SPOT: {
+            const {spotId, imageURL} = action;
+            const updatedSpot={...state[spotId], imageURL: imageURL}
+            return {
+                ...state,
+                [spotId]: updatedSpot,
+            }
+            return state;
         }
         default:
             return state;

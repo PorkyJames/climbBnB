@@ -31,7 +31,7 @@ const SpotDetailReviews = ({spotId}) => {
             const sortedReviews = spotReviews.slice().sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
             setSortedReviews(sortedReviews);
         }
-  }, [spotReviews]);
+    }, [spotReviews]);
 
     //* Review Modal
     const openReviewModal = () => {
@@ -45,60 +45,60 @@ const SpotDetailReviews = ({spotId}) => {
     const openDeleteModal = (reviewId) => {
         setReviewToDelete(reviewId);
         setShowDeleteModal(true);
-      };
+    };
     
-      const closeDeleteModal = () => {
+    const closeDeleteModal = () => {
         setReviewToDelete(null);
         setShowDeleteModal(false);
-      };
+    };
 
     const handleSubmitReview = (reviewData) => {
         dispatch(postSpotReviewThunk(spotId, reviewData)).then(() => {
           //! Reload reviews after posting a new review
-          dispatch(loadSpotReviewsThunk(spotId));
-          setShowReviewModal(false);
+        dispatch(loadSpotReviewsThunk(spotId));
+        setShowReviewModal(false);
         });
-      };
+    };
 
-      const handleDeleteReview = (reviewId) => {
+    const handleDeleteReview = (reviewId) => {
         dispatch(deleteSpotReviewThunk(spotId, reviewId));
         dispatch(loadSpotReviewsThunk(spotId));
         closeDeleteModal();
-      };
+    };
 
     const hasUserReviewedSpot = () => {
         if (!spotReviews || !sessionUser || !spotState) {
             return false;
-          }
+        }
         
-          const sessionUserId = sessionUser.id;
+        const sessionUserId = sessionUser.id;
         
           // Check if the logged-in user has written a review for any spot
-          const userReviewedSpot = spotReviews.some(
+        const userReviewedSpot = spotReviews.some(
             (review) => review.userId === sessionUserId
-          );
+        );
         
-          return userReviewedSpot;
-      };
+        return userReviewedSpot;
+    };
 
-      const renderPostReviewButton = () => {
+    const renderPostReviewButton = () => {
         if (!sessionUser) {
-          return null;
+            return null;
         }
 
         if (sessionUser.id === spotState.ownerId) {
             // Hide the button for the spot's owner
             return null;
-          }
+        }
     
         if (hasUserReviewedSpot()) {
-          return null;
+            return null;
         }
     
         return (
-          <button onClick={openReviewModal}>Post Your Review</button>
+            <button onClick={openReviewModal}>Post Your Review</button>
         );
-      };
+    };
     
 
     if (spotReviews === undefined) {

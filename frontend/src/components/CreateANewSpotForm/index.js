@@ -3,10 +3,11 @@ import { useDispatch } from "react-redux";
 import { createNewSpotThunk } from "../../store/spot";
 import { useHistory } from "react-router-dom"
 
+import { addImageToSpotThunk } from "../../store/spot";
+
 const CreateANewSpotForm = () => {
     
     const dispatch = useDispatch();
-    
     const history = useHistory();
 
     //! Create States for our Forms
@@ -34,7 +35,16 @@ const CreateANewSpotForm = () => {
     const [nameError, setNameError] = useState('');
     const [priceError, setPriceError] = useState('');
     const [previewImageURLError, setPreviewImageURLError] = useState('');
+    const [imageURL1Error, setImageURL1Error] = useState('');
+    const [imageURL2Error, setImageURL2Error] = useState('');
+    const [imageURL3Error, setImageURL3Error] = useState('');
+    const [imageURL4Error, setImageURL4Error] = useState('');
 
+    //! Validations for image URL
+    const isValidImageUrl = (url) => {
+      const imageUrlPattern = /\.(png|jpe?g)$/i;
+      return imageUrlPattern.test(url);
+    };
 
     //! Handle submit for form
     const handleSubmit = (e) => {
@@ -93,9 +103,27 @@ const CreateANewSpotForm = () => {
           if (!previewImageURL) {
             setPreviewImageURLError('Preview Image URL is required');
             isValid = false;
+          } else if (!isValidImageUrl(previewImageURL)) {
+            setPreviewImageURLError('Image URL needs to end in .png, .jpg, or .jpeg');
+            isValid = false;
           } else {
             setPreviewImageURLError('');
           }
+        
+          // Validate additional image URLs
+          const setImageURLError = (url, setError) => {
+            if (url && !isValidImageUrl(url)) {
+              setError('Image URL needs to end in .png, .jpg, or .jpeg');
+              isValid = false;
+            } else {
+              setError('');
+            }
+          };
+        
+          setImageURLError(imageURL1, setImageURL1Error);
+          setImageURLError(imageURL2, setImageURL2Error);
+          setImageURLError(imageURL3, setImageURL3Error);
+          setImageURLError(imageURL4, setImageURL4Error);
 
         //! When we submit our form, we're going to dispatch the form data to our thunk
         if (isValid){
@@ -114,13 +142,44 @@ const CreateANewSpotForm = () => {
                 imageURL2,
                 imageURL3,
                 imageURL4,
+
+                //! Create SpotImage array so that we can get the Items in
+                SpotImages: [
+                  {
+                    url: previewImageURL,
+                    preview: true,
+                  },
+                  {
+                    url: imageURL1,
+                    preview: false,
+                  },
+                  {
+                    url: imageURL2,
+                    preview: false,
+                  },
+                  {
+                    url: imageURL3,
+                    preview: false,
+                  },
+                  {
+                    url: imageURL4,
+                    preview: false,
+                  },
+                ],
             }
 
+
             dispatch(createNewSpotThunk(formData)).then((result) => {
-              if (result) {
-                history.push(`/spots/${result.id}`);
+                const spotId = result.id
+                const previewImage = {
+                  url: previewImageURL,
+                  preview: true,
+                }
+                dispatch(addImageToSpotThunk(spotId, previewImage)).then(() => {
+                  history.push(`/spots/${result.id}`);
+                })
               }
-            });
+            );
         }
     };
 
@@ -304,6 +363,7 @@ useEffect(() => {
                 value={imageURL1}
                 onChange={(e) => setImageURL1(e.target.value)}
             />
+            <div className="error-message">{imageURL1Error}</div>
             <label htmlFor="imageURL2">Image URL 2:</label>
             <input
                 type="text"
@@ -313,6 +373,7 @@ useEffect(() => {
                 value={imageURL2}
                 onChange={(e) => setImageURL2(e.target.value)}
             />
+            <div className="error-message">{imageURL2Error}</div>
             <label htmlFor="imageURL3">Image URL 3:</label>
             <input
                 type="text"
@@ -322,6 +383,7 @@ useEffect(() => {
                 value={imageURL3}
                 onChange={(e) => setImageURL3(e.target.value)}
             />
+            <div className="error-message">{imageURL3Error}</div>
             <label htmlFor="imageURL4">Image URL 4:</label>
             <input
                 type="text"
@@ -331,7 +393,7 @@ useEffect(() => {
                 value={imageURL4}
                 onChange={(e) => setImageURL4(e.target.value)}
             />
-
+            <div className="error-message">{imageURL4Error}</div>
             {/* //! Submit Button */}
             <div className="create-form-submit-button">
                 <button>Create Spot</button>

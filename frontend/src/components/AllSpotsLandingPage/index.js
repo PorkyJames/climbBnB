@@ -35,7 +35,7 @@ const AllSpotsLandingPage = () => {
             {allSpots.map((spot) => {
               return (
                 <Link to={`spot/${spot.id}`} key={spot.id}>
-                  <TiledSpot spot={spot} reviewExists={reviewExists(spot.avgStarRating)} />
+                  <TiledSpot spot={spot} />
                 </Link>
               );
             })}

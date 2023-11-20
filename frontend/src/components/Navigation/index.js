@@ -44,6 +44,7 @@ function Navigation({ isLoaded }) {
     <div className="logo-container">
         <NavLink to="/">
           <i class="fa-brands fa-airbnb"></i>
+          <span className="logo-text">climbBnb</span>
         </NavLink>
     </div>
     <ul>
