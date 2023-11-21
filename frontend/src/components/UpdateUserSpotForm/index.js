@@ -104,11 +104,16 @@ const UpdateUserSpotForm = () => {
         description,
         name,
         price,
+        previewImageURL,
+        imageURL1,
+        imageURL2,
+        imageURL3,
+        imageURL4,
       };
 
       dispatch(updateUserSpotThunk(spotId, spotDataFromForm)).then((result) => {
         if (result) {
-          history.push(`/spots/${result.id}`);
+           history.push(`/spots/${result.id}`);
         }
       });
     }
