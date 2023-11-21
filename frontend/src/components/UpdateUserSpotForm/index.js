@@ -15,8 +15,8 @@ const UpdateUserSpotForm = () => {
   const [address, setAddress] = useState(spot.address || "");
   const [city, setCity] = useState(spot.city || "");
   const [state, setState] = useState(spot.state || "");
-  const [lng, setLng] = useState(spot.lng || "");
-  const [lat, setLat] = useState(spot.lat || "");
+  const [lng, setLng] = useState(spot.lng || 0);
+  const [lat, setLat] = useState(spot.lat || 0);
   const [description, setDescription] = useState(spot.description || "");
   const [name, setName] = useState(spot.name || "");
   const [price, setPrice] = useState(parseInt(spot.price) || "");
