@@ -1,0 +1,227 @@
+[33mcommit 1ff04db710088bae834297f63e21834b8d991f38[m[33m ([m[1;36mHEAD -> [m[1;32mmain[m[33m, [m[1;31morigin/dev[m[33m, [m[1;32mdev[m[33m)[m
+Author: PorkyJames <kwanjko17@gmail.com>
+Date:   Mon Nov 20 15:47:28 2023 -0800
+
+    Finished being able to add an Image to my new spot
+
+[33mcommit 0e1136aac03de9c6f883e2e9af342bfec8837bf5[m
+Author: PorkyJames <kwanjko17@gmail.com>
+Date:   Thu Nov 16 17:45:07 2023 -0800
+
+    Fixed the avgStarRating vs. average issue
+
+[33mcommit acb3a5af810fa3826976ff9028b9e879c3eba3d8[m
+Author: PorkyJames <kwanjko17@gmail.com>
+Date:   Thu Nov 16 17:00:09 2023 -0800
+
+    Fixed a few errors here and there
+
+[33mcommit 866411fa514fa2ddc44336706897b34f47583c65[m
+Author: PorkyJames <kwanjko17@gmail.com>
+Date:   Thu Nov 16 10:40:06 2023 -0800
+
+    Added favicon and adjusted the name of the react app
+
+[33mcommit 5f10923a3af6a9c122fdee2b0f66d3f866fd700f[m
+Author: PorkyJames <kwanjko17@gmail.com>
+Date:   Wed Nov 15 20:58:36 2023 -0800
+
+    Added Demo Login User Button
+
+[33mcommit 3993e7b344957c77ffcf3ccec5b8ea210073a302[m
+Author: PorkyJames <kwanjko17@gmail.com>
+Date:   Wed Nov 15 20:15:01 2023 -0800
+
+    Move the Manage Spots button to inside the Profile Button
+
+[33mcommit 8f44f5d8edaa05f4415eefe13d25aa4ca427e965[m
+Author: PorkyJames <kwanjko17@gmail.com>
+Date:   Wed Nov 15 20:04:39 2023 -0800
+
+    Added Home page upon logout and updated profile button
+
+[33mcommit 767be3e1688e067843ae1fdd0718ec070c73623a[m
+Author: PorkyJames <kwanjko17@gmail.com>
+Date:   Wed Nov 15 16:43:47 2023 -0800
+
+    Completed Delete Review Modal
+
+[33mcommit 61566d48289812f225ccfa58c2446febcd480763[m
+Author: PorkyJames <kwanjko17@gmail.com>
+Date:   Tue Nov 14 23:14:29 2023 -0800
+
+    Finished Post a review
+
+[33mcommit 36d61f7643ad730e119243023ee8200175d31af3[m
+Author: PorkyJames <kwanjko17@gmail.com>
+Date:   Tue Nov 14 19:06:10 2023 -0800
+
+    Finished Post Review Modal, but just need to fix the submission issues for validation
+
+[33mcommit ae8f16f5b26dc3a016a31a5ffd036f705c4a159b[m
+Author: PorkyJames <kwanjko17@gmail.com>
+Date:   Tue Nov 14 14:48:32 2023 -0800
+
+    Got the PostReviewModal to appear/disappear based on logged in User
+
+[33mcommit f1394c62d1f287aa1650d9a56b41a59f1c874789[m
+Author: PorkyJames <kwanjko17@gmail.com>
+Date:   Mon Nov 13 17:29:15 2023 -0800
+
+    Finished the Delete a Spot Modal
+
+[33mcommit 7912d171ae003023cbe9971c3837eec00df06ee7[m
+Author: PorkyJames <kwanjko17@gmail.com>
+Date:   Mon Nov 13 16:38:15 2023 -0800
+
+    Completed the Update a Spot page
+
+[33mcommit 04e436501de2448bf51b03109713202866e74b49[m
+Author: PorkyJames <kwanjko17@gmail.com>
+Date:   Sat Nov 11 22:21:49 2023 -0800
+
+    almost finished with Manage Spots
+
+[33mcommit 73c70691780debf14af0e9e83970951679bbd105[m
+Author: PorkyJames <kwanjko17@gmail.com>
+Date:   Sat Nov 11 17:43:26 2023 -0800
+
+    Managed to get the correct use state for userSpots in ManageSpots component
+
+[33mcommit a2b6d24a72f40918f742392a1d5240e98e2d71fb[m
+Author: PorkyJames <kwanjko17@gmail.com>
+Date:   Sat Nov 11 17:08:01 2023 -0800
+
+    Created ManageSpots component
+
+[33mcommit e1fed324c24be35ff20dbe38396b3eb9534d3610[m
+Author: PorkyJames <kwanjko17@gmail.com>
+Date:   Sat Nov 11 13:54:07 2023 -0800
+
+    Now able to submit Create a Spot Form. Need pictures
+
+[33mcommit 35605cbaf35dc6114b1a57fd93bae897f999607d[m
+Author: PorkyJames <kwanjko17@gmail.com>
+Date:   Fri Nov 10 22:07:27 2023 -0800
+
+    Added a re-navigate to spot page upon creation of spot via useHistory
+
+[33mcommit fd32ad3da464ef7f80e11d2b635da4df10ef0a2f[m
+Author: PorkyJames <kwanjko17@gmail.com>
+Date:   Thu Nov 9 18:03:09 2023 -0800
+
+    Created Validations for Create a New Spot Form
+
+[33mcommit 40d7b5737ee0d44b168257e400ae053896992476[m
+Author: PorkyJames <kwanjko17@gmail.com>
+Date:   Thu Nov 9 16:35:05 2023 -0800
+
+    Finished first part of Create A New Spot Form
+
+[33mcommit 055b0a1fcca2ca1f7d1909b178d19f46ca0d69bb[m
+Author: PorkyJames <kwanjko17@gmail.com>
+Date:   Wed Nov 8 18:21:40 2023 -0800
+
+    End of Day Wed. Started on my form component by creating some useStates for my form
+
+[33mcommit 172d845ae67eeb81ab928cb26aa43818542c0b71[m
+Author: PorkyJames <kwanjko17@gmail.com>
+Date:   Wed Nov 8 17:13:50 2023 -0800
+
+    Connected my CreateANewSpotForm to my Create a New Spot Link on Landing page
+
+[33mcommit dd254d6f1c7550f1a71059152325574f74e46321[m
+Author: PorkyJames <kwanjko17@gmail.com>
+Date:   Wed Nov 8 16:03:49 2023 -0800
+
+    Finally fixed the undefined spotState issue
+
+[33mcommit d9eb54a4a4d5be472cc6066559de110bc7f325d2[m
+Author: PorkyJames <kwanjko17@gmail.com>
+Date:   Wed Nov 8 13:53:09 2023 -0800
+
+    Created a new form component that creates a new spot
+
+[33mcommit 2e1b8578bbf20271d4bb7e85625aeb577ad72f6a[m
+Author: PorkyJames <kwanjko17@gmail.com>
+Date:   Tue Nov 7 18:03:01 2023 -0800
+
+    Added SpotDetailReview component to split my SpotDetail page into 2
+
+[33mcommit bfd2772fd3d0042147fa5fc579d4292097fde581[m
+Author: PorkyJames <kwanjko17@gmail.com>
+Date:   Tue Nov 7 11:40:36 2023 -0800
+
+    Added Review stars + the star icon for reviews in the TiledSpot landing page
+
+[33mcommit 22598f52626a44a57216a07c7c7cfaf466f560e3[m
+Author: PorkyJames <kwanjko17@gmail.com>
+Date:   Mon Nov 6 17:53:38 2023 -0800
+
+    Created large and small images for Spot Details
+
+[33mcommit f423fc27af256c8be056cdeca8e9dab219390d09[m
+Author: PorkyJames <kwanjko17@gmail.com>
+Date:   Mon Nov 6 17:10:18 2023 -0800
+
+    Completed View Spot Details minus a few things related to it
+
+[33mcommit ca6ff8645329b5c367ba9a72100883cad438ac8f[m
+Author: PorkyJames <kwanjko17@gmail.com>
+Date:   Sun Nov 5 22:16:19 2023 -0800
+
+    Added tooltip on TiledSpot and created SpotDetails page
+
+[33mcommit f18982c9d89ac8ac8978ce783a2a59ca3eb607db[m
+Author: PorkyJames <kwanjko17@gmail.com>
+Date:   Sun Nov 5 01:55:27 2023 -0700
+
+    Added $ and /per night on the spot price
+
+[33mcommit 4dbbb15474c6e1405385e3b40b7243595fb18ceb[m
+Author: PorkyJames <kwanjko17@gmail.com>
+Date:   Sun Nov 5 01:46:38 2023 -0700
+
+    Fixed an issue where my next state wasn't showing
+
+[33mcommit d6f6ef45e33f9802e4b9165619f852591dd9a657[m
+Author: PorkyJames <kwanjko17@gmail.com>
+Date:   Sat Nov 4 23:03:36 2023 -0700
+
+    Created a component for All tiled spots
+
+[33mcommit df87800a05fc5b125aa7c23f86bc0a026d312b7e[m
+Author: PorkyJames <kwanjko17@gmail.com>
+Date:   Sat Nov 4 21:48:05 2023 -0700
+
+    Created thunks / store for my All Spots Landing Page
+
+[33mcommit b0b29175c525d31bfd15bee03a1a025f9c67c0f9[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Author: PorkyJames <kwanjko17@gmail.com>
+Date:   Sat Nov 4 15:54:07 2023 -0700
+
+    Fixed the conditional rendering for Profile Button Drop down menu
+
+[33mcommit 6aa0b251052bee3c933c4cc4195d4f964577fd64[m
+Author: PorkyJames <kwanjko17@gmail.com>
+Date:   Sat Nov 4 15:26:33 2023 -0700
+
+    Added render-postbuild script
+
+[33mcommit 0816a867cbadedc9f181eef8329933f007856d37[m
+Author: PorkyJames <kwanjko17@gmail.com>
+Date:   Sat Nov 4 15:16:16 2023 -0700
+
+    Phase 1 of Render Deployment finished
+
+[33mcommit a6e240c58fbcd1c6228f6427d85ddde350acd36a[m
+Author: PorkyJames <kwanjko17@gmail.com>
+Date:   Sat Nov 4 15:11:40 2023 -0700
+
+    Finished optional Phase 5
+
+[33mcommit 11d3bdbf4c9ebd0aa38961d601d817b3a58aa062[m
+Author: PorkyJames <kwanjko17@gmail.com>
+Date:   Sat Nov 4 14:53:28 2023 -0700
+
+    Created a nested Login / SignUp in Drop down menu
