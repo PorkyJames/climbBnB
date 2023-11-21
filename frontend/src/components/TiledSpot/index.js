@@ -41,7 +41,7 @@ const TiledSpot = ({ spot }) => {
                             {reviewExists()}
                         </div>
                     </div>
-                    <div className="spot-price" title={spot.name}>${spot.price.toFixed(2)} / night</div>
+                    <div className="spot-price" title={spot.name}>${parseInt(spot.price).toFixed(2)} / night</div>
                 </div>
             </Link>
         </>

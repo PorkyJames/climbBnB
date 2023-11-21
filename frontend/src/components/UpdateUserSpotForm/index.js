@@ -19,7 +19,7 @@ const UpdateUserSpotForm = () => {
   const [lat, setLat] = useState(spot.lat || "");
   const [description, setDescription] = useState(spot.description || "");
   const [name, setName] = useState(spot.name || "");
-  const [price, setPrice] = useState(spot.price || "");
+  const [price, setPrice] = useState(parseInt(spot.price) || "");
   const [previewImageURL, setPreviewImageURL] = useState(spot.previewImageURL || "");
   const [imageURL1, setImageURL1] = useState(spot.imageURL1 || "");
   const [imageURL2, setImageURL2] = useState(spot.imageURL2 || "");
