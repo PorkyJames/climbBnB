@@ -169,13 +169,13 @@ const CreateANewSpotForm = () => {
             }
 
 
-            dispatch(createNewSpotThunk(formData)).then((result) => {
+          dispatch(createNewSpotThunk(formData)).then(async (result) => {
                 const spotId = result.id
                 const previewImage = {
                   url: previewImageURL,
                   preview: true,
                 }
-                dispatch(addImageToSpotThunk(spotId, previewImage)).then(() => {
+                await dispatch(addImageToSpotThunk(spotId, previewImage)).then(() => {
                   history.push(`/spots/${result.id}`);
                 })
               }
