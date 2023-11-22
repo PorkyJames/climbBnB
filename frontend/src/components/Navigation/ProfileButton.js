@@ -6,6 +6,8 @@ import OpenModalButton from '../OpenModalButton'
 import LoginFormModal from "../LoginFormModal";
 import SignupFormModal from "../SignupFormModal";
 
+import "./Navigation.css";
+
 function ProfileButton({ user }) {
   const dispatch = useDispatch();
   const history = useHistory();
@@ -48,13 +50,15 @@ function ProfileButton({ user }) {
 
   return (
     <>
-      <button onClick={openMenu}>
-        <i className="fas fa-user-circle" />
+      <button className="user-profile-button" onClick={openMenu}>
+        <div className="user-button-icon">
+          <i class="fas fa-bars"></i><i className="fas fa-user-circle" />  
+        </div>
       </button>
       {showMenu && (
       <ul className={ulClassName} ref={ulRef}>
         {user ? (
-          <>
+          <div className='open-button-logged-in'>
             <li>Hello, {user.firstName}</li>
             {/* <li>{user.username}</li>
             <li>{user.firstName} {user.lastName}</li> */}
@@ -67,9 +71,9 @@ function ProfileButton({ user }) {
             <li>
               <button onClick={logout}>Log Out</button>
             </li>
-          </>
+          </div>
         ) : (
-          <>
+          <div className="open-button-logged-out">
             <li>
               <OpenModalButton
                 buttonText="Log In"
@@ -84,7 +88,7 @@ function ProfileButton({ user }) {
                 modalComponent={<SignupFormModal />}
               />
             </li>
-          </>
+          </div>
         )}
       </ul>
       )}

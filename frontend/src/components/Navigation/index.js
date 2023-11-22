@@ -43,16 +43,17 @@ function Navigation({ isLoaded }) {
   <header className="header">
     <div className="logo-container">
         <NavLink to="/">
-          <i class="fa-brands fa-airbnb"></i>
-          <span className="logo-text">climbBnb</span>
+        <span className="logo-itself">
+          <i class="fa-brands fa-airbnb"></i><span className="logo-text">climbBnb</span>
+        </span>
         </NavLink>
     </div>
     <ul>
-      <li>
+      {/* <li>
         <NavLink exact to="/">
           Home
         </NavLink>
-      </li>
+      </li> */}
       <div className="user-and-nav">
         {userLoggedIn && createASpotButton()}
         {/* {userLoggedIn && (
@@ -61,9 +62,9 @@ function Navigation({ isLoaded }) {
           </li>
         )} */}
         {isLoaded && (
-          <li className="profile-button">
+          <span className="profile-button">
             <ProfileButton user={sessionUser} />
-          </li>
+          </span>
         )}
       </div>
     </ul>

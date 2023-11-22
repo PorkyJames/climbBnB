@@ -130,14 +130,17 @@ const SpotDetailReviews = ({spotId}) => {
                     <div className="spot-detail-reviews">
                         <div className="star-rating">
                             {renderPostReviewButton()}
-                            <i className="fas fa-star"></i>
                             {showReviewModal && (
-                            <PostReviewModal onClose={closeReviewModal} onSubmit={handleSubmitReview} />
-                            )}
-                            {avgRating === "New" ? (
-                                <p>New</p>
-                            ) : (
-                                <p>
+                                <PostReviewModal onClose={closeReviewModal} onSubmit={handleSubmitReview} />
+                                )}
+                            {avgRating === "New" ? (      
+                                    <p>
+                                        <i className="fas fa-star"></i>
+                                        New
+                                    </p>
+                                ) : (
+                                    <p>
+                                    <i className="fas fa-star"></i>
                                     {avgRating}
                                     {reviewCount > 0 && <span className="centered-dot"> · </span>}
                                 </p>
