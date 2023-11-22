@@ -1,14 +1,23 @@
 import { useState } from "react";
 import { UseSelector, useSelector } from "react-redux";
 
+import "./DeleteReviewModal.css"
+
 const DeleteReviewModal = ({ reviewId, onDelete, onClose }) => {
     const handleDelete = () => {
       onDelete(reviewId);
       onClose(); 
     };
+
+    const handleCloseModal = (e) => {
+      if (e.target.classList.contains("modal-background")) {
+        onClose();
+      }
+    };
   
     return (
-      <div className="modal">
+      <div id="modal" className="modal-background" onClick={handleCloseModal}>
+        <div id="modal-content" className="modal-content">
         <button className="close-button" onClick={onClose}>
             &times;
         </button>
@@ -25,6 +34,7 @@ const DeleteReviewModal = ({ reviewId, onDelete, onClose }) => {
           </div>
         </div>
       </div>
+    </div>
     );
   };
   

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import "./PostReviewModal.css"
 
 
 const PostReviewModal = ({onClose, onSubmit }) => {
@@ -49,31 +50,37 @@ const PostReviewModal = ({onClose, onSubmit }) => {
         return stars;
       };
 
+    const handleCloseModal = (e) => {
+      if (e.target.classList.contains("post-review-modal-overlay")) {
+        onClose();
+      }
+    };
+
     return (
-        <div className="full-modal">
-        <div className="modal-content">
-          <span className="x-button" onClick={onClose}>&times;</span>
-          <h2>How was your stay?</h2>
-  
-          <label>
-            Leave your review here:
-            <textarea
-              value={review}
-              onChange={handleCommentChange}
-              placeholder="Leave your review here..."
-            />
-          </label>
-  
-          <label>
-            Stars:
-            <div className="stars">{renderStars()}</div>
-          </label>
-  
-          <button disabled={review.length < 10 || selectedRating === 0} onClick={handleSubmit}>
-            Submit Your Review
-          </button>
+      <div id="modal" className="post-review-modal-overlay" onClick={handleCloseModal}>
+        <div id="modal-content" className="modal-content">
+            <span className="x-button" onClick={onClose}>&times;</span>
+            <h2>How was your stay?</h2>
+    
+            <label>
+              Leave your review here:
+              <textarea
+                value={review}
+                onChange={handleCommentChange}
+                placeholder="Leave your review here..."
+              />
+            </label>
+    
+            <label>
+              Stars:
+              <div className="stars">{renderStars()}</div>
+            </label>
+    
+            <button disabled={review.length < 10 || selectedRating === 0} onClick={handleSubmit}>
+              Submit Your Review
+            </button>
         </div>
-      </div>
+    </div>
     )
 }
 

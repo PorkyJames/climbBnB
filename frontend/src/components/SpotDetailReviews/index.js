@@ -8,6 +8,8 @@ import { deleteSpotReviewThunk } from "../../store/review";
 import PostReviewModal from '../PostReviewModal'
 import DeleteReviewModal from "../DeleteReviewModal";
 
+import OpenModalButton from "../OpenModalButton";
+
 const SpotDetailReviews = ({spotId}) => {
 
     const dispatch = useDispatch();

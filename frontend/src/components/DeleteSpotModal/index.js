@@ -1,11 +1,17 @@
-
+import "./DeleteSpotModal.css"
 
 const DeleteSpotModal = ({ onCancel, onDelete }) => {
     
+  const handleCloseModal = (e) => {
+    if (e.target.classList.contains("delete-spot-modal-overlay")) {
+      onCancel();
+    }
+  };
+
     return (
-      <div className="delete-spot-modal">
-        <div className="modal-content">
-          &times;
+      <div id="modal" className="delete-spot-modal-overlay" onClick={handleCloseModal}>
+        <div id="modal-content" className="modal-content">
+          <span className="x-button" onClick={onCancel}>&times;</span>
           <h2>Confirm Delete</h2>
           <p>Are you sure you want to remove this spot?</p>
           <div className="button-container">
