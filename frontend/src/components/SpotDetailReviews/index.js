@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 
 import { postSpotReviewThunk } from "../../store/review";
 import { deleteSpotReviewThunk } from "../../store/review";
+import { loadSpotDetailsThunk } from "../../store/spot";
 
 import PostReviewModal from '../PostReviewModal'
 import DeleteReviewModal from "../DeleteReviewModal";
@@ -58,6 +59,7 @@ const SpotDetailReviews = ({spotId}) => {
         dispatch(postSpotReviewThunk(spotId, reviewData)).then(() => {
           //! Reload reviews after posting a new review
         dispatch(loadSpotReviewsThunk(spotId));
+        dispatch(loadSpotDetailsThunk(spotId));
         setShowReviewModal(false);
         });
     };
@@ -65,6 +67,7 @@ const SpotDetailReviews = ({spotId}) => {
     const handleDeleteReview = (reviewId) => {
         dispatch(deleteSpotReviewThunk(spotId, reviewId));
         dispatch(loadSpotReviewsThunk(spotId));
+        dispatch(loadSpotDetailsThunk(spotId))
         closeDeleteModal();
     };
 

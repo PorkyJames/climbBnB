@@ -1,8 +1,15 @@
 import { useState } from "react";
 import "./PostReviewModal.css"
 
+import {loadSpotDetailsThunk} from "../../store/spot"
+import {useDispatch} from "react-redux"
+import { useParams } from "react-router-dom";
 
 const PostReviewModal = ({onClose, onSubmit }) => {
+
+  const dispatch = useDispatch();
+  const { spotId } = useParams();
+
     const [review, setReview] = useState('');
     const [hoveredRating, setHoveredRating] = useState(0);
     const [selectedRating, setSelectedRating] = useState(0);
@@ -26,6 +33,7 @@ const PostReviewModal = ({onClose, onSubmit }) => {
         review,
         stars: selectedRating,
       };
+
       //! Comes from the onSubmit in the SpotDetailsReviews component
       onSubmit(reviewData);
     };
@@ -60,25 +68,29 @@ const PostReviewModal = ({onClose, onSubmit }) => {
       <div id="modal" className="post-review-modal-overlay" onClick={handleCloseModal}>
         <div id="modal-content" className="modal-content">
             <span className="x-button" onClick={onClose}>&times;</span>
-            <h2>How was your stay?</h2>
+            <div className="review-title">
+              <h2>How was your stay?</h2>
+            </div>
+
+          <div className="review-input-box">
+            <textarea
+              value={review}
+              onChange={handleCommentChange}
+              placeholder="Leave your review here..."
+            />
+          </div>
     
+          <div className="starRating-icons">
             <label>
-              Leave your review here:
-              <textarea
-                value={review}
-                onChange={handleCommentChange}
-                placeholder="Leave your review here..."
-              />
+              <div className="stars">{renderStars()} Stars</div>
             </label>
+          </div>
     
-            <label>
-              Stars:
-              <div className="stars">{renderStars()}</div>
-            </label>
-    
+          <div className="submit-review-button">
             <button disabled={review.length < 10 || selectedRating === 0} onClick={handleSubmit}>
               Submit Your Review
             </button>
+          </div>
         </div>
     </div>
     )

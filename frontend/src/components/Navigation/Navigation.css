@@ -11,6 +11,8 @@ body {
     align-items: center;
     width: auto;
     padding: 15px 14px;
+    position: relative;
+    overflow: visible;
 }
 
 /* ! Just the AirBnb logo and the "climbBnb" itself */
@@ -50,12 +52,12 @@ body {
 
 /* ! The dropdown menu from my profile button */
 .profile-dropdown {
-    position: relative; 
+    position: absolute; 
     list-style-type: none;
-    left: -30%; /* Initially position the dropdown menu offscreen */
-    z-index: 1; 
+    top: 70%;
+    right: 15;
+    z-index: 10; 
 }
-
 
 .open-button-logged-in {
     padding: 10px;
@@ -72,13 +74,13 @@ body {
 }
 
 /* ! User Icons as well as the collapsed Icon */
-.user-button-icon .fa-user-circle {
-    margin-left: 5px;
-}
-
 .user-button-icon {
     font-size: 28px;
     display: flex;
+}
+
+.user-button-icon .fa-user-circle {
+    margin-left: 5px;
 }
 
 .user-button-icon .fa-bars {
@@ -99,4 +101,16 @@ body {
     font-size: 20px;
     color: rgb(26, 119, 150);
     font-weight: bold
+}
+
+/* ! Log-Out Button */
+.log-out-button{
+    text-align: center;
+}
+
+.log-out-button button {
+    width: 60%;
+    height: 1.5rem;
+    margin-top: 5px;
+    border-radius: 20px;
 }

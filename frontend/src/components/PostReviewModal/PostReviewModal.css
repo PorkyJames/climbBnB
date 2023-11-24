@@ -41,3 +41,53 @@
     justify-content: center;
     align-items: center;
 }
+
+.review-title{
+    text-align: center;
+    font-size: 1.2em;
+}
+
+.review-input-box{
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.review-input-box textarea {
+    width: 100%;
+    height: 150px;
+    padding: 10px;
+    font-size: 20px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    resize: none;
+}
+
+.starRating-icons{
+    text-align: center;
+    font-size: 1.8em;
+    margin: 10px;
+    margin-top: 3px;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+.stars{
+    cursor: pointer;
+}
+
+.submit-review-button button {
+    width: calc(100% - 20px); 
+    padding: 10px 0; 
+    background-color: #ff6868; 
+    color: white; 
+    border: none; 
+    border-radius: 4px; 
+    font-size: 1em; 
+    margin: 10px auto; 
+    display: block; 
+    cursor: pointer; 
+}
+
+.starRating-and-submit-container {
+    text-align: center; 
+    padding: 10px; 
+}

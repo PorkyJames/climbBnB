@@ -22,8 +22,12 @@ const DeleteReviewModal = ({ reviewId, onDelete, onClose }) => {
             &times;
         </button>
         <div className="modal-content">
-          <h2>Confirm Delete</h2>
-          <p>Are you sure you want to delete this review?</p>
+          <div className="confirm-delete-text">
+            <h2>Confirm Delete</h2> 
+          </div>
+          <div className="delete-review-paragraph">
+            <p>Are you sure you want to delete this review?</p>
+          </div>
           <div className="modal-buttons">
             <button className="delete-button" onClick={handleDelete}>
               Yes (Delete Review)

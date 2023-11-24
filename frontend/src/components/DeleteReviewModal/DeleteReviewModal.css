@@ -41,3 +41,41 @@
     justify-content: center;
     align-items: center;
   }
+
+  .confirm-delete-text{
+    text-align: center;
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+}
+
+.delete-review-paragraph {
+    text-align: center;
+    width: 100%;
+}
+
+.modal-buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch; 
+    gap: 10px; 
+}
+
+.modal-buttons button {
+    padding: 10px; 
+    border: none; 
+    border-radius: 5px; 
+    font-size: 1rem; 
+    font-weight: bold; 
+    cursor: pointer; 
+    margin: 5px 0; 
+}
+
+.delete-button {
+    background-color: #ff6868; 
+    color: white;
+}
+
+.cancel-button {
+    background-color: #c4c4c4; 
+    color: black;
+}

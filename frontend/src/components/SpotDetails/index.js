@@ -2,6 +2,7 @@ import { useParams } from "react-router-dom"
 import { useSelector, useDispatch } from "react-redux"
 import { useEffect, useState } from "react";
 import { loadSpotDetailsThunk } from "../../store/spot";
+import { loadSpotReviewsThunk } from "../../store/review";
 
 import SpotDetailReviews from "../SpotDetailReviews";
 import "./SpotDetailsCSS.css"
@@ -17,6 +18,10 @@ const [isLoading, setIsLoading] = useState(true)
 useEffect(() => {
     dispatch(loadSpotDetailsThunk(spotId)).then(() => setIsLoading(false))
 }, [dispatch, spotId])
+
+useEffect(() => {
+    dispatch(loadSpotReviewsThunk(spotId));
+  }, [dispatch, spotId]);
 
 if (spotState === undefined) {
     return (
@@ -39,6 +44,7 @@ if (spotState === undefined) {
         state } = spotState;
 
 const avgStarRatingItem = spotState.avgStarRating //5
+console.log(avgStarRatingItem)
 const numReviewsItem = spotState.numReviews //1
 
 const reserveButtonAlert = () => {
@@ -51,6 +57,8 @@ const reserveButtonAlert = () => {
             <>
 
                 <h1>{name}</h1>
+
+                <p>Location: {city}, {state}, {country}</p>
 
                 <div className="spot-details-images-container">
                     {/* Our Large Image */}
@@ -67,13 +75,16 @@ const reserveButtonAlert = () => {
                     {/* Our other Small Images */}
 
                     <div className="spot-details-small-images-container">
-                        {SpotImages.slice(1, 5).map((img, i) => (
-                            <img key={i} src={img?.url} />
+                        {SpotImages.slice(1).map((img, i) => (
+                        <img
+                            key={i}
+                            src={img?.url}
+                            alt={`Spot Image ${i + 1}`}
+                            className="spot-details-small-image"
+                        />
                         ))}
                     </div>
                 </div>
-
-                <p>Location: {city}, {state}, {country}</p>
 
                 <p>Hosted by {Owner.firstName} {Owner.lastName}</p>
 
@@ -83,7 +94,7 @@ const reserveButtonAlert = () => {
                     <div className="spot-reserve-box-price-and-reviews">
                         <p> CalloutInfoBox Down Here </p>
                         <p>${price} per night</p>
-                        <p>Average Star Rating: {avgStarRatingItem !== null ? avgStarRatingItem.toFixed(2) : "New"}</p>
+                        <p>Average Star Rating: {avgStarRatingItem ? avgStarRatingItem.toFixed(2) : "New"}</p>
                         <p>Review Count: {numReviewsItem}</p>
                     </div>
                     <button 

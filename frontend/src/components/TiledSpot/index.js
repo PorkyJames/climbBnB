@@ -21,7 +21,7 @@ const TiledSpot = ({ spot }) => {
         }
     }
     
-    console.log(spot.price)
+    // console.log(spot.price)
 
     return (
         <>
@@ -32,15 +32,19 @@ const TiledSpot = ({ spot }) => {
                             <img src={spot.previewImage} className="spot-thumbnail" alt="spot-thumbnail"/>
                         </div>
                     </div>
-                    <div className="spot-name" title={spot.name}>{spot.name}</div>
-                    <div className="spot-city" title={spot.city}>{spot.city}</div>
-                    <div className="spot-state" title={spot.name}>{spot.state}</div>
-                    <div>
+                    {/* <div className="spot-name" title={spot.name}>{spot.name}</div> */}
+                    <div className="spot-info-container">
+                        <div className="spot-city-state">
+                            {spot.city}, {spot.state}
+                        </div>
+                        {/* <div className="spot-city" title={spot.city}>{spot.city}</div>
+                        <div className="spot-state" title={spot.name}>{spot.state}</div> */}
                         <div className="spot-starRating" title={spot.name}>
-                            <i className="fas fa-star"></i>
+                            <i className="fas fa-star"></i> 
                             {reviewExists()}
                         </div>
                     </div>
+
                     <div className="spot-price" title={spot.name}>${parseInt(spot.price).toFixed(2)} / night</div>
                 </div>
             </Link>

@@ -12,8 +12,14 @@ const DeleteSpotModal = ({ onCancel, onDelete }) => {
       <div id="modal" className="delete-spot-modal-overlay" onClick={handleCloseModal}>
         <div id="modal-content" className="modal-content">
           <span className="x-button" onClick={onCancel}>&times;</span>
-          <h2>Confirm Delete</h2>
-          <p>Are you sure you want to remove this spot?</p>
+
+          <div className="delete-text-title">
+            <h2>Confirm Delete</h2>
+          </div>
+          <div className="delete-text-paragraph">
+            <p>Are you sure you want to remove this spot from the listings?</p>
+          </div>
+
           <div className="button-container">
             <button className="delete-button" onClick={onDelete}>
               Yes (Delete Spot)
@@ -22,6 +28,7 @@ const DeleteSpotModal = ({ onCancel, onDelete }) => {
               No (Keep Spot)
             </button>
           </div>
+
         </div>
       </div>
     );
