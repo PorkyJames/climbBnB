@@ -56,10 +56,11 @@
     width: 100%;
     height: 150px;
     padding: 10px;
-    font-size: 20px;
-    border: 1px solid #ccc;
+    font-size: 15px;
+    border: 2px solid black;
     box-sizing: border-box;
     resize: none;
+    background-color: aliceblue;
 }
 
 .starRating-icons{
@@ -72,6 +73,7 @@
 
 .stars{
     cursor: pointer;
+    font-size: 1em;
 }
 
 .submit-review-button button {

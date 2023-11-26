@@ -1,1 +1,27 @@
 
+.landing-page {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    padding: 20px;
+}
+
+@media screen and (max-width: 1200px) {
+    .landing-page {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  
+  /* Adjust to two columns when the screen width is less than 900px */
+  @media screen and (max-width: 900px) {
+    .landing-page {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  
+  /* Adjust to one column when the screen width is less than 600px */
+  @media screen and (max-width: 600px) {
+    .landing-page {
+      grid-template-columns: 1fr;
+    }
+  }

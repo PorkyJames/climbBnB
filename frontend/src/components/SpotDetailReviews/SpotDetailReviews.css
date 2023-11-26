@@ -1,0 +1,53 @@
+.spot-detail-review-header {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    font-weight: bold;
+    font-size: 1.2em;
+}
+
+.centered-dot {
+    margin: 0; 
+    margin-left: 5px;
+    
+}
+
+.review-count p {
+    margin: 0; 
+    margin-left: 5px;
+}
+
+.post-review-button button {
+    background-color: gray;
+    color: white;
+    border: solid 2px black;
+    box-shadow: 2px 2px 2px black; 
+}
+
+.review-list{
+    list-style-type: none;
+    padding-left: 0;
+    margin-left: 0;
+}
+
+.reviewer{
+    font-weight: bold;
+    font-size: 1.1em;
+}
+
+.review-date{
+    color: gray;
+    font-size: .95em;
+}
+
+.review-comment{
+    font-size: .8em;
+}
+
+.delete-review-button button{
+    border: none;
+    background-color: gray;
+    color: white;
+    border: solid 2px black;
+    box-shadow: 1px 1px 1px black; 
+}

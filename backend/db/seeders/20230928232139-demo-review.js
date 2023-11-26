@@ -24,25 +24,25 @@ module.exports = {
     {
       userId: 1,
       spotId: 2,
-      review: "Just a normal suburban home with all good amenities!",
+      review: "Great spot in Nevada. Although in the middle of nowhere.",
       stars: 3,
     },
     {
       userId: 2,
       spotId: 3,
-      review: "Felt like I going to be murdered.",
-      stars: 1,
+      review: "It was incredibly difficult to find parking. Climbs were great though.",
+      stars: 2,
     },
     {
       userId: 3,
       spotId: 1,
-      review: "Beautiful terrace with a refreshing overlook of the city!",
+      review: "Rich with history and some of the best route setting I've seen!",
       stars: 5,
     },
     {
       userId: 3,
       spotId: 3,
-      review: "My ghost hunting skill from Phasmophobia will come into play",
+      review: "Got to see Big Ben right after climbing! Great food around too, but missing something...",
       stars: 4,
     },
    ], {validate: true})

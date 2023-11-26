@@ -1,9 +1,6 @@
-.active {
-    background-color: aliceblue;
-}
-
 .sign-up-text{
     text-align: center;
+    margin-bottom: -15px;
 }
 
 .email-input, 
@@ -13,6 +10,15 @@
 .password-input,
 .confirm-pass-input{
     width:100%;
+}
+
+.email-label label,
+.username-label label,
+.name-label label,
+.last-name-label label,
+.password-label label,
+.confirm-pass-label label {
+    font-weight: bold;
 }
 
 .email-input input,
@@ -27,6 +33,7 @@
     border-radius: 4px; 
     box-sizing: border-box;
     margin-bottom: 10px;
+    background-color: aliceblue;
 }
 
 .submit-button {
@@ -39,5 +46,14 @@
     height: 40px;
     margin-bottom: 20px;
     margin-top: 20px;
+    background-color: red;
+    color: white;
+    box-shadow: 1px solid black;
 }
 
+.submit-button button:disabled {
+    background-color: lightgray;
+    color: white;
+    cursor: not-allowed; 
+    box-shadow: none;
+}

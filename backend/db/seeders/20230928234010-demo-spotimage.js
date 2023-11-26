@@ -23,77 +23,77 @@ module.exports = {
    await SpotImage.bulkCreate([
     {
       spotId: 1,
-      url: 'https://ssl.cdn-redfin.com/photo/398/mbphoto/147/genMid.1643147_1.jpg',
+      url: 'https://images.squarespace-cdn.com/content/v1/5f4596c47a3e0b7b0ced96b4/1604161618789-MLXBOOHMIGI4BW7RL0MX/unnamed.jpg',
       preview: true,
     },
     {
       spotId: 1,
-      url: 'https://images.trvl-media.com/lodging/77000000/76680000/76673500/76673427/f57e277a.jpg?impolicy=resizecrop&rw=500&ra=fit',
+      url: 'https://images.squarespace-cdn.com/content/v1/52dae429e4b04f03beacb5bc/1478190382880-7JZFEP26XXJ5KPMADFGL/1476449_709739009110127_7257283308281148409_n.jpg',
       preview: true,
     },
     {
       spotId: 1,
-      url: 'https://hips.hearstapps.com/hmg-prod/images/melanie-pounds-mountain-brook-house-tour-bedroom-jpg-1623350346.jpg',
+      url: 'https://centralrockgym.com/watertown/wp-content/uploads/sites/19/1-2-800x534-640x480.jpg',
       preview: true,
     },
     {
       spotId: 1,
-      url: 'https://www.thespruce.com/thmb/asM4rLR5OHkPWIxmhM77P3xYWbo=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/beautiful-bathrooms-ideas-4101846-hero-e436124be1664154b7771e3b0d23676f.jpg',
+      url: 'https://www.thepadclimbing.org/wp-content/uploads/2023/05/PXL_20230521_163223975.MP_.jpg',
       preview: true,
     },
     {
       spotId: 1,
-      url: 'https://www.thespruce.com/thmb/YQoHr2VZ3O1VgORCiSsNHAOqWbI=/6232x0/filters:no_upscale():max_bytes(150000):strip_icc()/backyard-ideas-to-delight-diyers-4098826-hero-6476eec3d3e54046920ac0b707050821.jpg',
+      url: 'https://s3-media0.fl.yelpcdn.com/bphoto/GpEQ5WC_K_QjI-VObP_b9A/348s.jpg',
       preview: true,
     },
     {
       spotId: 2,
-      url: 'https://nypost.com/wp-content/uploads/sites/2/2019/10/191007-cuozzo-terraces.jpg?quality=75&strip=all&w=1024',
+      url: 'https://mesarim.com/reno/wp-content/uploads/sites/2/2023/09/RenoHomepage-scaled.jpg',
       preview: true,
     },
     {
       spotId: 2,
-      url: 'https://cdna.artstation.com/p/marketplace/presentation_assets/002/715/014/large/file.jpg?1684496212',
+      url: 'https://www.luxuryrenohomes.com/uploads/renobouldering.jpg',
       preview: true,
     },
     {
       spotId: 2,
-      url: 'https://media.architecturaldigest.com/photos/611446c7d9a1fb9d625f8019/master/pass/210524_EJ_central_park_tower_56E_0147_HIGH_RES.jpg',
+      url: 'https://travelnevada.com/wp-content/uploads/2021/02/Mesa2-768x432.jpg',
       preview: true,
     },
     {
       spotId: 2,
-      url: 'https://static01.nyt.com/images/2014/11/13/garden/20141113-BATHROOM-slide-A45L/20141113-BATHROOM-slide-A45L-superJumbo.jpg',
+      url: 'https://travelnevada.com/wp-content/uploads/2021/02/Mesa_Desktop.jpg',
       preview: true,
     },
     {
       spotId: 2,
-      url: 'https://i.pinimg.com/736x/02/94/f5/0294f5ffd8544338746b6c406325a826.jpg',
+      url: 'https://cdn.walltopia.com/wp-content/uploads/20231027223344/training-boards2-scaled.jpg',
       preview: true,
     },
     {
       spotId: 3,
-      url: 'https://i.pinimg.com/originals/1b/11/05/1b1105f8843881865801a6a90e89eda8.jpg',
+      url: 'https://citywall.eu/wp-content/uploads/2022/03/IMG_0310-scaled.jpg',
       preview: true,
     },
     {
       spotId: 3,
-      url: 'https://www.barnhouse.lk/wp-content/uploads/2021/03/DSC1137.jpg',
+      url: 'https://assets-global.website-files.com/60ca0eb72162e830cff668b1/60f274dfe5f61e59e61cdc74_008A3986-2.jpg',
       preview: true,
     },
     {
       spotId: 3,
-      url: 'https://cdn.onekindesign.com/wp-content/uploads/2013/06/Barn-Bedroom-Design-Ideas-01-1-Kindesign.jpg',
+      url: 'https://s3.amazonaws.com/images.gearjunkie.com/uploads/2021/04/grasshopper-climbing.jpg',
       preview: true,
     },
     {
       spotId: 3,
-      url: 'https://www.digsdigs.com/photos/2013/04/a-barn-bathroom-decorated-with-rough-weathered-wood-with-a-large-window-a-wooden-vanity-and-a-free-standing-tub.jpg',
+      url: 'https://ugclimbing.com/denver/wp-content/uploads/sites/2/2020/04/April282018_UberGrippen_Candid_slackline_018_DSC9242-768x512.jpg',
       preview: true,
     },
     {
       spotId: 3,
-      url: 'https://poppytalk.com/wp-content/uploads/2021/10/310F52C1-AA97-4CD7-8335-956383F00152.jpeg',
+      url: 'https://www.phillymag.com/wp-content/uploads/sites/3/2021/02/reach-thefactory-featured.jpg',
       preview: true,
     },
    ], {validate: true})

@@ -3,6 +3,8 @@ import { useEffect } from "react";
 import { loadAllSpotsThunk } from "../../store/spot"
 import { Link } from "react-router-dom";
 
+import "./AllSpotsLandingPageCSS.css"
+
 //! Component
 import TiledSpot from "../TiledSpot";
 
@@ -34,7 +36,7 @@ const AllSpotsLandingPage = () => {
           <div className="landing-page">
             {allSpots.map((spot) => {
               return (
-                <Link to={`spot/${spot.id}`} key={spot.id}>
+                <Link to={`spot/${spot.id}`} key={spot.id} className="each-spot-tile-details">
                   <TiledSpot spot={spot} />
                 </Link>
               );

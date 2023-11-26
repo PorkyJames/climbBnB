@@ -235,8 +235,8 @@ useEffect(() => {
               <div className="country-label">
                 <label htmlFor="country">
                   Country 
-                  <div className="error-message">{countryError}</div>
                   </label>
+                <div className="error-message">{countryError}</div>
               </div>
               <div className="country-input">
                 <input 
@@ -276,7 +276,9 @@ useEffect(() => {
                     onChange={(e) => setCity(e.target.value)}
                   />
                 </div>
-
+                
+                <span className="input-comma">,</span>
+    
                 <div className="state-input">
                   <label htmlFor="state">State</label>
                   <div className="error-message">{stateError}</div>
@@ -301,6 +303,9 @@ useEffect(() => {
                     onChange={(e) => setLat(e.target.value)}
                   />
                 </div>
+
+                <span className="input-comma">,</span>
+
                 <div className="lng-input">
                   <label htmlFor="longitude">Longitude</label>
                   <input 

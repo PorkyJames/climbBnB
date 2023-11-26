@@ -44,7 +44,7 @@ if (spotState === undefined) {
         state } = spotState;
 
 const avgStarRatingItem = spotState.avgStarRating //5
-console.log(avgStarRatingItem)
+// console.log(avgStarRatingItem)
 const numReviewsItem = spotState.numReviews //1
 
 const reserveButtonAlert = () => {
@@ -52,13 +52,13 @@ const reserveButtonAlert = () => {
 };
 
     return (
-        <div>
+        <div className="entire-page">
             {!isLoading && 
             <>
 
                 <h1>{name}</h1>
 
-                <p>Location: {city}, {state}, {country}</p>
+                <p>{city}, {state}, {country}</p>
 
                 <div className="spot-details-images-container">
                     {/* Our Large Image */}
@@ -85,27 +85,41 @@ const reserveButtonAlert = () => {
                         ))}
                     </div>
                 </div>
-
-                <p>Hosted by {Owner.firstName} {Owner.lastName}</p>
-
-                <p>{description}</p>
-
-                <div className="spot-reserve-box">
-                    <div className="spot-reserve-box-price-and-reviews">
-                        <p> CalloutInfoBox Down Here </p>
-                        <p>${price} per night</p>
-                        <p>Average Star Rating: {avgStarRatingItem ? avgStarRatingItem.toFixed(2) : "New"}</p>
-                        <p>Review Count: {numReviewsItem}</p>
+            
+            <div className="second-half-spot-details-container">
+                <div className="text-container">
+                    <div className="hosted-by">
+                        <p>Hosted by {Owner.firstName} {Owner.lastName}</p>
                     </div>
-                    <button 
-                        className ="reserve-button" 
-                        onClick={reserveButtonAlert}>
-                            Reserve
-                    </button>
+
+                    <div className="description">
+                        <p>{description}</p>
+                    </div>
                 </div>
 
+            <div className="callout-info-box-container">
+                <div className="spot-reserve-box-price-and-reviews">
+                    {/* <p> CalloutInfoBox Down Here </p> */}
+                    <p className="smol-price">${price} night</p>
+                    <div className="rating-review-container">
+                    <p className="smol-avgRating">
+                        <i className="fas fa-star"></i>
+                        {avgStarRatingItem ? <>{avgStarRatingItem.toFixed(2)}<span className="interpunct-adjust">·</span></> : "New"}
+                    </p>
+                        {numReviewsItem > 0 && (
+                            <p className="smol-reviewItem">
+                            {numReviewsItem} {numReviewsItem === 1 ? "Review" : "Reviews"}
+                            </p>
+                        )}
+                    </div>
+                </div>
+                <div className="reserve-button">
+                    <button onClick={reserveButtonAlert}>Reserve</button>
+                </div>
+            </div>
+</div>  
+
                 <div className = "spot-details-review-section">
-                    <h1> Spot Detail Reviews goes here</h1>
                     <SpotDetailReviews spotId={spotId} />
                 </div>
 

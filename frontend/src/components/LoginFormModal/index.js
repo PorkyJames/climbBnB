@@ -80,7 +80,6 @@ function LoginFormModal() {
         </div>
         </label>
     
-    <div className="buttons-container">
       <div className="login-button">
         <button type="submit" disabled={!isUsernameValid || !isPasswordValid}>
           Log In
@@ -88,10 +87,9 @@ function LoginFormModal() {
       </div>
         <div className="demo-user-button">
           <button type="button" onClick={handleDemoLogin}>
-            Log in as Demo User
+            Demo User
           </button>
         </div>
-    </div>
       </form>
     </>
   );

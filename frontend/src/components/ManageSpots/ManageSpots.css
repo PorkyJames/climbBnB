@@ -1,0 +1,77 @@
+.entire-manage-spot-page{
+  width: calc(100% - 10%);
+  margin: 0 5%;
+}
+
+.spot-list-manage {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: flex-start;
+    
+}
+
+.buttons-container {
+    display: flex;
+    width: 100%;
+    flex-direction: row;
+    justify-content: flex-start;
+    padding-top: 10px;
+}
+
+.spot-container {
+    flex: 0 0 calc(25% - 20px);
+    max-width: calc(25% - 20px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+
+/* ! Media Queries */
+@media (max-width: 1200px) {
+    .spot-container {
+      flex: 0 0 calc(33.3333% - 20px);
+      max-width: calc(33.3333% - 20px);
+    }
+}
+
+@media (max-width: 900px) {
+    .spot-container {
+      flex: 0 0 calc(50% - 20px);
+      max-width: calc(50% - 20px);
+    }
+}
+
+@media (max-width: 600px) {
+    .spot-container {
+      flex: 0 0 100%;
+      max-width: 100%;
+    }
+}
+
+.new-spot-button button{
+    border: 1px solid black;
+    box-shadow: 2px 2px 2px black;
+    background-color: gray;
+    color: white;
+    cursor: pointer;
+}
+
+.update-spot-button button{
+  border: 1px solid black;
+  box-shadow: 2px 2px 2px black;
+  background-color: gray;
+  color: white;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+.delete-spot-button button{
+  border: 1px solid black;
+  box-shadow: 2px 2px 2px black;
+  background-color: gray;
+  color: white;
+  cursor: pointer;
+}

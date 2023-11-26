@@ -9,7 +9,7 @@ import { loadSpotDetailsThunk } from "../../store/spot";
 import PostReviewModal from '../PostReviewModal'
 import DeleteReviewModal from "../DeleteReviewModal";
 
-import OpenModalButton from "../OpenModalButton";
+import "./SpotDetailReviews.css"
 
 const SpotDetailReviews = ({spotId}) => {
 
@@ -101,7 +101,9 @@ const SpotDetailReviews = ({spotId}) => {
         }
     
         return (
-            <button onClick={openReviewModal}>Post Your Review</button>
+            <div className="post-review-button">
+                <button onClick={openReviewModal}>Post Your Review</button>
+            </div>
         );
     };
     
@@ -129,64 +131,76 @@ const SpotDetailReviews = ({spotId}) => {
     const reviewCount = spotReviews ? spotReviews.length : 0;
 
     return (
-        <div>
-            {!isLoading && (
-                <>
-                    <div className="spot-detail-reviews">
-                        <div className="star-rating">
-                            {renderPostReviewButton()}
-                            {showReviewModal && (
-                                <PostReviewModal onClose={closeReviewModal} onSubmit={handleSubmitReview} />
-                                )}
-                            {avgRating === "New" ? (      
-                                    <p>
-                                        <i className="fas fa-star"></i>
-                                        New
-                                    </p>
-                                ) : (
-                                    <p>
-                                    <i className="fas fa-star"></i>
-                                    {avgRating}
-                                    {reviewCount > 0 && <span className="centered-dot"> · </span>}
-                                </p>
-                            )}
-                        </div>
-                        {reviewCount > 0 && (
-                            <div className="review-count">
-                                <p>{reviewCount} {reviewCount === 1 ? "Review" : "Reviews"}</p>
-                            </div>
+<div>
+    {!isLoading && (
+        <>
+            <div className="spot-detail-reviews">
+                <div className="star-rating">
+                    {showReviewModal && (
+                        <PostReviewModal onClose={closeReviewModal} onSubmit={handleSubmitReview} />
                         )}
-                        <ul className="review-list">
-                            {sortedReviews && sortedReviews.length > 0 ? (
-                                sortedReviews.map((review, index) => (
-                                    <li key={review.id}>
-                                        <div className="review-header">
-                                            {review.User && (
-                                                <p>{review.User.firstName} {review.User.lastName}</p>
-                                            )}
-                                            <p>{new Date(review.createdAt).toLocaleString('en-US', { month: 'long', year: 'numeric' })}</p>
-                                        </div>
-                                        <p className="review-comment">{review.review}</p>
-                                        {sessionUser && review && review.User && review.User.id === sessionUser.id && (
-                                            <button onClick={() => openDeleteModal(review.id)}>Delete</button>
-                                        )}
-                                    </li>
-                                ))
-                            ) : (
-                                <p className="no-reviews-text">Be the first to post a review!</p>
-                            )}
-                        </ul>
-                    </div>
-                    {showDeleteModal && (
-                        <DeleteReviewModal
-                            reviewId={reviewToDelete}
-                            onDelete={handleDeleteReview}
-                            onClose={closeDeleteModal}
-                        />
+                    {avgRating === "New" ? (      
+                        <p>
+                                <i className="fas fa-star"></i>
+                                New
+                            </p>
+                        ) : (
+                            <p>
+                            <div className="spot-detail-review-header">
+                                <i className="fas fa-star"></i>
+                                {avgRating}
+                                {reviewCount > 0 && <span className="centered-dot"> · </span>}
+                                {reviewCount > 0 && (
+                                    <div className="review-count">
+                                        <p>{reviewCount} {reviewCount === 1 ? "Review" : "Reviews"}</p>
+                                    </div>
+                                )}
+                            </div>
+                        </p>
                     )}
-                </>
-            )}
-        </div>
+                </div>
+                    {renderPostReviewButton()}
+                <ul className="review-list">
+                    {sortedReviews && sortedReviews.length > 0 ? (
+                        sortedReviews.map((review, index) => (
+                            <li key={review.id}>
+                                <div className="review-header">
+                                    {review.User && (
+                                    <div className="reviewer">
+                                        <p>{review.User.firstName} {review.User.lastName}</p>
+                                    </div>
+                                    )}
+                                    <div className="review-date">
+                                        <p>{new Date(review.createdAt).toLocaleString('en-US', { month: 'long', year: 'numeric' })}</p>
+                                    </div>
+                                </div>
+                                <div className="review-comment">
+                                    <p>{review.review}</p>
+                                </div>
+                                {sessionUser && review && review.User && review.User.id === sessionUser.id && (
+                                    <div className="delete-review-button">
+                                        <button onClick={() => openDeleteModal(review.id)}>Delete</button>
+                                    </div>
+                                )}
+                            </li>
+                        ))
+                    ) : (
+                        <p className="no-reviews-text">Be the first to post a review!</p>
+                    )}
+                </ul>
+            </div>
+            <div className="review-button">
+                {showDeleteModal && (
+                    <DeleteReviewModal
+                    reviewId={reviewToDelete}
+                    onDelete={handleDeleteReview}
+                    onClose={closeDeleteModal}
+                    />
+                    )}
+            </div>
+        </>
+    )}
+</div>
     );
 };
 

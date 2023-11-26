@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { updateUserSpotThunk } from "../../store/spot";
 import { useHistory, useParams } from "react-router-dom";
 
+import "./UpdateUserSpotForm.css"
 
 const UpdateUserSpotForm = () => {
   const dispatch = useDispatch();
@@ -144,47 +145,58 @@ const UpdateUserSpotForm = () => {
     <>
     <form onSubmit={handleSubmit}>
         <div>
-            <h1>Update your Existing Spot</h1>
+            <h1>Update your Spot</h1>
         </div>
 
     {/*//! Section 1 */}
     <div className="section-one-create-form">
+      <div className="section-one-text">
         <h2>Where's your place located?</h2>
         <p>Guests will only get your exact address once they booked a reservation.</p>
+      </div>
         {/* //? Country Input */}
-        <label htmlFor="country">Country</label>
-        <input 
-            type="text"
-            id="country"
-            placeholder="Country"
-            value={country}
-            onChange={(e) => setCountry(e.target.value)}
-        />
-        <div className="error-message">{countryError}</div>
+        <div className="country-label">
+          <label htmlFor="country">Country</label>
+          <div className="error-message">{countryError}</div>
+        </div>
+        <div className="country-input">
+          <input 
+              type="text"
+              id="country"
+              placeholder="Country"
+              value={country}
+              onChange={(e) => setCountry(e.target.value)}
+          />
+        </div>
 
         {/* //? Street Address Input */}
-        <label htmlFor="streetAddress">Street Address</label>
-        <input 
-            type="text"
-            id="address"
-            placeholder="Street Address"
-            value={address}
-            onChange={(e) => setAddress(e.target.value)}
-        />
-        <div className="error-message">{addressError}</div>
+        <div className="city-state-container">
+          <div className="city-input">
+            <label htmlFor="city">City</label>
+            <div className="error-message">{cityError}</div>
+            <input 
+              type="text"
+              id="city"
+              placeholder="City"
+              value={city}
+              onChange={(e) => setCity(e.target.value)}
+            />
+          </div>
 
-        {/* //? City Input */}
-        <label htmlFor="city">City</label>
-        <input 
-            type="text"
-            id="city"
-            placeholder="City"
-            value={city}
-            onChange={(e) => setCity(e.target.value)}
-        />
-        <div className="error-message">{cityError}</div>
+          <div className="state-input">
+            <label htmlFor="state">State</label>
+            <div className="error-message">{stateError}</div>
+            <input 
+              type="text"
+              id="state"
+              placeholder="State"
+              value={state}
+              onChange={(e) => setState(e.target.value)}
+            />
+          </div>
+        </div>
 
-        {/* //? State Input */}
+        {/* //? State Input
         <label htmlFor="state">State</label>
         <input 
             type="text"
@@ -193,82 +205,100 @@ const UpdateUserSpotForm = () => {
             value={state}
             onChange={(e) => setState(e.target.value)}
         />
-        <div className="error-message">{stateError}</div>
+        <div className="error-message">{stateError}</div> */}
 
       {/* //? Lat Input */}
-      <label htmlFor="latitude">Latitude</label>
-          <input 
-              type="text"
-              id="lat"
-              placeholder="Latitude"
-              value={lat}
-              onChange={(e) => setLat(e.target.value)}
-          />
-          {/* <div className="error-message">{stateError}</div> */}
-
-
-        {/* //? Lng Input */}
-        <label htmlFor="longitude">Longitude</label>
-        <input 
-            type="text"
-            id="lng"
-            placeholder="Longitude"
-            value={lng}
-            onChange={(e) => setLng(e.target.value)}
-        />
-        {/* <div className="error-message">{stateError}</div> */}
+        <div className="lat-lng-container">
+            <div className="lat-input">
+              <label htmlFor="latitude">Latitude</label>
+              <input 
+                type="text"
+                id="lat"
+                placeholder="Latitude"
+                value={lat}
+                onChange={(e) => setLat(e.target.value)}
+              />
+            </div>
+            <div className="lng-input">
+              <label htmlFor="longitude">Longitude</label>
+              <input 
+                type="text"
+                id="lng"
+                placeholder="Longitude"
+                value={lng}
+                onChange={(e) => setLng(e.target.value)}
+              />
+            </div>
+          </div>
 
     </div>
+    {"_____________________________________________________________________________________"}
 
     {/* //! Section Two */}
     <div className="section-two-create-form">
         <h2>Describe your place to guests</h2>
-        <p>Mention the best features of your space, any special amenities like fast wifi or parking, and what you love about the neighborhood.</p>
-        <label htmlFor="description">Description</label>
-        <textarea
-            id="description"
-            placeholder="Please write at least 30 characters"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-        />
+        <p>Mention the best features of your space, any special amenities 
+          like fast wifi or parking, and what you love about the neighborhood.</p>
+      <div className="description-container">
+        <div className="description-text-area">
+          <textarea
+              id="description"
+              placeholder="Please write at least 30 characters"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+          />
         <div className="error-message">{descriptionError}</div>
+        </div>
+      </div>
     </div>
 
-    {/* //! Section Three */}
-    <div className="section-three-create-form">
-        <h2>Create a title for your spot</h2>
-        <p>Catch guests' attention with a spot title that highlights what makes your place special.</p>
-        <label htmlFor="spotTitle">Name of your Spot</label>
-        <input 
-            type="text"
-            id="name"
-            placeholder="Name of your spot"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-        />
-        <div className="error-message">{nameError}</div>
-    </div>
+    {"_____________________________________________________________________________________"}
 
-    {/* //! Section Four */}
-    <div className="section-four-create-form">
+      {/* //! Section Three */}
+      <div className="section-three-create-form">
+          <h2>Create a title for your spot</h2>
+          <p>Catch guests' attention with a spot title that highlights what makes your place special.</p>
+          <div className="spot-name-input">
+            <input 
+                type="text"
+                id="name"
+                placeholder="Name of your spot"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+            />
+          </div>
+          <div className="error-message">{nameError}</div>
+      </div>
+
+    
+      {"_____________________________________________________________________________________"}
+
+      {/* //! Section Four */}
+      <div className="section-four-create-form">
         <h2>Set a base price for your spot</h2>
         <p>Competitive pricing can help your listing stand out and rank higher in search results.</p>
-        <label htmlFor="spotPrice">Price</label>
-        <input
+        <div className="price-container">
+          <span className="dolla-dolla-sign">$</span>
+          <input
             type="text"
             id="spotPrice"
+            className="price-input"
             placeholder="Price per night (USD)"
             value={price}
             onChange={(e) => setPrice(e.target.value)}
-        />
+          />
+        </div>
         <div className="error-message">{priceError}</div>
-    </div>
+      </div>
+
 
     {/* //! Section Five */}
     <div className="section-five-create-form">
+      <div className="section-five-header-text">
         <h2>Liven up your spot with photos</h2>
         <p>Submit a link to at least one photo to publish your spot.</p>
-        <label htmlFor="previewImageURL">Preview Image URL:</label>
+      </div>
+      <div className="preview-img-class">
         <input
             type="text"
             id="previewImageURL"
@@ -277,10 +307,10 @@ const UpdateUserSpotForm = () => {
             value={previewImageURL}
             onChange={(e) => setPreviewImageURL(e.target.value)}
         />
+      </div>
         <div className="error-message">{previewImageURLError}</div>
 
-
-        <label htmlFor="imageURL1">Image URL 1:</label>
+    <div className="img-url-1-class">
         <input
             type="text"
             id="imageURL1"
@@ -289,7 +319,9 @@ const UpdateUserSpotForm = () => {
             value={imageURL1}
             onChange={(e) => setImageURL1(e.target.value)}
         />
-        <label htmlFor="imageURL2">Image URL 2:</label>
+    </div>
+
+    <div className="img-url-2-class">
         <input
             type="text"
             id="imageURL2"
@@ -298,7 +330,9 @@ const UpdateUserSpotForm = () => {
             value={imageURL2}
             onChange={(e) => setImageURL2(e.target.value)}
         />
-        <label htmlFor="imageURL3">Image URL 3:</label>
+    </div>
+
+    <div className="img-url-3-class">
         <input
             type="text"
             id="imageURL3"
@@ -307,7 +341,9 @@ const UpdateUserSpotForm = () => {
             value={imageURL3}
             onChange={(e) => setImageURL3(e.target.value)}
         />
-        <label htmlFor="imageURL4">Image URL 4:</label>
+    </div>
+
+    <div className="img-url-4-class">
         <input
             type="text"
             id="imageURL4"
@@ -316,11 +352,15 @@ const UpdateUserSpotForm = () => {
             value={imageURL4}
             onChange={(e) => setImageURL4(e.target.value)}
         />
-
+    </div>
+    
+    {"_____________________________________________________________________________________"}
+        
         {/* //! Submit Button */}
-        <div className="update-form-submit-button">
+        <div className="create-form-submit-button">
             <button>Update Spot</button>
         </div>
+
     </div>
     </form>
     </>

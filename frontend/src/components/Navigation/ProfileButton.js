@@ -64,9 +64,11 @@ function ProfileButton({ user }) {
             <li>{user.firstName} {user.lastName}</li> */}
             <li>{user.email}</li>
             {userLoggedIn && (
-            <li>
-              <NavLink className ="manage-spots-button" to="/spots/current">Manage Spots</NavLink>
-            </li>
+            <div className="manage-spots-link-container">
+              <div className="push-link-out">
+                <NavLink className ="manage-spots-button" to="/spots/current">Manage Spots</NavLink>
+              </div>
+            </div>
             )}
             <div className="log-out-button">
               <li>
@@ -78,16 +80,16 @@ function ProfileButton({ user }) {
           <div className="open-button-logged-out">
             <li>
               <OpenModalButton
-                buttonText="Log In"
+                buttonText="Sign Up"
                 onButtonClick={closeMenu}
-                modalComponent={<LoginFormModal />}
+                modalComponent={<SignupFormModal />}
               />
             </li>
             <li>
               <OpenModalButton
-                buttonText="Sign Up"
+                buttonText="Log In"
                 onButtonClick={closeMenu}
-                modalComponent={<SignupFormModal />}
+                modalComponent={<LoginFormModal />}
               />
             </li>
           </div>

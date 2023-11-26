@@ -7,6 +7,8 @@ import DeleteSpotModal from "../DeleteSpotModal";
 
 import TiledSpot from "../TiledSpot";
 
+import "./ManageSpots.css"
+
 const ManageSpots = () => {
 
 const dispatch = useDispatch();
@@ -49,34 +51,53 @@ const handleModalConfirm = () => {
   setShowDeleteModal(false);
 };
 
+const handleNewSpotClick = () => {
+  history.push('/spots/new')
+}
+
     return (
         <div>
         {!isLoading &&
-        <>
-        <h1> Manage Spots</h1>
-        {spotsCreatedByUser.length > 0 ? (
-            <ul>
-              {spotsCreatedByUser.map((spot) => (
-                <li key={spot.id}>
-                  <TiledSpot spot={spot} />
-                  <button onClick={() => history.push(`/spots/${spot.id}/edit`)}>Update</button>
-                  <button onClick={() => handleDelete(spot.id)}>Delete</button>
-                </li>
-              ))}
-            </ul>
+        <div className="entire-manage-spot-page">
+      
+        <h1>Manage Spots</h1>
+        <div className="new-spot-button">
+          <button onClick={handleNewSpotClick}>Create a New Spot</button>
+        </div>
+
+        <div className="spot-list-manage">
+          {spotsCreatedByUser.length > 0 ? (
+            spotsCreatedByUser.map((spot) => (
+              <div className="spot-container" key={spot.id}>
+                <TiledSpot spot={spot} />
+                <div className="buttons-container">
+                  <div className="update-spot-button">
+                    <button onClick={() => history.push(`/spots/${spot.id}/edit`)}>Update</button>
+                  </div>
+                  <div className="delete-spot-button">
+                    <button onClick={() => handleDelete(spot.id)}>Delete</button>
+                  </div>
+                </div>
+              </div>
+            ))
           ) : (
-            <p>
-              No spots posted yet.
-              <NavLink to="/spots/new">Create a New Spot</NavLink>
-            </p>
+            <div className="no-spots-container">
+              {/* <div className="new-spot-button">
+                <button onClick={handleNewSpotClick}>Create a New Spot</button>
+              </div> */}
+              <div className="no-spots-text">
+                <p>No spots posted yet.</p>
+              </div>
+            </div>
           )}
+        </div>
           {showDeleteModal && (
           <DeleteSpotModal
             onCancel={() => setShowDeleteModal(false)}  
             onDelete={handleModalConfirm}              
           />
-)}
-        </>
+          )}
+        </div>
         }
         </div>
     )

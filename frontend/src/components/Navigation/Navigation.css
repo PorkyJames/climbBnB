@@ -10,14 +10,13 @@ body {
     justify-content: space-between;
     align-items: center;
     width: auto;
-    padding: 15px 14px;
     position: relative;
     overflow: visible;
 }
 
 /* ! Just the AirBnb logo and the "climbBnb" itself */
 .logo-container {
-    font-size: 30px;
+    font-size: 20px;
     text-decoration: none;
     justify-content: center;
     align-items: center;
@@ -25,7 +24,7 @@ body {
 
 /* !Logo itself */
 .logo-itself {
-    font-size: 50px;
+    font-size: 30px;
     text-decoration: none;
     color: lightcoral;
     margin-right: 10px;
@@ -45,37 +44,55 @@ body {
     align-items: center;
     padding: 10px;
     border-radius: 20px;
-    width: 90px;
+    width: 65px;
     border: none;
     cursor: pointer;
+    height: 35px;
 }
 
 /* ! The dropdown menu from my profile button */
 .profile-dropdown {
     position: absolute; 
     list-style-type: none;
-    top: 70%;
-    right: 15;
+    top: 75%;
+    right: 1;
     z-index: 10; 
 }
 
 .open-button-logged-in {
     padding: 10px;
+    margin-top: 5px;
     border-radius: 5px;
     background-color: #f2f2f2;
-    border: 1px solid #ccc;
+    border: 2px solid black;
+}
+
+.open-button-logged-in button{
+    cursor: pointer;
+    font-weight: bold;
+    font-size: .7em;
 }
 
 .open-button-logged-out {
     padding: 10px;
+    margin-top: 5px;
     border-radius: 5px;
     background-color: #f2f2f2;
-    border: 1px solid #ccc;
+    border: 2px solid black;
+}
+
+.open-button-logged-out button {
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: .9em;
+    border-radius: 5px;
+    margin-right: 40px;
 }
 
 /* ! User Icons as well as the collapsed Icon */
 .user-button-icon {
-    font-size: 28px;
+    font-size: 22px;
     display: flex;
 }
 
@@ -84,7 +101,7 @@ body {
 }
 
 .user-button-icon .fa-bars {
-    font-size: 28px; 
+    font-size: 22px; 
     margin-left: 5px;
 }
 
@@ -98,7 +115,7 @@ body {
 .create-a-spot-button {
     margin-right: 10px; 
     text-decoration: none;
-    font-size: 20px;
+    font-size: 15px;
     color: rgb(26, 119, 150);
     font-weight: bold
 }
@@ -113,4 +130,26 @@ body {
     height: 1.5rem;
     margin-top: 5px;
     border-radius: 20px;
+    background-color: gray;
+    color: white;
+}
+
+.manage-spots-link-container{
+    border-top: 2px solid #000; 
+    border-bottom: 2px solid #000; 
+    margin-top: 5px;
+    margin-right: 5px;
+    margin-bottom: 5px;
+}
+
+.push-link-out{
+    margin-top: 5px;
+    margin-right: 5px;
+    margin-bottom: 5px;
+}
+
+.manage-spots-button{
+    font-weight: bold;
+    text-decoration: none;
+    color: black
 }
