@@ -53,12 +53,21 @@ form {
     background-color: aliceblue;
 }
 
+.country-input-container,
+.streetAddress-container,
+.city-state-container {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+}
+
 .error-message {
     color: red;
     font-size: 0.8em; 
     margin-top: 5px; 
     font-size: 1em;
     margin-bottom: 5px;
+    margin-left: 8px;
 }
 
 .lat-lng-container {
@@ -169,3 +178,7 @@ form {
     font-size: 1em;
 }
 
+.test-border{
+    border-bottom: 2px solid black;
+    margin-top: 15px;
+}

@@ -183,6 +183,8 @@ const UpdateUserSpotForm = () => {
             />
           </div>
 
+          <span className="input-comma">,</span>
+
           <div className="state-input">
             <label htmlFor="state">State</label>
             <div className="error-message">{stateError}</div>
@@ -219,6 +221,9 @@ const UpdateUserSpotForm = () => {
                 onChange={(e) => setLat(e.target.value)}
               />
             </div>
+
+            <span className="input-comma">,</span>
+
             <div className="lng-input">
               <label htmlFor="longitude">Longitude</label>
               <input 
@@ -232,7 +237,8 @@ const UpdateUserSpotForm = () => {
           </div>
 
     </div>
-    {"_____________________________________________________________________________________"}
+
+    <div className="test-border"></div>
 
     {/* //! Section Two */}
     <div className="section-two-create-form">
@@ -252,7 +258,7 @@ const UpdateUserSpotForm = () => {
       </div>
     </div>
 
-    {"_____________________________________________________________________________________"}
+    <div className="test-border"></div>
 
       {/* //! Section Three */}
       <div className="section-three-create-form">
@@ -271,7 +277,7 @@ const UpdateUserSpotForm = () => {
       </div>
 
     
-      {"_____________________________________________________________________________________"}
+      <div className="test-border"></div>
 
       {/* //! Section Four */}
       <div className="section-four-create-form">
@@ -354,7 +360,7 @@ const UpdateUserSpotForm = () => {
         />
     </div>
     
-    {"_____________________________________________________________________________________"}
+    <div className="test-border"></div>
         
         {/* //! Submit Button */}
         <div className="create-form-submit-button">

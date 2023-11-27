@@ -232,12 +232,14 @@ useEffect(() => {
                 they booked a reservation.</p>
             </div>
               {/* //? Country Input */}
+            <div className="country-input-container">
               <div className="country-label">
                 <label htmlFor="country">
                   Country 
-                  </label>
-                <div className="error-message">{countryError}</div>
+                </label>
               </div>
+                <span className="error-message">{countryError}</span>
+            </div>
               <div className="country-input">
                 <input 
                     type="text"
@@ -249,9 +251,11 @@ useEffect(() => {
               </div>
 
               {/* //? Street Address Input */}
-              <div className="streetAddress-label">
-                <label htmlFor="streetAddress">Street Address</label>
-                <div className="error-message">{addressError}</div>
+              <div className="streetAddress-container">
+                <div className="streetAddress-label">
+                  <label htmlFor="streetAddress">Street Address</label>
+                </div>
+                <span className="error-message">{addressError}</span>
               </div>
               <div className="streetAddress-input">
                 <input 
@@ -267,7 +271,7 @@ useEffect(() => {
               <div className="city-state-container">
                 <div className="city-input">
                   <label htmlFor="city">City</label>
-                  <div className="error-message">{cityError}</div>
+                  <span className="error-message">{cityError}</span>
                   <input 
                     type="text"
                     id="city"
@@ -281,7 +285,7 @@ useEffect(() => {
     
                 <div className="state-input">
                   <label htmlFor="state">State</label>
-                  <div className="error-message">{stateError}</div>
+                  <span className="error-message">{stateError}</span>
                   <input 
                     type="text"
                     id="state"
@@ -319,7 +323,7 @@ useEffect(() => {
               </div>
           </div>
 
-          {"_____________________________________________________________________________________"}
+          <div className="test-border"></div>
 
           {/* //! Section Two */}
           <div className="section-two-create-form">
@@ -339,7 +343,7 @@ useEffect(() => {
             </div>
           </div>
 
-          {"_____________________________________________________________________________________"}
+          <div className="test-border"></div>
 
           {/* //! Section Three */}
           <div className="section-three-create-form">
@@ -357,7 +361,7 @@ useEffect(() => {
               <div className="error-message">{nameError}</div>
           </div>
 
-          {"_____________________________________________________________________________________"}
+          <div className="test-border"></div>
 
           {/* //! Section Four */}
           <div className="section-four-create-form">
@@ -377,7 +381,7 @@ useEffect(() => {
             <div className="error-message">{priceError}</div>
           </div>
 
-          {"_____________________________________________________________________________________"}
+          <div className="test-border"></div>
 
           {/* //! Section Five */}
           <div className="section-five-create-form">
@@ -450,7 +454,7 @@ useEffect(() => {
               <div className="error-message-img">{imageURL4Error}</div>
             </div>
 
-          {"_____________________________________________________________________________________"}
+            <div className="test-border"></div>
           
               {/* //! Submit Button */}
               <div className="create-form-submit-button">

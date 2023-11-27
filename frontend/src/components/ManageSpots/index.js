@@ -61,9 +61,9 @@ const handleNewSpotClick = () => {
         <div className="entire-manage-spot-page">
       
         <h1>Manage Spots</h1>
-        <div className="new-spot-button">
+        {/* <div className="new-spot-button">
           <button onClick={handleNewSpotClick}>Create a New Spot</button>
-        </div>
+        </div> */}
 
         <div className="spot-list-manage">
           {spotsCreatedByUser.length > 0 ? (
@@ -82,9 +82,9 @@ const handleNewSpotClick = () => {
             ))
           ) : (
             <div className="no-spots-container">
-              {/* <div className="new-spot-button">
+              <div className="new-spot-button">
                 <button onClick={handleNewSpotClick}>Create a New Spot</button>
-              </div> */}
+              </div>
               <div className="no-spots-text">
                 <p>No spots posted yet.</p>
               </div>

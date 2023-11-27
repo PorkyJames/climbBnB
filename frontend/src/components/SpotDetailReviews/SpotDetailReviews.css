@@ -22,6 +22,7 @@
     color: white;
     border: solid 2px black;
     box-shadow: 2px 2px 2px black; 
+    cursor: pointer;
 }
 
 .review-list{
@@ -50,4 +51,5 @@
     color: white;
     border: solid 2px black;
     box-shadow: 1px 1px 1px black; 
+    cursor: pointer;
 }

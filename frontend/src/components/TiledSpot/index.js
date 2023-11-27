@@ -45,7 +45,7 @@ const TiledSpot = ({ spot }) => {
                         </div>
                     </div>
 
-                    <div className="spot-price" title={spot.name}>${parseInt(spot.price).toFixed(2)} / session</div>
+                    <div className="spot-price" title={spot.name}>${parseInt(spot.price).toFixed(2)} night </div>
                 </div>
             </Link>
         </>

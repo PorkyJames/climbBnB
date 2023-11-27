@@ -64,10 +64,10 @@ const SpotDetailReviews = ({spotId}) => {
         });
     };
 
-    const handleDeleteReview = (reviewId) => {
-        dispatch(deleteSpotReviewThunk(spotId, reviewId));
-        dispatch(loadSpotReviewsThunk(spotId));
-        dispatch(loadSpotDetailsThunk(spotId))
+    const handleDeleteReview = async (reviewId) => {
+        await dispatch(deleteSpotReviewThunk(spotId, reviewId));
+        await dispatch(loadSpotReviewsThunk(spotId));
+        await dispatch(loadSpotDetailsThunk(spotId))
         closeDeleteModal();
     };
 
