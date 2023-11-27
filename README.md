@@ -4,10 +4,16 @@ Welcome to climbBnb!
 This is a market place where you can list any type of climbing spots that you own and rent them out to others.
 
 ## Features
+Users can:
+- Sign Up
+- Log In
+- Create a Spot
+- Update a Spot
+- Delete a Spot
+- Post a Review
+- Delete a Review
 
-Users can sign up, log in, create and update spots, and post reviews of a spot.
-
-<Img> here
+![Alt text](<images/ReadMe img.jpg>)
 
 ## Technologies Used
 Backend
