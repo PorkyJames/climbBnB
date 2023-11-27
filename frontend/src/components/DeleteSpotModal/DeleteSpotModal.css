@@ -72,11 +72,14 @@
 .button-container .delete-button {
     background-color: #ff6868; 
     color: white; 
+    border: 2px solid black;
+    box-shadow: 2px 2px 2px black;
 }
 
 .button-container .cancel-button {
-    background-color: #c4c4c4; 
-    color: black; 
+    background-color: darkgray; 
+    color: white; 
+    border: 2px solid black;
+    box-shadow: 2px 2px 2px black;
 }
-
 

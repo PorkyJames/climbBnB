@@ -49,6 +49,7 @@
     background-color: red;
     color: white;
     box-shadow: 1px solid black;
+    cursor: pointer;
 }
 
 .submit-button button:disabled {

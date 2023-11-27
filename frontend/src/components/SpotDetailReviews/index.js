@@ -167,7 +167,7 @@ const SpotDetailReviews = ({spotId}) => {
                                 <div className="review-header">
                                     {review.User && (
                                     <div className="reviewer">
-                                        <p>{review.User.firstName} {review.User.lastName}</p>
+                                        <p>{review.User.firstName}</p>
                                     </div>
                                     )}
                                     <div className="review-date">

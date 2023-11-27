@@ -81,12 +81,21 @@
     padding: 10px 0; 
     background-color: #ff6868; 
     color: white; 
-    border: none; 
     border-radius: 4px; 
     font-size: 1em; 
     margin: 10px auto; 
+    border: 2px solid black;
+    box-shadow: 2px 2px 2px black;
     display: block; 
     cursor: pointer; 
+}
+
+.submit-review-button button:disabled {
+    background-color: lightgray;
+    color: white;
+    cursor: not-allowed; 
+    box-shadow: none;
+
 }
 
 .starRating-and-submit-container {
