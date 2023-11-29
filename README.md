@@ -2,6 +2,7 @@
 
 Welcome to climbBnb! 
 This is a market place where you can list any type of climbing spots that you own and rent them out to others.
+![Alt text](<images/ReadMe img.jpg>)
 
 ## Features
 Users can:
@@ -13,7 +14,6 @@ Users can:
 - Post a Review
 - Delete a Review
 
-![Alt text](<images/ReadMe img.jpg>)
 
 ## Technologies Used
 Backend
