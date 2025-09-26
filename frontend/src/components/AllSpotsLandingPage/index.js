@@ -36,9 +36,10 @@ const AllSpotsLandingPage = () => {
           <div className="landing-page">
             {allSpots.map((spot) => {
               return (
-                <Link to={`spot/${spot.id}`} key={spot.id} className="each-spot-tile-details">
-                  <TiledSpot spot={spot} />
-                </Link>
+                // <Link to={`spot/${spot.id}`} key={spot.id} className="each-spot-tile-details">
+                  
+                // </Link>
+                <TiledSpot spot={spot} />
               );
             })}
           </div>

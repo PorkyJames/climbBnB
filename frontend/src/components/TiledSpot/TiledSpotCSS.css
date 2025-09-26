@@ -1,68 +1,123 @@
 .each-spot-tile-details {
-  width: 100%;
-  margin-top: 15px;
-  margin-right: 15px; 
-  margin-bottom: 20px; 
-  box-sizing: border-box;
-  float: left; 
-  clear: none;
+  display: block;
+  background-color: white;
+  border-radius: 12px;
+  overflow: hidden;
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.each-spot-tile-details:hover {
+  transform: scale(1.015);
 }
 
 .image-container {
   width: 99%;
-  height: 350px;
+  height: 100%;
   overflow: hidden; 
   margin-bottom: 10px; 
-  border: solid 3px black;
-  border-radius: 10px;
+  /* border: solid 3px black; */
+  border-radius: 20px;
 }
+
 
 .spot-info-container {
   display: flex;
   justify-content: space-between;
   align-items: center; 
+  margin-bottom: 6px
+}
+
+.spot-context {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 14px;
+  color: #222;
 }
   
 .spot-thumbnail {
   width: 100%;
   height: 100%;
-  object-fit: cover; 
+  object-fit: cover;
+  display: block;
 }
 
 .spot-starRating {
   display: flex; 
   align-items: center; 
   justify-content: flex-end; 
-  margin: 10px;
+  margin: 0;
+  font-size: 14px;
+  color: #222;
 }
-.spot-name,
+
+.spot-starRating i {
+  color: #ff385c;
+  margin-right: 4px;
+}
+
+/* Text Adjustments */
+.spot-city-title {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.spot-city-state {
+  font-size: 14px;
+  font-weight: 400;
+  color: #717171;
+}
+
+.spot-price {
+  font-size: 15px;
+  font-weight: 500;
+  color: #222;
+  margin-top: 5px;
+}
+
+.spot-price::after {
+  font-weight: 400;
+  font-size: 14px;
+  color: #717171;
+  margin-left: 2px;
+}
+
+/* .spot-city-title,
 .spot-city-state,
 .spot-starRating,
 .spot-price {
-  font-size: 1.2em;
+  font-size: 1em;
   font-weight: bold;
+  font-family: Airbnb Cereal VF, Circular, -apple-system, BlinkMacSystemFont, Roboto, Helvetica Neue, sans-serif;
+} */
+
+.spot-context {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 14px;
+  color: #222;
 }
 
 .each-spot-tile-details:nth-child(4n) {
   margin-right: 0; 
 }
 
-@media screen and (max-width: 1000px) {
-  .each-spot-tile-details {
-    width: calc(50% - 10 px); 
-}
-  
-  .each-spot-tile-details:nth-child(2n) {
-    margin-right: 0; 
-    }
-}
-
 @media screen and (max-width: 768px) {
-  .each-spot-tile-details {
-    width: calc(100% - 50px); 
-  }
+  /* .each-spot-tile-details {
+    width: 100%; 
+  } */
 
   .image-container {
     height: 200px; 
+    width: 100%;
   }
+}
+
+.image-container {
+  aspect-ratio: 4 / 3;
+  height: auto;
+  overflow: hidden;
+  border-radius: 12px;
 }

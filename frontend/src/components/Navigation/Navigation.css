@@ -12,6 +12,8 @@ body {
     width: auto;
     position: relative;
     overflow: visible;
+    margin-left: 25px;
+    margin-right: 25px;
 }
 
 /* ! Just the AirBnb logo and the "climbBnb" itself */
@@ -22,18 +24,23 @@ body {
     align-items: center;
 }
 
+.logo-container a.active {
+    text-decoration: none;
+}
+
 /* !Logo itself */
 .logo-itself {
     font-size: 30px;
     text-decoration: none;
-    color: lightcoral;
+    color: #FF385C;
     margin-right: 10px;
 }
 
 .logo-text {
     text-decoration: none;
-    color: lightcoral;
+    color: #FF385C;
     font-weight: bold;
+    text-decoration: none;
 }
 
 /* ! Profile button from ProfileButton Component*/
@@ -48,7 +55,15 @@ body {
     border: none;
     cursor: pointer;
     height: 35px;
+    background-color: #eaeaea; 
+    transition: background-color 0.2s ease, box-shadow 0.2s ease;
 }
+
+.user-profile-button:hover {
+    background-color: #dddddd; 
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06); 
+}
+
 
 /* ! The dropdown menu from my profile button */
 .profile-dropdown {
