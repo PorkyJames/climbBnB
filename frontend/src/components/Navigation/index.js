@@ -40,35 +40,35 @@ function Navigation({ isLoaded }) {
   }
 
   return (
-  <header className="header">
-    <div className="logo-container">
-        <NavLink to="/">
-        <span className="logo-itself">
-          <i class="fa-solid fa-mountain"></i><span className="logo-text">climbBnb</span>
-        </span>
-        </NavLink>
-    </div>
-    <ul>
-      {/* <li>
-        <NavLink exact to="/">
-          Home
-        </NavLink>
-      </li> */}
-      <div className="user-and-nav">
-        {userLoggedIn && createASpotButton()}
-        {/* {userLoggedIn && (
-          <li>
-            <NavLink className ="manage-spots-button" to="/spots/current">Manage Spots</NavLink>
-          </li>
-        )} */}
-        {isLoaded && (
-          <span className="profile-button">
-            <ProfileButton user={sessionUser} />
+    <header className="header">
+      <div className="logo-container">
+          <NavLink to="/">
+          <span className="logo-itself">
+            <i className="fa-solid fa-compass"></i><span className="logo-text"> climbnb</span>
           </span>
-        )}
+          </NavLink>
       </div>
-    </ul>
-  </header>
+      <ul>
+        {/* <li>
+          <NavLink exact to="/">
+            Home
+          </NavLink>
+        </li> */}
+        <div className="user-and-nav">
+          {userLoggedIn && createASpotButton()}
+          {/* {userLoggedIn && (
+            <li>
+              <NavLink className ="manage-spots-button" to="/spots/current">Manage Spots</NavLink>
+            </li>
+          )} */}
+          {isLoaded && (
+            <span className="profile-button">
+              <ProfileButton user={sessionUser} />
+            </span>
+          )}
+        </div>
+      </ul>
+    </header>
   );
 }
 

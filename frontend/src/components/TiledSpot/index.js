@@ -23,6 +23,8 @@ const TiledSpot = ({ spot }) => {
     
     // console.log(spot.price)
 
+    
+
     return (
         <>
             <Link to={`/spots/${spot.id}`}>
