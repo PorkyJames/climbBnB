@@ -391,6 +391,7 @@ useEffect(() => {
             </div>
               {/* <label htmlFor="previewImageURL">Preview Image URL:</label> */}
               <div className="preview-img-class">
+                <div className="error-message-img">{previewImageURLError}</div>
                 <input
                     type="text"
                     id="previewImageURL"
@@ -400,10 +401,10 @@ useEffect(() => {
                     onChange={(e) => setPreviewImageURL(e.target.value)}
                 />
               </div>
-              <div className="error-message-img">{previewImageURLError}</div>
               {/* <label htmlFor="imageURL1">Image URL 1:</label> */}
 
             <div className="img-url-1-class">
+              <div className="error-message-img">{imageURL1Error}</div>
               <input
                   type="text"
                   id="imageURL1"
@@ -413,10 +414,10 @@ useEffect(() => {
                   onChange={(e) => setImageURL1(e.target.value)}
               />
             </div>
-              <div className="error-message-img">{imageURL1Error}</div>
               {/* <label htmlFor="imageURL2">Image URL 2:</label> */}
 
             <div className="img-url-2-class">
+              <div className="error-message-img">{imageURL2Error}</div>
               <input
                   type="text"
                   id="imageURL2"
@@ -426,10 +427,10 @@ useEffect(() => {
                   onChange={(e) => setImageURL2(e.target.value)}
               />
             </div>
-              <div className="error-message-img">{imageURL2Error}</div>
               {/* <label htmlFor="imageURL3">Image URL 3:</label> */}
 
             <div className="img-url-3-class">
+              <div className="error-message-img">{imageURL3Error}</div>
               <input
                   type="text"
                   id="imageURL3"
@@ -439,10 +440,10 @@ useEffect(() => {
                   onChange={(e) => setImageURL3(e.target.value)}
               />
             </div>
-              <div className="error-message-img">{imageURL3Error}</div>
               {/* <label htmlFor="imageURL4">Image URL 4:</label> */}
 
             <div className="img-url-4-class">
+              <div className="error-message-img">{imageURL4Error}</div>
               <input
                   type="text"
                   id="imageURL4"
@@ -451,7 +452,6 @@ useEffect(() => {
                   value={imageURL4}
                   onChange={(e) => setImageURL4(e.target.value)}
               />
-              <div className="error-message-img">{imageURL4Error}</div>
             </div>
 
             <div className="test-border"></div>

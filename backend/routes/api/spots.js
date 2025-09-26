@@ -39,7 +39,9 @@ const validateData = [
   .withMessage("Name must be less than 50 characters"),
   check("description")
   .exists({ checkFalsy: true })
-  .withMessage("Description is required"),
+  .withMessage("Description is required")
+  .isLength({max: 1000})
+  .withMessage("Description must be 1000 characters or less"),
   check("price")
   .exists({ checkFalsy: true })
   .isFloat({
