@@ -10,28 +10,6 @@ import "./Navigation.css";
 function Navigation({ isLoaded }) {
   const sessionUser = useSelector((state) => state.session.user);
 
-  // let sessionLinks;
-  // if (sessionUser) {
-  //   sessionLinks = (
-  //     <li>
-  //       <ProfileButton user={sessionUser} />
-  //     </li>
-  //   );
-  // } else {
-  //   sessionLinks = (
-  //     <li>
-  //       <OpenModalButton
-  //         buttonText="Log In"
-  //         modalComponent={<LoginFormModal />}
-  //       />
-  //       <OpenModalButton
-  //         buttonText="Sign Up"
-  //         modalComponent={<SignupFormModal />}
-  //       />
-  //     </li>
-  //   );
-  // }
-
   //! If logged in, include a Create a Spot button in Nav Bar
   const userLoggedIn = !sessionUser ? false : true
 
@@ -49,18 +27,8 @@ function Navigation({ isLoaded }) {
           </NavLink>
       </div>
       <ul>
-        {/* <li>
-          <NavLink exact to="/">
-            Home
-          </NavLink>
-        </li> */}
         <div className="user-and-nav">
           {userLoggedIn && createASpotButton()}
-          {/* {userLoggedIn && (
-            <li>
-              <NavLink className ="manage-spots-button" to="/spots/current">Manage Spots</NavLink>
-            </li>
-          )} */}
           {isLoaded && (
             <span className="profile-button">
               <ProfileButton user={sessionUser} />

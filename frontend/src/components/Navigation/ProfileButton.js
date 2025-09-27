@@ -52,7 +52,7 @@ function ProfileButton({ user }) {
     <>
       <button className="user-profile-button" onClick={openMenu}>
         <div className="user-button-icon">
-          <i class="fas fa-bars"></i><i className="fas fa-user-circle" />  
+          <i class="fa-regular fa-circle-user"></i>
         </div>
       </button>
       {showMenu && (
@@ -60,8 +60,6 @@ function ProfileButton({ user }) {
         {user ? (
           <div className='open-button-logged-in'>
             <li>Hello, {user.firstName}</li>
-            {/* <li>{user.username}</li>
-            <li>{user.firstName} {user.lastName}</li> */}
             <li>{user.email}</li>
             {userLoggedIn && (
             <div className="manage-spots-link-container">
@@ -78,14 +76,14 @@ function ProfileButton({ user }) {
           </div>
         ) : (
           <div className="open-button-logged-out">
-            <li>
+            <li className="lo-sign-up">
               <OpenModalButton
                 buttonText="Sign Up"
                 onButtonClick={closeMenu}
                 modalComponent={<SignupFormModal />}
               />
             </li>
-            <li>
+            <li className="lo-log-in">
               <OpenModalButton
                 buttonText="Log In"
                 onButtonClick={closeMenu}
