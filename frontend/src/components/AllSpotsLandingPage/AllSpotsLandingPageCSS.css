@@ -3,6 +3,18 @@
     grid-template-columns: repeat(4, 1fr);
     gap: 20px;
     padding: 30px;
+    animation: fadeInUp 0.5s ease both;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 @media screen and (max-width: 1200px) {

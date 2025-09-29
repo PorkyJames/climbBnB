@@ -6,6 +6,26 @@
     align-items: flex-start;
 }
 
+.entire-form input {
+    width: 100%;
+    height: 2.5rem;
+    padding: 0 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #fff;
+    font-size: 1rem;
+    font-family: inherit;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    box-sizing: border-box;
+    margin-bottom: 16px;
+}
+
+.entire-form input:focus {
+    border-color: #ff385c;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(255, 56, 92, 0.2);
+}
+
 form {
     width: 100%; 
     max-width: 600px; 
@@ -14,23 +34,8 @@ form {
     box-sizing: border-box; 
 }
 
+
 /* ! Section 1 */
-.country-input input{
-    width: 100%;
-    height: 2rem;
-    border: 3px solid black;
-    margin-bottom: 10px;
-    background-color: aliceblue;
-}
-
-.streetAddress-input input{
-    width: 100%;
-    height: 2rem;
-    border: 3px solid black;
-    margin-bottom: 10px;
-    background-color: aliceblue;
-}
-
 .city-state-container {
     display: flex;
     justify-content: space-between; 
@@ -43,14 +48,6 @@ form {
 
 .state-input{
     flex: 1;
-}
-
-.city-input input, .state-input input {
-    width: 100%; 
-    height: 2rem;
-    border: 3px solid black;
-    margin-bottom: 10px;
-    background-color: aliceblue;
 }
 
 .country-input-container,
@@ -81,35 +78,42 @@ form {
     
 }
 
-.lat-input input, .lng-input input {
-    width: 100%; 
-    height: 2rem;
-    border: 3px solid black;
-    margin-bottom: 10px;
-    box-sizing: border-box; 
-    background-color: aliceblue;
+/* ! Section 2 */
+.description-text-area textarea {
+    width: 100%;
+    min-height: 120px;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #fff;
+    font-size: 1rem;
+    font-family: inherit;
+    resize: vertical;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    box-sizing: border-box;
+    margin-bottom: 16px;
+    line-height: 1.5;
 }
 
-/* ! Section 2 */
-.description-text-area textarea{
-    width: 100%;
-    height: 10em;
-    resize: none;
-    font-size: 1.2em;
-    border: 3px solid black;
-    background-color: aliceblue;
-    margin-bottom: 10px;
+.description-text-area textarea::placeholder {
+    color: #999;
+    font-size: 0.95rem;
 }
+
+.description-text-area textarea:focus {
+    border-color: #ff385c; 
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(255, 56, 92, 0.2); 
+}
+
+.description-text-area textarea:hover {
+    border-color: #bbb;
+}
+
 
 /* ! Section 3 */
-.spot-name-input input{
-    width: 100%;
-    height: 2rem;
-    resize: none;
-    border: 3px solid black;
-    margin-bottom: 10px;
-    background-color: aliceblue;
-}
+
+
 
 /* ! Section 4 */
 .price-container {
@@ -133,19 +137,6 @@ form {
 }
 
 /* ! Section 5 */
-.preview-img-class input,
-.img-url-1-class input,
-.img-url-2-class input,
-.img-url-3-class input,
-.img-url-4-class input{
-    width: 100%;
-    height: 2rem;
-    resize: none;
-    border: 3px solid black;
-    margin-bottom: 10px;
-    background-color: aliceblue;
-}
-
 .error-message-img{
     color: red;
     font-size: 0.8em; 

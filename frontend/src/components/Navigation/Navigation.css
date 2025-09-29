@@ -77,7 +77,7 @@ body, html {
 
 .intro-logged-in {
     font-weight: bold;
-    font-size: 20px;
+    font-size: 17px;
 }
 
 
@@ -97,7 +97,7 @@ body, html {
     height: 120px;
     margin-top: 5px;
     margin-right: 32px;
-    border-radius: 5px;
+    border-radius: 8px;
     background-color: #ffffff;
     animation: dropdownFadeIn 0.3s ease-out forwards;
     transition: background-color 0.2s ease, box-shadow 0.2s ease;
@@ -173,6 +173,10 @@ body, html {
     font-size: 15px;
     color: rgb(26, 119, 150);
     font-weight: bold
+}
+
+.create-a-spot-button:hover {
+    color: rgb(15,84,107,1);
 }
 
 /* ! Log-Out List */
