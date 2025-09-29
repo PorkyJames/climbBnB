@@ -46,12 +46,14 @@ function LoginFormModal() {
 
   return (
     <>
-    <div className="login-text-container">
-      <h1>Log In</h1>
-    </div>
-    <div className="error-message">
-      {errors.credential && (<p>{errors.credential}</p>)}
-    </div>
+      <div className="login-text-container">
+        <h1>Log In</h1>
+      </div>
+      
+      <div className="error-message">
+        {errors.credential && (<p>{errors.credential}</p>)}
+      </div>
+
       <form onSubmit={handleSubmit}>
         <label>
         <div className="username-or-email-label">
@@ -79,7 +81,6 @@ function LoginFormModal() {
           />
         </div>
         </label>
-    
       <div className="login-button">
         <button type="submit" disabled={!isUsernameValid || !isPasswordValid}>
           Log In
@@ -91,6 +92,7 @@ function LoginFormModal() {
           </button>
         </div>
       </form>
+
     </>
   );
 }

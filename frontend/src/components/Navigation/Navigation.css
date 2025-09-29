@@ -41,13 +41,13 @@ body, html {
 .logo-itself {
     font-size: 30px;
     text-decoration: none;
-    color: #FF385C;
+    color: #ff5a5f;
 }
 
 
 .logo-text {
     text-decoration: none;
-    color: #FF385C;
+    color: #ff5a5f;
     /* font-weight: bold; */
     font-family: 'Poppins', sans-serif;
 }
@@ -75,6 +75,11 @@ body, html {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06); 
 }
 
+.intro-logged-in {
+    font-weight: bold;
+    font-size: 20px;
+}
+
 
 /* ! The dropdown menu from my profile button */
 .profile-dropdown {
@@ -87,11 +92,16 @@ body, html {
 
 /* ! Logged In Drop Down */
 .open-button-logged-in {
-    padding: 10px;
+    padding: 20px;
+    width: 180px;
+    height: 120px;
     margin-top: 5px;
+    margin-right: 32px;
     border-radius: 5px;
     background-color: #ffffff;
-    border: 2px solid black;
+    animation: dropdownFadeIn 0.3s ease-out forwards;
+    transition: background-color 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 }
 
 .open-button-logged-in button{
@@ -144,7 +154,6 @@ body, html {
     }
 }
 
-
 /* ! User Icons as well as the collapsed Icon */
 .user-button-icon {
     font-size: 22px;
@@ -166,23 +175,19 @@ body, html {
     font-weight: bold
 }
 
-/* ! Log-Out Button */
-.log-out-button{
-    text-align: center;
+/* ! Log-Out List */
+.log-out-button {
+    text-align: left;
 }
 
-.log-out-button button {
-    width: 60%;
-    height: 1.5rem;
-    margin-top: 5px;
-    border-radius: 20px;
-    background-color: gray;
-    color: white;
+.log-out-button:hover {
+    background-color: #f8f6f6;
+    cursor: pointer;
 }
 
 .manage-spots-link-container{
-    border-top: 2px solid #000; 
-    border-bottom: 2px solid #000; 
+    border-top: 1px solid #e0e0e0; 
+    border-bottom: 1px solid #e0e0e0; 
     margin-top: 5px;
     margin-right: 5px;
     margin-bottom: 5px;
@@ -197,5 +202,11 @@ body, html {
 .manage-spots-button{
     font-weight: bold;
     text-decoration: none;
-    color: black
+    text-align: left;
+    color: rgb(26, 119, 150);
+}
+
+.manage-spots-button:hover {
+    background-color: #f8f6f6;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
 }

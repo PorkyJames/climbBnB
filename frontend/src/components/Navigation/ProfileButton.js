@@ -59,8 +59,10 @@ function ProfileButton({ user }) {
       <ul className={ulClassName} ref={ulRef}>
         {user ? (
           <div className='open-button-logged-in'>
-            <li>Hello, {user.firstName}</li>
-            <li>{user.email}</li>
+            <div className="intro-logged-in">
+              <li>Hello, {user.firstName}</li>
+              <li>{user.email}</li>
+            </div>
             {userLoggedIn && (
             <div className="manage-spots-link-container">
               <div className="push-link-out">
@@ -69,9 +71,7 @@ function ProfileButton({ user }) {
             </div>
             )}
             <div className="log-out-button">
-              <li>
-                <button onClick={logout}>Log Out</button>
-              </li>
+              <li onClick={logout}>Log Out</li>
             </div>
           </div>
         ) : (
