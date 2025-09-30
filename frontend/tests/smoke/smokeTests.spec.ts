@@ -20,13 +20,14 @@ test.describe("Smoke Tests", () => {
         expect(createButton).toBeVisible()
     })
 
+    //! Need to make more dynamic
     test("Sign Up User", async({page}) => {
         //Arrange
         await page.locator('[class="user-profile-button"]').click()
         await page.getByRole('button', {name: "Sign Up"}).click()
 
         //Act
-        await page.locator('[class="email-input"]').fill('123@tester.com')
+        await page.locator('[class="email-input"]').fill('43566@tester.com')
         const genUserName = Date.now()
         await page.locator('[class="username-input"]').fill(`${genUserName}`)
         // ! Can use faker.js or something
@@ -37,12 +38,14 @@ test.describe("Smoke Tests", () => {
         await page.getByRole('button', {name: "Sign Up"}).click()
 
         //Assert
-        const itemOne = page.locator('[class="intro-logged-in"]').nth(0)
-        const itemTwo = page.locator('[class="intro-logged-in"]').nth(1)
-
+        await page.locator('[class="user-profile-button"]').click()
+        const introInfo = page.locator('.intro-logged-in li')
         //Expect the first item in the intro-logged-in to be Hello James
-        //Expect the second item in the intro-logged-in to be the email 123@tester.com
-
+        const testOne = await introInfo.first().textContent()
+        expect(testOne).toContain("Hello")        
+        //Expect the manage spots button to be in the drop down
+        const manageBtn = page.getByRole('link', {name: "Manage Spots"})
+        expect(manageBtn).toBeVisible()
     })
 })
 
@@ -68,9 +71,34 @@ test.describe("Logged In Tests", () => {
 
     test("Leave a Review", async({page}) => {
         //Arrange
+        await page.getByText("Huge Climbing Gym").click()
 
         //Act
+        //! If there is a Post a Review button, then we'll post a review
+        //! If there is a Delete button, then we'll delete the review first, then
+        //! post a review. 
+        const deleteBtn = page.getByRole('button', {name: "Delete"})
+        await deleteBtn.scrollIntoViewIfNeeded()
+        // console.log(await deleteBtn.count())
+        if (await deleteBtn.count() > 0) {
+            await deleteBtn.scrollIntoViewIfNeeded()
+            if (await deleteBtn.isVisible()) {
+                await deleteBtn.click()
+                await page.getByRole('button', {name: "Yes (Delete Review)"}).click()
+            }
+        }
+        
+        const postBtn = page.getByRole('button', {name: "Post Your Review"})
+        await postBtn.scrollIntoViewIfNeeded()
+        await postBtn.click()
+        await page.getByPlaceholder('Leave your review here...').fill("This is my review. I enjoyed it!")
+        await page.locator('.star').nth(3).click()
+        await page.getByRole('button', {name: "Submit Your Review"}).click()
+    
         //Assert
+        await page.waitForSelector('.reviewer p');
+        const reviewer = await page.locator('.reviewer p').allTextContents();
+        expect(reviewer).toContain('Demo');
     })
 
     test("Update a Spot", async({page}) => {
