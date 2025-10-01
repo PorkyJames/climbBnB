@@ -69,7 +69,7 @@ test.describe("Logged In Tests", () => {
         expect(createButton).not.toBeVisible()
     })
 
-    test("Leave a Review", async({page}) => {
+    test("Create and Delete a Review", async({page}) => {
         //Arrange
         await page.getByText("Huge Climbing Gym").click()
 
@@ -79,7 +79,6 @@ test.describe("Logged In Tests", () => {
         //! post a review. 
         const deleteBtn = page.getByRole('button', {name: "Delete"})
         await deleteBtn.scrollIntoViewIfNeeded()
-        // console.log(await deleteBtn.count())
         if (await deleteBtn.count() > 0) {
             await deleteBtn.scrollIntoViewIfNeeded()
             if (await deleteBtn.isVisible()) {
@@ -101,15 +100,53 @@ test.describe("Logged In Tests", () => {
         expect(reviewer).toContain('Demo');
     })
 
-    test("Update a Spot", async({page}) => {
+    test("Create and Delete a Spot", async({page}) => {
         //Arrange
+        await page.locator('.create-a-spot-button').click()
         //Act
+        await page.getByPlaceholder('Country').fill("United States")
+        await page.getByPlaceholder('Street Address').fill('18030 Newhope St')
+        await page.getByPlaceholder('City').fill('Fountain Valley')
+        await page.getByPlaceholder('State').fill('CA')
+        await page.getByPlaceholder('Please write at least 30 characters')
+            .fill('We opened in 2019 bringing new life into a vacant building that now offers more than 30,000 square feet of bouldering, yoga, and fitness. We honor those with the surf to rock lifestyle and offer plenty of cross-training conditioning and strength spaces. And for those off-days, we hope to see you relaxing on our slackline, in the yoga studio, or in the saunas.')
+        await page.getByPlaceholder('Name of your spot').fill('Movement - Fountain Valley')
+        await page.getByPlaceholder('Price per night (USD)').fill('50')
+        await page.getByPlaceholder('Preview Image URL').fill('https://augustconstructionsolutions.com/wp-content/uploads/2020/12/Planey-Granite-Fountain-Valley-climb-wall.jpg')
+        await page.locator('#imageURL1').fill("https://augustconstructionsolutions.com/wp-content/uploads/2020/12/Planet-Granite-Fountain-Valley-retail-shop.jpg")
+        await page.locator('#imageURL2').fill("https://movementgyms.com/app/uploads/sites/25/2023/03/Web-Large-Fountain-Valley_MVMT_2023-413.jpg")
+        await page.locator('#imageURL3').fill("https://s3-media0.fl.yelpcdn.com/bphoto/viRHG9p9JBgH3m5fV7Z1rw/o.jpg")
+        await page.locator('#imageURL4').fill("https://s3-media0.fl.yelpcdn.com/bphoto/Cpntr3G1Xt3gXHau27rOpw/o.jpg")
+        await page.getByRole('button', { name: "Create Spot "}).click()
+
         //Assert
     })
 
     test("Delete a Spot", async({page}) => {
         //Arrange
+        await page.locator('[class="user-profile-button"]').click()
+        await page.locator('.manage-spots-button').click()
+
         //Act
-        //Assert
+        await page.getByRole('button', {name: "Delete"}).last().click()
+        await page.getByRole('button', {name: "Yes (Delete Spot)"}).click()
+
     })
+
+    test("Update a Spot", async({page}) => {
+        //Arrange
+        await page.locator('[class="user-profile-button"]').click()
+        await page.locator('.manage-spots-button').click()
+        await page.getByRole('button', {name: "Update"}).first().click()
+
+        //Act
+        const genPrice = Math.floor(Math.random() * 1000).toString()
+        await page.locator("#spotPrice").fill(genPrice)
+        await page.getByRole('button', {name: "Update Spot"}).click()
+
+        //Assert
+        const priceInput = await page.locator(".smol-price").textContent()
+        expect(priceInput).toContain(genPrice)
+    })
+
 })
