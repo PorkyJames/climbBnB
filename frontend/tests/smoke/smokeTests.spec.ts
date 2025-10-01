@@ -119,18 +119,18 @@ test.describe("Logged In Tests", () => {
         await page.locator('#imageURL4').fill("https://s3-media0.fl.yelpcdn.com/bphoto/Cpntr3G1Xt3gXHau27rOpw/o.jpg")
         await page.getByRole('button', { name: "Create Spot "}).click()
 
-        //Assert
-    })
-
-    test("Delete a Spot", async({page}) => {
-        //Arrange
+        //! Delete
         await page.locator('[class="user-profile-button"]').click()
         await page.locator('.manage-spots-button').click()
-
-        //Act
         await page.getByRole('button', {name: "Delete"}).last().click()
         await page.getByRole('button', {name: "Yes (Delete Spot)"}).click()
 
+        //Assert
+        //Expect that Movement - Fountain Valley doesn't exist
+
+        await expect(
+            page.locator('.spot-city-title', { hasText: 'Movement - Fountain Valley' })
+        ).toHaveCount(0);
     })
 
     test("Update a Spot", async({page}) => {
